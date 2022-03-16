@@ -1,55 +1,18 @@
 import 'package:agric/database/database.dart';
+import 'package:agric/pages/controller/printing_controller.dart';
 import 'package:agric/styles/text_style.dart';
 import "package:flutter/material.dart";
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class PrintingScreen extends StatefulWidget {
-  @override
-  State<PrintingScreen> createState() => _PrintingScreenState();
-}
+class PrintingScreen extends StatelessWidget {
 
-class _PrintingScreenState extends State<PrintingScreen> {
- // what i need to make the recipt
-  late Sale current_sale ;
-
-  late Purchase current_purchase;
-
-  late AppDatabase database;
-
-  late String merchant;
-
-  late String action;
-
-  var transaction_object;
-
-  Map previous_data ={};
-
-  late List<TotalSale> total_sale_list;
-
-  late List<TotalPurchase> total_purchase_list;
+  final PrintingController printingController = Get.put(PrintingController());
 
   @override
   Widget build(BuildContext context) {
-
-    database = Provider.of<AppDatabase>(context);
-
-    previous_data = ModalRoute.of(context)?.settings.arguments as Map;
-
-    transaction_object = previous_data["transaction_object"];
-
-    merchant = previous_data["merchant"];
-    action = previous_data["action"];
-
-
-    if(action == "sell_product")
-      {
-        current_sale = previous_data["transaction_object"];
-      }else
-        {
-          current_purchase = previous_data["transaction_object"];
-        }
-    get_data_from_db();
-
+    printingController.get_data_from_trade_screen(context);
+    printingController.get_data_from_db();
 
     return Scaffold(
       appBar: AppBar(
@@ -57,7 +20,8 @@ class _PrintingScreenState extends State<PrintingScreen> {
         centerTitle: true,
         backgroundColor: Colors.green,
       ),
-      body: Column(
+      body: GetBuilder<PrintingController>(builder: (_)
+    {return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("AGRIC TRANSACTION RECIEPT",style: MyTextStyle.make("body"),),
@@ -65,30 +29,12 @@ class _PrintingScreenState extends State<PrintingScreen> {
           SizedBox(height: 20),
           Text("current transaction",style: MyTextStyle.make("title"),),
           SizedBox(height: 20),
-          Text("Served By : $merchant",style: MyTextStyle.make("title"),),
+          Text("Served By : ${printingController.merchant}",style: MyTextStyle.make("title"),),
           SizedBox(height: 20),
-          Text(show_transaction_details(action),style: MyTextStyle.make("body"),),
-          SizedBox(height: 20),
-
-          Text("NET TOTAL",style: MyTextStyle.make("title"),),
-          Text("Farmer Sold to US:",style: MyTextStyle.make("body"),),
-          Column(
-            children: total_purchase_list.map((e) => Text("${e.product} \t"
-                "${e.amount_kg} KGS"
-                ,style: MyTextStyle.make("body"),)).toList(),
-          ),
-
-          SizedBox(height: 20),
-          Text("Farmer Purchased From US:",style: MyTextStyle.make("body"),),
-          Column(
-            children: total_sale_list.map((e) => Text("${e.product} \t"
-                "${e.amount_kg} KGS"
-              ,style: MyTextStyle.make("body"),)).toList(),
-          ),
-
-
+          Text(printingController.show_transaction_details(printingController.action),style: MyTextStyle.make("body"),),
+          printingController.render_net_total(),
         ],
-      ),
+      );}),
       floatingActionButton: FloatingActionButton(
         onPressed: (){},
         child: Icon(Icons.print),
@@ -97,47 +43,8 @@ class _PrintingScreenState extends State<PrintingScreen> {
     );
   }
 
-  String show_transaction_details(String action)
-  {
-    if(action=="sell_product")
-      {
 
-        String details = "Product : ${current_sale.product} \n"
-            "Farmer number : ${current_sale.farmer_number} \n"
-                "Amount in KG :${current_sale.amount_kg}";
 
-        return details;
-      }
-    if(action=="buy_product")
-    {
 
-      String details = "Product : ${current_purchase.product} \n"
-          "Farmer number : ${current_purchase.farmer_number} \n"
-          "Amount in KG :${current_purchase.amount_kg}";
-
-      return details;
-    }
-
-    return "";
-  }
-
-  //get data from db
-get_data_from_db() async
-{
-  if(action=="sell_product")
-    {
-      total_purchase_list = await database.getTotalPurchaseList_of_farmer_number(current_sale.farmer_number);
-      total_sale_list =  await database.getTotalSaleList_of_farmer_number(current_sale.farmer_number);
-    }else if(action=="buy_product")
-  {
-    total_purchase_list = await database.getTotalPurchaseList_of_farmer_number(current_purchase.farmer_number);
-    total_sale_list =  await database.getTotalSaleList_of_farmer_number(current_purchase.farmer_number);
-  }
-  setState(() {
-    total_sale_list = total_sale_list;
-    total_purchase_list = total_purchase_list;
-  });
-
-}
 
 }

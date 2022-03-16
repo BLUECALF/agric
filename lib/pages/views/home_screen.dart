@@ -7,6 +7,7 @@ class HomeScreen extends StatelessWidget{
 
 final HomeController  homeController =  Get.put(HomeController());
 
+
   @override
   Widget build(BuildContext context) {
     homeController.get_attributes_from_login(context);

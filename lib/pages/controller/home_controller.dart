@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 class HomeController extends GetxController
 {
    final database = Get.find<AppDatabase>();
+   final SalesDao salesDao = Get.put(AppDatabase().salesDao);
   Map data ={};
   String message ="";
 
