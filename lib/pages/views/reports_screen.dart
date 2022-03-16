@@ -5,7 +5,7 @@ import 'package:agric/styles/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'database/database.dart';
+import '../../database/database.dart';
 
 
 

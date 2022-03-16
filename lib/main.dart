@@ -1,15 +1,17 @@
-import 'package:agric/actions_screen.dart';
-import 'package:agric/login_screen.dart';
-import 'package:agric/printing_screen.dart';
-import 'package:agric/products_screen.dart';
-import 'package:agric/reports_screen.dart';
-import 'package:agric/trade_screen.dart';
+import 'package:agric/pages/views/home_screen.dart';
+import 'package:agric/pages/views/login_screen.dart';
+import 'package:agric/pages/views/printing_screen.dart';
+import 'package:agric/pages/views/products_screen.dart';
+import 'package:agric/pages/views/reports_screen.dart';
+import 'package:agric/pages/views/trade_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
 import 'database/database.dart';
-import 'loading_screen.dart';
+import 'pages/views/loading_screen.dart';
 
 void main() =>runApp(
+
 
     MultiProvider(
       providers: [
@@ -17,13 +19,13 @@ void main() =>runApp(
         Provider(create:(_) => AppDatabase().salesDao,)
       ],
 
-      child: MaterialApp(
+      child: GetMaterialApp(
   initialRoute: "/",
 
   routes: {
       "/":(context) =>LoadingScreen(),
       "/login_screen":(context) => LoginScreen(),
-      "/actions_screen":(context) =>ActionsScreen(),
+      "/home_screen":(context) =>HomeScreen(),
       "/trade_screen":(context) =>TradeScreen(),
       "/reports_screen":(context) => ReportsScreen(),
        "/products_screen":(context) => ProductsScreen(),

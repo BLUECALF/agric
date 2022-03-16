@@ -7,7 +7,6 @@ class MyTextStyle extends TextStyle {
     if(purpose=="title")
       {
         return TextStyle(
-
           fontSize: 25,
           fontWeight: FontWeight.bold,
           letterSpacing: 4,
