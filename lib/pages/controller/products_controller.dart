@@ -62,6 +62,19 @@ class ProductsController extends GetxController
       print(" add sellable product :called");
 
       try{
+        List<Sellable_product> sellable_product_list = await database.getSellable_productList();
+        if(sellable_product_list.isNotEmpty)
+          {
+            bool is_in_db = check_sellabe_product_in_db(sellable_product_list,product);
+
+            if(is_in_db)
+              {
+                message = "The product $product is already in database. Can't add it again";
+                return;
+              }
+          }
+
+
         var row = await database.insertSellableProduct(Sellable_product(
             product_name: product
 
@@ -89,6 +102,20 @@ class ProductsController extends GetxController
 
       print(" add purchasable product :called");
       try {
+
+        List<Buyable_product> buyable_product_list = await database.getBuyable_productList();
+        if(buyable_product_list.isNotEmpty)
+        {
+          bool is_in_db = check_buyable_product_in_db(buyable_product_list,product);
+
+          if(is_in_db)
+          {
+            message = "The product $product is already in database. Can't add it again";
+            return;
+          }
+        }
+
+
         var row = await database.insertBuyableProduct(Buyable_product(
             product_name: product
         ));
@@ -109,12 +136,30 @@ class ProductsController extends GetxController
             "The error is ${e.toString()}";
       }
 
-
     }
 
     else  if(action =="remove product" && product_type == "sellable product")
     {
       print(" remove sellable product :called");
+
+      List<Sellable_product> sellable_product_list = await database.getSellable_productList();
+      if(sellable_product_list.isEmpty)
+      {
+        message = " Remove failed ,The product $product is NOT in database";
+        return;
+      }
+      else if(sellable_product_list.isNotEmpty)
+      {
+        bool is_in_db = check_sellabe_product_in_db(sellable_product_list,product);
+
+        if(is_in_db)
+        {
+
+        }else
+          { message = " Remove failed ,The product $product is NOT in database";
+          return;
+          }
+      }
       var row = await database.deleteSellable_product(Sellable_product(
           product_name: product
       ));
@@ -131,6 +176,25 @@ class ProductsController extends GetxController
     else  if(action == "remove product" && product_type == "purchasable product")
     {
       print(" remove purchasable product :called");
+
+      List<Buyable_product> buyable_product_list = await database.getBuyable_productList();
+      if(buyable_product_list.isEmpty)
+      {
+        message = " Remove failed ,The product $product is NOT in database";
+        return;
+      }
+      else if(buyable_product_list.isNotEmpty)
+      {
+        bool is_in_db = check_buyable_product_in_db(buyable_product_list, product);
+        if(is_in_db)
+        {
+        }else
+        { message = " Remove failed ,The product $product is NOT in database";
+        return;
+        }
+      }
+
+
       var row = await database.deleteBuyable_product(Buyable_product(
           product_name: product
       ));
@@ -149,5 +213,32 @@ class ProductsController extends GetxController
   GlobalKey<FormBuilderState> get_formkey()
   {
     return _formKey;
+  }
+  // check if  sellable Product is in db
+  bool check_sellabe_product_in_db(List<Sellable_product> list_of_object,String product)
+  {
+  for (int i = 0; i < list_of_object.length; i++)
+    {
+    if (list_of_object[i].product_name == product)
+    {
+    // the product you are trying to enter is already in db
+       return true;
+    }
+  }
+  return false;
+  }
+
+  // check if  buyable Product is in db
+  bool check_buyable_product_in_db(List<Buyable_product> list_of_object,String product)
+  {
+    for (int i = 0; i < list_of_object.length; i++)
+    {
+      if (list_of_object[i].product_name == product)
+      {
+        // the product you are trying to enter is already in db
+        return true;
+      }
+    }
+    return false;
   }
 }
