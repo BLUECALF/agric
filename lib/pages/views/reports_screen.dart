@@ -1,41 +1,21 @@
 
-import 'package:agric/styles/button_decoration.dart';
-import 'package:agric/styles/text_field_decoration.dart';
+
+import 'package:agric/pages/controller/reports_controller.dart';
 import 'package:agric/styles/text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../database/database.dart';
+import 'package:get/get.dart';
 
 
 
 
-class ReportsScreen extends StatefulWidget {
 
+class ReportsScreen extends StatelessWidget {
 
-  @override
-  State<ReportsScreen> createState() => _ReportsScreenState();
-}
-
-class _ReportsScreenState extends State<ReportsScreen> {
-  List<String> giveoutlist  = ["Fertelizer","chicken feed",
-    "Cattle Feed","Maize Seed","Pesticide","herbicide"];
-
-  List<String> takeinlist = ["Cows milk","goats milk","Camels Milk","eggs","Tea leaves"];
-
-  List<Sale> salesList =[];
-  List<Purchase> purchaseList=[];
-  List<Zreport> zreportList=[];
-
-  late AppDatabase database;
-
-
+  final ReportsController reportsController = Get.put(ReportsController());
   @override
   Widget build(BuildContext context) {
 
-    database = Provider.of<AppDatabase>(context);
-
-    get_objects();
+    reportsController.get_objects();
 
     return Scaffold(
       appBar: AppBar(
@@ -49,7 +29,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20,50,20,0),
 
-              child: ListView(
+              child: GetBuilder<ReportsController>(builder: (_){ return ListView(
                 scrollDirection: Axis.vertical,
                 children: [
                   Text(
@@ -64,38 +44,38 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     children: [
                       Expanded(
                         flex: 2,
-                        child: Container( child: Text("Date"),decoration: BoxDecoration(
+                        child: Container( child: Text("Date",style: MyTextStyle.make("tiny"),),decoration: BoxDecoration(
                           color: Colors.greenAccent,
 
                         ),),
                       ),
                       Expanded(
-                        flex: 1,
-                        child: Container(child: Text("Transactions sold"),decoration: BoxDecoration(
+                        flex: 2,
+                        child: Container(child: Text("Transactions sold",style: MyTextStyle.make("tiny"),),decoration: BoxDecoration(
                           color: Colors.greenAccent,
                         ),),
                       ),
                       Expanded(
                         flex: 1,
-                        child: Container(child: Text("Units Sold",),decoration: BoxDecoration(
+                        child: Container(child: Text("Units Sold",style: MyTextStyle.make("tiny"),),decoration: BoxDecoration(
+                          color: Colors.greenAccent,
+                        ),),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Container(child: Text("transactions bought",style: MyTextStyle.make("tiny"),),decoration: BoxDecoration(
                           color: Colors.greenAccent,
                         ),),
                       ),
                       Expanded(
                         flex: 1,
-                        child: Container(child: Text("transactions bought",),decoration: BoxDecoration(
+                        child: Container(child: Text("Units Bought",style: MyTextStyle.make("tiny"),),decoration: BoxDecoration(
                           color: Colors.greenAccent,
                         ),),
                       ),
                       Expanded(
                         flex: 1,
-                        child: Container(child: Text("Units Bought",),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                        ),),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(child: Text("User Name ",),decoration: BoxDecoration(
+                        child: Container(child: Text("User Name ",style: MyTextStyle.make("tiny"),),decoration: BoxDecoration(
                           color: Colors.greenAccent,
                         ),),
                       ),
@@ -103,7 +83,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     ],
                   ),
                   Column(
-                    children: zreportList.map((z) => makerow_of_zreport(z)).toList(),
+                    children: reportsController.zreportList.map((z) => reportsController.makerow_of_zreport(z)).toList(),
                   ),
                   SizedBox(height:20),
 
@@ -136,7 +116,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     ],
                   ),
                   Column(
-                    children: purchaseList.map((purchase) => makerow_of_purchase(purchase)).toList(),
+                    children: reportsController.purchaseList.map((purchase) => reportsController.makerow_of_purchase(purchase)).toList(),
                   ),
                   SizedBox(height: 20,),
                   Text(
@@ -163,150 +143,18 @@ class _ReportsScreenState extends State<ReportsScreen> {
                           color: Colors.greenAccent,
                         ),),
                       ),
-
                     ],
                   ),
                   Column(
-                    children: salesList.map((sales) => makerow_of_sales(sales)).toList(),
+                    children: reportsController.salesList.map((sales) => reportsController.makerow_of_sales(sales)).toList(),
                   ),
-
-
-
-            ]),),
+            ]);}),),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        setState(() {
-          salesList = salesList;
-          purchaseList  = purchaseList;
-        });
-
+      floatingActionButton: FloatingActionButton(onPressed: () {print("refresh called");
+       reportsController.update();
       },child: Icon(Icons.refresh,color: Colors.redAccent[300],),),
     );
   }
-
-  Widget makerow_of_sales(Sale sale)
-  {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(child: Text("${sale.product}"),decoration: BoxDecoration(
-            color: Colors.grey,
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(child: Text("${sale.farmer_number}"),decoration: BoxDecoration(
-            color: Colors.grey[400],
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(child: Text("${sale.amount_kg}"),decoration: BoxDecoration(
-            color: Colors.grey[300],
-          ),),
-        ),
-
-      ],
-
-    );
-  }
-
-  Widget makerow_of_purchase(Purchase purchase)
-  {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(child: Text("${purchase.product}"),decoration: BoxDecoration(
-            color: Colors.grey,
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(child: Text("${purchase.farmer_number}"),decoration: BoxDecoration(
-            color: Colors.grey[400],
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(child: Text("${purchase.amount_kg}"),decoration: BoxDecoration(
-            color: Colors.grey[300],
-          ),),
-        ),
-
-      ],
-
-    );
-  }
-  get_objects() async
-  {
-    final salesDao = Provider.of<SalesDao>(context);
-    salesList = await salesDao.getSaleList();
-    purchaseList = await database.getPurchaseList();
-    zreportList = await database.getZreportList();
-
-
-
-    // after we get values we recall build by set states
-    setState(() {
-
-    });
-  }
-
-  // makes row of Z reports
-
-  Widget makerow_of_zreport(Zreport z) {
-    return Row(
-      children: [
-
-        Expanded(
-          flex: 2,
-          child: Container(child: Text("${z.date}"), decoration: BoxDecoration(
-            color: Colors.grey,
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            child: Text("${z.transactions_sold}"), decoration: BoxDecoration(
-            color: Colors.grey[400],
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            child: Text("${z.units_sold}"), decoration: BoxDecoration(
-            color: Colors.grey[300],
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            child: Text("${z.transactions_bought}"), decoration: BoxDecoration(
-            color: Colors.grey[300],
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            child: Text("${z.units_bought}"), decoration: BoxDecoration(
-            color: Colors.grey[300],
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            child: Text("${z.username}"), decoration: BoxDecoration(
-            color: Colors.grey[300],
-          ),),
-        ),
-
-      ],
-
-    );
-  }
-
 }

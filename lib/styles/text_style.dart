@@ -35,6 +35,26 @@ class MyTextStyle extends TextStyle {
         color: Colors.white,
       );
     }
+    else if(purpose=="tiny")
+    {
+      return TextStyle(
+        fontSize: 7,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 1,
+        fontFamily: "Courier Prime",
+        color: Colors.black,
+      );
+    }
+    else if(purpose=="small")
+    {
+      return TextStyle(
+        fontSize: 8,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 1,
+        fontFamily: "Courier Prime",
+        color: Colors.black,
+      );
+    }
     else
       {
         return TextStyle(

@@ -29,9 +29,6 @@ class HomeController extends GetxController
     //data = ModalRoute.of(context)?.settings.arguments as Map;
     data = Get.arguments;
   }
-
-
-
   void get_xreport_list() async {
 
     print("xreport b4:${xreport_list[0]}");
