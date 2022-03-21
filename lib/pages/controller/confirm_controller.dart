@@ -1,18 +1,14 @@
 
 import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/database/database.dart';
-import 'package:agric/pages/views/choose_product_screen.dart';
-import 'package:agric/pages/views/confirm_screen.dart';
 import 'package:agric/pages/views/printing_screen.dart';
-import 'package:agric/styles/text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
-class TradeController extends GetxController
+class ConfirmController extends GetxController
 {
-  Map previous_data = {};
-  Map current_data={};
+  Map all_data={};
+  Map current_data = {};
 
   String title = "";
   String merchant = "";
@@ -29,95 +25,30 @@ class TradeController extends GetxController
   void get_previous_data()
   {
     merchant = appController.username;
-
-
-  }
-  get_data_from_db() async
-  {
-    buyable_products = await database.getBuyable_productList();
-    sellable_products = await database.getSellable_productList();
-   ///  we will use update instead of set state.
-    buyable_products = buyable_products;
-    sellable_products = sellable_products;
-    print("Buyable products are $buyable_products");
-    update();
-    title = (action == "buy_product")? "BUY PRODUCT":"SELL PRODUCT";
-  }
-  /// GET A LIST OF DROPDOWN iTEMS
-
-  List<DropdownMenuItem<String>> get_dropdown_items()
-  {
-    if(action=="buy_product")
-    {
-      //check if the list is empty
-      if(buyable_products.isEmpty)
-      {
-        return [DropdownMenuItem(
-            child: Card(child: Container(height: 20 ,child: Text("there is no purchasable products")))),];
-      }
-      List<DropdownMenuItem<String>>  buyable_list = buyable_products.map((obj) {
-        return DropdownMenuItem(
-          child: Text("${obj.product_name}",style: MyTextStyle.make("body"),),value: obj.product_name,);
-      }).toList();
-      return buyable_list;
-    }
-    else
-    {
-
-      //check if the list is empty
-      if(sellable_products.isEmpty)
-      {
-        return [DropdownMenuItem(
-            child: Card(child: Text("there is no Sellable products"))),];
-      }
-
-      List<DropdownMenuItem<String>>  sellable_list = sellable_products.map((obj) {
-        return DropdownMenuItem(
-          child: Text("${obj.product_name}",style: MyTextStyle.make("body"),),value: obj.product_name,);
-      }).toList();
-      return sellable_list;
-    }
+    all_data = appController.transaction_data;
+    current_data = all_data["data"];
+    action = all_data["action"];
+    appController.transaction_data = {};
   }
 
- void on_press_submit(GlobalKey<FormBuilderState> _formKey,TextEditingController textEditingController)
+
+  void on_press_confirm()
   async{
-    bool accept;
+
     message ="";
- /// validate form
-    var validate = _formKey.currentState?.validate();
+    title = (action == "buy_product")? "BUY PRODUCT":"SELL PRODUCT";
+    message = "$title of ${current_data["product"]} Recorded Successfully";
+    await insert_to_database(action);
 
-    if(validate==true)
-    { _formKey.currentState?.save();
-    current_data = _formKey.currentState!.value;
-    print("current data amap $current_data");
-    print(current_data);
-    message = "$title of ${textEditingController.text} Recorded Successfully";
-    _formKey.currentState?.reset();
-    accept = true;
-    }
-    else {message = "Couldn't Complete action $action"; accept = false;}
-
-    // all is well
-    if(accept){
-      appController.transaction_data = {
-        "action":action,
-    "data":current_data
-    };
-      ///DATA IS OK, NOW FOWARD TO CONFIRM PAGE
-      Get.to(() =>ConfirmScreen(),);
-      print("The data passed Is ::::\n$current_data");
-      print("the action is ::$action");
-    }
-    if(!accept) {
+    // show results
     Get.defaultDialog(
       title: title,
       content:Text("${message}"),
-    );}
-
+    );
 
   }
 
-  /*/// INSERT THE DATA TO DATABASE
+  /// INSERT THE DATA TO DATABASE
   insert_to_database(String action) async
   {
     if(current_data.isEmpty)
@@ -192,7 +123,7 @@ class TradeController extends GetxController
           {
             print("## the insertion to total purchase table was recorded successfully");
             // proceed to printing screen
-            Get.to(PrintingScreen(),arguments: {
+            Get.off(PrintingScreen(),arguments: {
               "merchant":merchant,
               "action":"buy_product",
               "transaction_object":p,
@@ -217,7 +148,7 @@ class TradeController extends GetxController
           {
             print("## the insertion to total purchase table was recorded successfully");
             //proceed to printing screen
-            Get.to(PrintingScreen(),arguments: {
+            Get.off(PrintingScreen(),arguments: {
               "merchant":merchant,
               "action":"buy_product",
               "transaction_object":p,
@@ -281,7 +212,7 @@ class TradeController extends GetxController
           if(rows_affected>0)
           {
             print("## the insertion to total sale table was recorded successfully");
-            Get.to(PrintingScreen(),arguments: {
+            Get.off(PrintingScreen(),arguments: {
               "merchant":merchant,
               "action":"sell_product",
               "transaction_object":s,
@@ -306,7 +237,7 @@ class TradeController extends GetxController
         if(rows_affected)
         {
           print("## the insertion to total sale table was recorded successfully");
-          Get.to(PrintingScreen(),arguments: {
+          Get.off(PrintingScreen(),arguments: {
             "merchant":merchant,
             "action":"sell_product",
             "transaction_object":s,
@@ -317,61 +248,6 @@ class TradeController extends GetxController
         }
       }
     }
-  }*/
-  Widget render_transactions(GlobalKey<FormBuilderState> _formKey,TextEditingController textEditingController)
-  {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-          Text("Sale",style: MyTextStyle.make("body"),),
-         Radio(value: "sell_product", groupValue: action,
-             onChanged: (value){action=value.toString();
-           _formKey.currentState?.reset();
-             textEditingController.text = "";
-           update();
-
-         }),
-
-          Text("Purchase",style: MyTextStyle.make("body"),),
-          Radio(value: "buy_product", groupValue: action,
-              onChanged: (value){action=value.toString();
-              _formKey.currentState?.reset();
-              textEditingController.text = "";
-
-            update();}),
-
-      ],
-    );
   }
 
-  void on_press_choose_product(TextEditingController textEditingController) async {
-    // take a list of products
-    Map data = {};
-    if(action == "sell_product")
-      {
-        data = {
-          "items":sellable_products,
-          "action":action
-        };
-      }
-    else if(action == "buy_product")
-    {
-     data = {
-       "items":buyable_products,
-    "action":action
-     };
-    }
-    else
-      {
-        Get.defaultDialog(title: "Error",content: Text("Choose a Transaction to continue"));
-        return;
-      }
-    // foward to a choose page
-     String choice =  await Get.to(ChooseProduct(),arguments: data);
-    // fill the space with the choice
-    textEditingController.text = choice;
-    update();
-
-
-  }
 }

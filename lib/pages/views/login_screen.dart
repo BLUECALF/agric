@@ -8,16 +8,11 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import '../../database/database.dart';
 
-class LoginScreen extends StatefulWidget {
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreen extends GetView{
 
   final _formKey = GlobalKey<FormBuilderState>();
-  final database =  Get.put(AppDatabase());
+  final database =  Get.find<AppDatabase>();
+  final loginController = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Log In screen",style: MyTextStyle.make("title-white"),
+                    "Welcome Back",style: MyTextStyle.make("title-white"),
                   ),
                   SizedBox(height: 20,),
                   FormBuilder(
@@ -62,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: MyTextFieldDecoration.make("Enter Username"),
                           cursorColor: Colors.white,
                           cursorWidth: 5,
-                          validator:(value)=>LoginController.validate_username(value),
+                          validator:(value)=>loginController.validate_username(value),
                         ),
                         SizedBox(height: 20,),
                         FormBuilderTextField(name: "password",
@@ -71,15 +66,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           cursorColor: Colors.white,
                           obscureText: true,
                           cursorWidth: 5,
-                          validator: (value)=>LoginController.validate_password(value),
+                          validator: (value)=>loginController.validate_password(value),
                         ),
                         SizedBox(height: 20,),
                       ],
                     ),
                   ),
 
-                  TextButton(onPressed:()=> LoginController.validate_login_form(_formKey, context)
-                  , child: Text("Log In",style: MyTextStyle.make(""),),style: MyButtonDecoration.make(),),
+                  Container(
+                    width: double.infinity,
+                    child: TextButton(onPressed:()=> loginController.validate_login_form(_formKey, context)
+                    , child: Text("Log In",style: MyTextStyle.make("body-white"),),style: MyButtonDecoration.make(),),
+                  ),
                 ],
               ),
             ),

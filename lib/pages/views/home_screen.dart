@@ -1,7 +1,10 @@
 
 import 'package:agric/pages/controller/home_controller.dart';
+import 'package:agric/pages/views/products_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'login_screen.dart';
 
 class HomeScreen extends StatelessWidget{
 
@@ -10,7 +13,6 @@ final HomeController  homeController =  Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
-    homeController.get_attributes_from_login(context);
     homeController.get_xreport_list();
     return Scaffold(
       backgroundColor: Colors.greenAccent,
@@ -50,10 +52,10 @@ final HomeController  homeController =  Get.put(HomeController());
                     crossAxisCount: 3,                            
 
                 children: [
-                  homeController.render_button(icon_name:Icons.add_shopping_cart, function:(){homeController.take_product(context);} , text: "purchase Product"),
-                  homeController.render_button(icon_name:Icons.sell, function:(){homeController.give_product(context);} , text: "Sell Product"),
+                  homeController.render_button(icon_name:Icons.add_shopping_cart, function:(){homeController.trade();} , text: "Purchase / Sell Product"),
+                  homeController.render_button(icon_name:Icons.computer, function:(){} , text: "Connect to server"),
                   homeController.render_button(icon_name:Icons.read_more, function:(){homeController.print_reports(context);} , text: "Print Reports"),
-                  homeController.render_button(icon_name:Icons.add, function:(){Navigator.pushNamed(context, "/products_screen");} , text: "add/remove products"),
+                  homeController.render_button(icon_name:Icons.add, function:(){Get.to(ProductsScreen());} , text: "add/remove products"),
                   homeController.render_button(icon_name:Icons.print, function:(){homeController.on_press_of_produce_zreport(context);} , text: "Produce Z Report "),
                   homeController.render_button(icon_name:Icons.refresh, function:(){homeController.update_xreport();} , text: " Update X report"),
 
@@ -63,7 +65,7 @@ final HomeController  homeController =  Get.put(HomeController());
             ]),
       ),
 
-      floatingActionButton: FloatingActionButton(onPressed: () { Navigator.pop(context);
+      floatingActionButton: FloatingActionButton(onPressed: () { Get.off(LoginScreen());
       },child: Icon(Icons.logout,size: 50,color: Colors.redAccent,),
       backgroundColor: Colors.white,
 

@@ -10,7 +10,7 @@ class MyTextStyle extends TextStyle {
           fontSize: 25,
           fontWeight: FontWeight.bold,
           letterSpacing: 4,
-          fontFamily: "Courier Prime",
+          //fontFamily: "Courier Prime",
           color: Colors.black,
 
         );
@@ -21,17 +21,27 @@ class MyTextStyle extends TextStyle {
         fontSize: 20,
         fontWeight: FontWeight.normal,
         letterSpacing: 2,
-        fontFamily: "Courier Prime",
+        //fontFamily: "Courier Prime",
         color: Colors.black,
       );
       }
+    else if(purpose=="body-white")
+    {
+      return TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.normal,
+        letterSpacing: 2,
+        //fontFamily: "Courier Prime",
+        color: Colors.white,
+      );
+    }
     else if(purpose=="title-white")
     {
       return TextStyle(
         fontSize: 35,
         fontWeight: FontWeight.bold,
         letterSpacing: 2,
-        fontFamily: "Courier Prime",
+        //fontFamily: "Courier Prime",
         color: Colors.white,
       );
     }
@@ -41,7 +51,7 @@ class MyTextStyle extends TextStyle {
         fontSize: 7,
         fontWeight: FontWeight.bold,
         letterSpacing: 1,
-        fontFamily: "Courier Prime",
+       // fontFamily: "Courier Prime",
         color: Colors.black,
       );
     }
@@ -51,7 +61,7 @@ class MyTextStyle extends TextStyle {
         fontSize: 8,
         fontWeight: FontWeight.bold,
         letterSpacing: 1,
-        fontFamily: "Courier Prime",
+        //fontFamily: "Courier Prime",
         color: Colors.black,
       );
     }
@@ -61,7 +71,7 @@ class MyTextStyle extends TextStyle {
           fontSize: 14,
           fontWeight: FontWeight.normal,
           letterSpacing: 2,
-          fontFamily: "Courier Prime",
+          //fontFamily: "Courier Prime",
           color: Colors.white,
         );
 

@@ -36,7 +36,7 @@ class PrintingScreen extends StatelessWidget {
         ],
       );}),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
+        onPressed: (){printingController.on_press_print();},
         child: Icon(Icons.print),
       ),
 

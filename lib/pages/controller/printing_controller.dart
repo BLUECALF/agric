@@ -1,5 +1,6 @@
 
 import 'package:agric/database/database.dart';
+import 'package:agric/pages/views/trade_screen.dart';
 import 'package:agric/styles/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -100,6 +101,11 @@ class PrintingController extends GetxController
         ),
       ),
     );
+  }
+  void on_press_print()
+  {
+    Get.defaultDialog(title: "Printing ......");
+    Get.off(TradeScreen());
   }
 
 

@@ -1,3 +1,4 @@
+import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/views/reports_screen.dart';
 import 'package:agric/pages/views/trade_screen.dart';
@@ -9,8 +10,8 @@ import 'package:get/get.dart';
 class HomeController extends GetxController
 {
    final database = Get.find<AppDatabase>();
+   final appController = Get.find<AppController>();
    final SalesDao salesDao = Get.put(AppDatabase().salesDao);
-  Map data ={};
   String message ="";
 
 
@@ -20,15 +21,7 @@ class HomeController extends GetxController
     units_bought: 0,
     units_sold: 0,
   )];
-  
- 
 
-  void get_attributes_from_login(BuildContext context)
-  {
-    //get data from login screen
-    //data = ModalRoute.of(context)?.settings.arguments as Map;
-    data = Get.arguments;
-  }
   void get_xreport_list() async {
 
     print("xreport b4:${xreport_list[0]}");
@@ -83,7 +76,7 @@ class HomeController extends GetxController
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("User: ",style: MyTextStyle.make("body"),),
-            Text(" ${data["username"].toString().toUpperCase()}",style: MyTextStyle.make("body"),),
+            Text(" ${appController.username.toUpperCase()}",style: MyTextStyle.make("body"),),
           ],
         ),
       ),
@@ -106,7 +99,7 @@ class HomeController extends GetxController
     );
   }
 
-  static bool confirm_dialog(String title,String body,BuildContext context,Function function)
+  bool confirm_dialog(String title,String body,BuildContext context,Function function)
   {
     var alertDialog = AlertDialog(
       title: Text("$title"),
@@ -126,7 +119,7 @@ class HomeController extends GetxController
   }
   void on_press_of_produce_zreport(BuildContext context) async
   {
-  await confirm_dialog("Alert", "Are you sure to produce z report", context, (){on_accept_to_produce_zreport();});
+  await confirm_dialog("Alert", "Are you sure to produce z report This will reset all X report records", context, (){on_accept_to_produce_zreport();});
 
   }
 
@@ -157,7 +150,7 @@ class HomeController extends GetxController
       transactions_bought: xreport_object.transactions_bought,
       units_sold: xreport_object.units_sold,
       units_bought: xreport_object.units_bought,
-      username: data["username"],
+      username: appController.username,
     );
 
     int rows = await database.insertZreport(zreport_object);
@@ -186,21 +179,9 @@ class HomeController extends GetxController
 
   // other methods
 
-  void take_product(context)
+  void trade()
   {
-
-    Get.to(()=> TradeScreen(),arguments: {
-      "username":data["username"],
-      "action":"buy_product"
-    });
-  }
-
-  void give_product(context)
-  {
-    Get.to(()=> TradeScreen() , arguments: {
-      "username":data["username"],
-      "action":"sell_product"
-    });
+    Get.to(()=> TradeScreen());
   }
   void print_reports(context)
   {

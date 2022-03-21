@@ -1,18 +1,21 @@
+import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/views/home_screen.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+
 
 
 class LoginController extends GetxController
 {
   final database =  Get.find<AppDatabase>();
+  final appController =  Get.find<AppController>();
+  late String date;
 
 
-   static Future<bool> verify_login_details(String username,String password) async
+    Future<bool> verify_login_details(String username,String password) async
   {
     print("Current date is ");
     print(DateTime.now());
@@ -21,21 +24,21 @@ class LoginController extends GetxController
     final _monthFormater = DateFormat('M');
     final _yearFormater = DateFormat('y');
 
-    var date = "${_dayFormater.format(now)}-${_monthFormater.format(now)}-${_yearFormater.format(now)}";
+    date = "${_dayFormater.format(now)}-${_monthFormater.format(now)}-${_yearFormater.format(now)}";
 
     print(" date is $date");
 
     return true;
   }
 
-  static String? validate_username(String? value)
+   String? validate_username(String? value)
    {
    if(value == "" || value == null)
    {return "Enter Username";}
    else{return null;}
    }
 
-   static String? validate_password(String? value)
+    String? validate_password(String? value)
    {
      if (value == "" || value == null) {
        return "Enter Password";
@@ -45,7 +48,7 @@ class LoginController extends GetxController
      }
    }
 
-   static validate_login_form(GlobalKey<FormBuilderState> _formKey,BuildContext context) async
+    validate_login_form(GlobalKey<FormBuilderState> _formKey,BuildContext context) async
    {
      var validate = _formKey.currentState?.validate();
      if(validate==true) {
@@ -58,7 +61,10 @@ class LoginController extends GetxController
            data["username"], data["password"]);
 
        if (accepted == true) {
-        Get.to(()=> HomeScreen(),arguments: data);
+        Get.off(()=> HomeScreen(),);
+        // update app conroller
+         appController.username = data["username"];
+         appController.current_date = DateTime.now();
        }
        else{
          alert_dialog("error", "username and password you entered is wrong", context);
@@ -66,7 +72,7 @@ class LoginController extends GetxController
 
      }}
 
-  static void alert_dialog(String title,String body,context)
+   void alert_dialog(String title,String body,context)
   {
       var alertDialog = AlertDialog(
       title: Text("$title"),
