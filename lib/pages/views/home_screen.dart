@@ -1,4 +1,5 @@
 
+import 'package:agric/database/database.dart';
 import 'package:agric/pages/controller/home_controller.dart';
 import 'package:agric/pages/views/products_screen.dart';
 import 'package:flutter/material.dart';
@@ -38,9 +39,19 @@ final HomeController  homeController =  Get.put(HomeController());
                 CircleAvatar(backgroundImage: AssetImage("assets/fresh_milk.jpg"),radius: 20,),
                 homeController.render_username(),
                 SizedBox(height: 20),
-                GetBuilder<HomeController>(builder: (_){
-                  return homeController.render_xreport();
-                }),
+
+                StreamBuilder(
+                  stream: homeController.database.getXreportListStream(homeController.appController.username),
+                    builder: (context , snapshot)
+                    {
+                      print("snaphot  data is ");
+                      print(snapshot.data);
+                      if(snapshot.hasError)
+                        {return Text("Error in X report data,${snapshot.toString()}");}
+                      List<Xreport> xreport_list  = snapshot.data as List<Xreport>;
+                      return homeController.render_xreport(xreport_list);
+                    }
+                ),
 
               ],
             ),
@@ -49,7 +60,7 @@ final HomeController  homeController =  Get.put(HomeController());
               child: GridView.count(
                     mainAxisSpacing: 2,
                     crossAxisSpacing: 2,
-                    crossAxisCount: 3,                            
+                    crossAxisCount: 3,
 
                 children: [
                   homeController.render_button(icon_name:Icons.add_shopping_cart, function:(){homeController.trade();} , text: "Purchase / Sell Product"),
@@ -68,9 +79,7 @@ final HomeController  homeController =  Get.put(HomeController());
       floatingActionButton: FloatingActionButton(onPressed: () { Get.off(LoginScreen());
       },child: Icon(Icons.logout,size: 50,color: Colors.redAccent,),
       backgroundColor: Colors.white,
-
       ),
-
     );
   }
 

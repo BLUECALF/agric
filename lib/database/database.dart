@@ -10,10 +10,14 @@ part "database.g.dart";
 
 
 class Sales extends Table {
-
+  IntColumn get id => integer()();
+  DateTimeColumn get date => dateTime()();
   TextColumn get product => text()();
   RealColumn get amount_kg => real()();
   TextColumn get farmer_number => text()();
+  TextColumn get username => text()();
+  IntColumn get zreport_id => integer().nullable()();
+  Set<Column> get primaryKey => {id};
 }
 
 class TotalSales extends Table {
@@ -25,10 +29,14 @@ class TotalSales extends Table {
 }
 
 class Purchases extends Table {
-
+  IntColumn get id => integer()();
+  DateTimeColumn get date => dateTime()();
   TextColumn get product => text()();
   RealColumn get amount_kg => real()();
   TextColumn get farmer_number => text()();
+  TextColumn get username => text()();
+  IntColumn get zreport_id => integer().nullable()();
+  Set<Column> get primaryKey => {id};
 }
 
 class TotalPurchases extends Table {
@@ -50,11 +58,13 @@ class Users extends Table {
 // x report
 
 class Xreports extends Table {
-  IntColumn get id => integer().autoIncrement()();
+
+  TextColumn get username => text()();
   IntColumn get transactions_sold => integer()();
   IntColumn get transactions_bought => integer()();
   RealColumn get units_sold => real()();
   RealColumn get units_bought => real()();
+  Set<Column> get primaryKey => {username};
 }
 
 class Zreports extends Table {
@@ -64,6 +74,8 @@ class Zreports extends Table {
   RealColumn get units_sold => real()();
   RealColumn get units_bought => real()();
   TextColumn get username => text()();
+  IntColumn get zreport_id => integer()();
+  Set<Column> get primaryKey => {zreport_id};
 }
 
 //make Sellable products
@@ -103,7 +115,7 @@ class AppDatabase extends _$AppDatabase{
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   //make a miration strategy for the schemer version 1
   MigrationStrategy get migration => MigrationStrategy(
@@ -116,6 +128,29 @@ class AppDatabase extends _$AppDatabase{
           await migrator.createTable(sellableProducts);
           await migrator.createTable(totalSales);
           await migrator.createTable(totalPurchases);
+        }
+      if(from == 2)
+        {
+          // await migrator to change tables
+          // sales
+          await migrator.addColumn(sales, sales.id);
+          await migrator.addColumn(sales, sales.date);
+          await migrator.addColumn(sales, sales.username);
+          await migrator.addColumn(sales, sales.zreport_id);
+          // purchases
+          await migrator.addColumn(purchases, purchases.id);
+          await migrator.addColumn(purchases, purchases.date);
+          await migrator.addColumn(purchases, purchases.username);
+          await migrator.addColumn(purchases, purchases.zreport_id);
+
+          await migrator.addColumn(xreports, xreports.username);
+          // zreport
+          await migrator.addColumn(zreports, zreports.zreport_id);
+
+          // x report
+          await migrator.issueCustomQuery("ALTER TABLE AppDatabase.xreport DROP COLUMN id;");
+
+
         }
 
 
@@ -146,9 +181,6 @@ class AppDatabase extends _$AppDatabase{
   { return await delete(users).delete(User);}
 
 
-
-
-
   //insert ,get ,update and delete For Purchases
 
   //insert
@@ -158,6 +190,11 @@ class AppDatabase extends _$AppDatabase{
   //getlist of object
   Future<List<Purchase>> getPurchaseList() async
   {  return await select(purchases).get(); }
+
+  //getlist of sale obt
+  Future<List<Purchase>> getPurchaseList_by_username_and_zreport_id(String username) async
+  {  return await   (select(purchases)..where((tbl) => tbl.username.equals(username) & tbl.zreport_id.equals(-1) )).get();
+  }
 
   //update value in db
   Future<bool> updatePurchase(Purchase) async
@@ -176,8 +213,12 @@ class AppDatabase extends _$AppDatabase{
   { return await into(xreports).insert(Xreport);}
 
   //getlist of object
-  Future<List<Xreport>> getXreportList() async
-  {  return await select(xreports).get(); }
+  Future<List<Xreport>> getXreportList(String username) async
+  {  return await (select(xreports)..where((tbl) => tbl.username.equals(username))).get();}
+
+  //get Stream of x report
+  Stream<List<Xreport>> getXreportListStream(String username)
+  {  return (select(xreports)..where((tbl) => tbl.username.equals(username))).watch();}
 
   //update value in db
   Future<bool> updateXreport(Xreport) async
@@ -197,8 +238,16 @@ class AppDatabase extends _$AppDatabase{
   { return await into(zreports).insert(Zreport);}
 
   //getlist of object
-  Future<List<Zreport>> getZreportList() async
-  {  return await select(zreports).get(); }
+  Future<List<Zreport>> getZreportList(String username) async
+  {  return await (select(zreports)..where((tbl) => tbl.username.equals(username))).get(); }
+
+  //getlist of object
+  Future<List<Zreport>> getZreportListAll() async
+  {  return await select(zreports).get();}
+
+  //get Stream of zreport
+  Stream<List<Zreport>> getZreportListStream(String username)
+  {  return (select(zreports)..where((tbl) => tbl.username.equals(username))).watch();}
 
   //update value in db
   Future<bool> updateZreport(Zreport) async
@@ -317,6 +366,12 @@ class SalesDao extends DatabaseAccessor<AppDatabase> with _$SalesDaoMixin {
   //getlist of object
   Future<List<Sale>> getSaleList() async
   {  return await select(sales).get(); }
+  
+  //getlist of sale obt
+  Future<List<Sale>> getSaleList_by_username_and_zreport_id(String username) async
+  {  return await   (select(sales)..where((tbl) => tbl.username.equals(username) & tbl.zreport_id.equals(-1))).get();
+  }
+
 
   //update value in db
   Future<bool> updateSale(Sale) async

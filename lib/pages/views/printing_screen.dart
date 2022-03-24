@@ -5,7 +5,7 @@ import "package:flutter/material.dart";
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class PrintingScreen extends StatelessWidget {
+class PrintingScreen extends GetView{
 
   final PrintingController printingController = Get.put(PrintingController());
 
@@ -42,9 +42,4 @@ class PrintingScreen extends StatelessWidget {
 
     );
   }
-
-
-
-
-
 }

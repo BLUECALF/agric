@@ -8,38 +8,66 @@ part of 'database.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class Sale extends DataClass implements Insertable<Sale> {
+  final int id;
+  final DateTime date;
   final String product;
   final double amount_kg;
   final String farmer_number;
+  final String username;
+  final int? zreport_id;
   Sale(
-      {required this.product,
+      {required this.id,
+      required this.date,
+      required this.product,
       required this.amount_kg,
-      required this.farmer_number});
+      required this.farmer_number,
+      required this.username,
+      this.zreport_id});
   factory Sale.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Sale(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      date: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date'])!,
       product: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}product'])!,
       amount_kg: const RealType()
           .mapFromDatabaseResponse(data['${effectivePrefix}amount_kg'])!,
       farmer_number: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}farmer_number'])!,
+      username: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}username'])!,
+      zreport_id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}zreport_id']),
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['date'] = Variable<DateTime>(date);
     map['product'] = Variable<String>(product);
     map['amount_kg'] = Variable<double>(amount_kg);
     map['farmer_number'] = Variable<String>(farmer_number);
+    map['username'] = Variable<String>(username);
+    if (!nullToAbsent || zreport_id != null) {
+      map['zreport_id'] = Variable<int?>(zreport_id);
+    }
     return map;
   }
 
   SalesCompanion toCompanion(bool nullToAbsent) {
     return SalesCompanion(
+      id: Value(id),
+      date: Value(date),
       product: Value(product),
       amount_kg: Value(amount_kg),
       farmer_number: Value(farmer_number),
+      username: Value(username),
+      zreport_id: zreport_id == null && nullToAbsent
+          ? const Value.absent()
+          : Value(zreport_id),
     );
   }
 
@@ -47,90 +75,154 @@ class Sale extends DataClass implements Insertable<Sale> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Sale(
+      id: serializer.fromJson<int>(json['id']),
+      date: serializer.fromJson<DateTime>(json['date']),
       product: serializer.fromJson<String>(json['product']),
       amount_kg: serializer.fromJson<double>(json['amount_kg']),
       farmer_number: serializer.fromJson<String>(json['farmer_number']),
+      username: serializer.fromJson<String>(json['username']),
+      zreport_id: serializer.fromJson<int?>(json['zreport_id']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'date': serializer.toJson<DateTime>(date),
       'product': serializer.toJson<String>(product),
       'amount_kg': serializer.toJson<double>(amount_kg),
       'farmer_number': serializer.toJson<String>(farmer_number),
+      'username': serializer.toJson<String>(username),
+      'zreport_id': serializer.toJson<int?>(zreport_id),
     };
   }
 
-  Sale copyWith({String? product, double? amount_kg, String? farmer_number}) =>
+  Sale copyWith(
+          {int? id,
+          DateTime? date,
+          String? product,
+          double? amount_kg,
+          String? farmer_number,
+          String? username,
+          int? zreport_id}) =>
       Sale(
+        id: id ?? this.id,
+        date: date ?? this.date,
         product: product ?? this.product,
         amount_kg: amount_kg ?? this.amount_kg,
         farmer_number: farmer_number ?? this.farmer_number,
+        username: username ?? this.username,
+        zreport_id: zreport_id ?? this.zreport_id,
       );
   @override
   String toString() {
     return (StringBuffer('Sale(')
+          ..write('id: $id, ')
+          ..write('date: $date, ')
           ..write('product: $product, ')
           ..write('amount_kg: $amount_kg, ')
-          ..write('farmer_number: $farmer_number')
+          ..write('farmer_number: $farmer_number, ')
+          ..write('username: $username, ')
+          ..write('zreport_id: $zreport_id')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(product, amount_kg, farmer_number);
+  int get hashCode => Object.hash(
+      id, date, product, amount_kg, farmer_number, username, zreport_id);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Sale &&
+          other.id == this.id &&
+          other.date == this.date &&
           other.product == this.product &&
           other.amount_kg == this.amount_kg &&
-          other.farmer_number == this.farmer_number);
+          other.farmer_number == this.farmer_number &&
+          other.username == this.username &&
+          other.zreport_id == this.zreport_id);
 }
 
 class SalesCompanion extends UpdateCompanion<Sale> {
+  final Value<int> id;
+  final Value<DateTime> date;
   final Value<String> product;
   final Value<double> amount_kg;
   final Value<String> farmer_number;
+  final Value<String> username;
+  final Value<int?> zreport_id;
   const SalesCompanion({
+    this.id = const Value.absent(),
+    this.date = const Value.absent(),
     this.product = const Value.absent(),
     this.amount_kg = const Value.absent(),
     this.farmer_number = const Value.absent(),
+    this.username = const Value.absent(),
+    this.zreport_id = const Value.absent(),
   });
   SalesCompanion.insert({
+    this.id = const Value.absent(),
+    required DateTime date,
     required String product,
     required double amount_kg,
     required String farmer_number,
-  })  : product = Value(product),
+    required String username,
+    this.zreport_id = const Value.absent(),
+  })  : date = Value(date),
+        product = Value(product),
         amount_kg = Value(amount_kg),
-        farmer_number = Value(farmer_number);
+        farmer_number = Value(farmer_number),
+        username = Value(username);
   static Insertable<Sale> custom({
+    Expression<int>? id,
+    Expression<DateTime>? date,
     Expression<String>? product,
     Expression<double>? amount_kg,
     Expression<String>? farmer_number,
+    Expression<String>? username,
+    Expression<int?>? zreport_id,
   }) {
     return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (date != null) 'date': date,
       if (product != null) 'product': product,
       if (amount_kg != null) 'amount_kg': amount_kg,
       if (farmer_number != null) 'farmer_number': farmer_number,
+      if (username != null) 'username': username,
+      if (zreport_id != null) 'zreport_id': zreport_id,
     });
   }
 
   SalesCompanion copyWith(
-      {Value<String>? product,
+      {Value<int>? id,
+      Value<DateTime>? date,
+      Value<String>? product,
       Value<double>? amount_kg,
-      Value<String>? farmer_number}) {
+      Value<String>? farmer_number,
+      Value<String>? username,
+      Value<int?>? zreport_id}) {
     return SalesCompanion(
+      id: id ?? this.id,
+      date: date ?? this.date,
       product: product ?? this.product,
       amount_kg: amount_kg ?? this.amount_kg,
       farmer_number: farmer_number ?? this.farmer_number,
+      username: username ?? this.username,
+      zreport_id: zreport_id ?? this.zreport_id,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
     if (product.present) {
       map['product'] = Variable<String>(product.value);
     }
@@ -140,15 +232,25 @@ class SalesCompanion extends UpdateCompanion<Sale> {
     if (farmer_number.present) {
       map['farmer_number'] = Variable<String>(farmer_number.value);
     }
+    if (username.present) {
+      map['username'] = Variable<String>(username.value);
+    }
+    if (zreport_id.present) {
+      map['zreport_id'] = Variable<int?>(zreport_id.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('SalesCompanion(')
+          ..write('id: $id, ')
+          ..write('date: $date, ')
           ..write('product: $product, ')
           ..write('amount_kg: $amount_kg, ')
-          ..write('farmer_number: $farmer_number')
+          ..write('farmer_number: $farmer_number, ')
+          ..write('username: $username, ')
+          ..write('zreport_id: $zreport_id')
           ..write(')'))
         .toString();
   }
@@ -159,6 +261,16 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $SalesTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime?> date = GeneratedColumn<DateTime?>(
+      'date', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _productMeta = const VerificationMeta('product');
   @override
   late final GeneratedColumn<String?> product = GeneratedColumn<String?>(
@@ -175,8 +287,19 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
   late final GeneratedColumn<String?> farmer_number = GeneratedColumn<String?>(
       'farmer_number', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _usernameMeta = const VerificationMeta('username');
   @override
-  List<GeneratedColumn> get $columns => [product, amount_kg, farmer_number];
+  late final GeneratedColumn<String?> username = GeneratedColumn<String?>(
+      'username', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _zreport_idMeta = const VerificationMeta('zreport_id');
+  @override
+  late final GeneratedColumn<int?> zreport_id = GeneratedColumn<int?>(
+      'zreport_id', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, date, product, amount_kg, farmer_number, username, zreport_id];
   @override
   String get aliasedName => _alias ?? 'sales';
   @override
@@ -186,6 +309,15 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
     if (data.containsKey('product')) {
       context.handle(_productMeta,
           product.isAcceptableOrUnknown(data['product']!, _productMeta));
@@ -206,11 +338,23 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
     } else if (isInserting) {
       context.missing(_farmer_numberMeta);
     }
+    if (data.containsKey('username')) {
+      context.handle(_usernameMeta,
+          username.isAcceptableOrUnknown(data['username']!, _usernameMeta));
+    } else if (isInserting) {
+      context.missing(_usernameMeta);
+    }
+    if (data.containsKey('zreport_id')) {
+      context.handle(
+          _zreport_idMeta,
+          zreport_id.isAcceptableOrUnknown(
+              data['zreport_id']!, _zreport_idMeta));
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Sale map(Map<String, dynamic> data, {String? tablePrefix}) {
     return Sale.fromData(data,
@@ -224,38 +368,66 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
 }
 
 class Purchase extends DataClass implements Insertable<Purchase> {
+  final int id;
+  final DateTime date;
   final String product;
   final double amount_kg;
   final String farmer_number;
+  final String username;
+  final int? zreport_id;
   Purchase(
-      {required this.product,
+      {required this.id,
+      required this.date,
+      required this.product,
       required this.amount_kg,
-      required this.farmer_number});
+      required this.farmer_number,
+      required this.username,
+      this.zreport_id});
   factory Purchase.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Purchase(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      date: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date'])!,
       product: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}product'])!,
       amount_kg: const RealType()
           .mapFromDatabaseResponse(data['${effectivePrefix}amount_kg'])!,
       farmer_number: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}farmer_number'])!,
+      username: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}username'])!,
+      zreport_id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}zreport_id']),
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['date'] = Variable<DateTime>(date);
     map['product'] = Variable<String>(product);
     map['amount_kg'] = Variable<double>(amount_kg);
     map['farmer_number'] = Variable<String>(farmer_number);
+    map['username'] = Variable<String>(username);
+    if (!nullToAbsent || zreport_id != null) {
+      map['zreport_id'] = Variable<int?>(zreport_id);
+    }
     return map;
   }
 
   PurchasesCompanion toCompanion(bool nullToAbsent) {
     return PurchasesCompanion(
+      id: Value(id),
+      date: Value(date),
       product: Value(product),
       amount_kg: Value(amount_kg),
       farmer_number: Value(farmer_number),
+      username: Value(username),
+      zreport_id: zreport_id == null && nullToAbsent
+          ? const Value.absent()
+          : Value(zreport_id),
     );
   }
 
@@ -263,91 +435,154 @@ class Purchase extends DataClass implements Insertable<Purchase> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Purchase(
+      id: serializer.fromJson<int>(json['id']),
+      date: serializer.fromJson<DateTime>(json['date']),
       product: serializer.fromJson<String>(json['product']),
       amount_kg: serializer.fromJson<double>(json['amount_kg']),
       farmer_number: serializer.fromJson<String>(json['farmer_number']),
+      username: serializer.fromJson<String>(json['username']),
+      zreport_id: serializer.fromJson<int?>(json['zreport_id']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'date': serializer.toJson<DateTime>(date),
       'product': serializer.toJson<String>(product),
       'amount_kg': serializer.toJson<double>(amount_kg),
       'farmer_number': serializer.toJson<String>(farmer_number),
+      'username': serializer.toJson<String>(username),
+      'zreport_id': serializer.toJson<int?>(zreport_id),
     };
   }
 
   Purchase copyWith(
-          {String? product, double? amount_kg, String? farmer_number}) =>
+          {int? id,
+          DateTime? date,
+          String? product,
+          double? amount_kg,
+          String? farmer_number,
+          String? username,
+          int? zreport_id}) =>
       Purchase(
+        id: id ?? this.id,
+        date: date ?? this.date,
         product: product ?? this.product,
         amount_kg: amount_kg ?? this.amount_kg,
         farmer_number: farmer_number ?? this.farmer_number,
+        username: username ?? this.username,
+        zreport_id: zreport_id ?? this.zreport_id,
       );
   @override
   String toString() {
     return (StringBuffer('Purchase(')
+          ..write('id: $id, ')
+          ..write('date: $date, ')
           ..write('product: $product, ')
           ..write('amount_kg: $amount_kg, ')
-          ..write('farmer_number: $farmer_number')
+          ..write('farmer_number: $farmer_number, ')
+          ..write('username: $username, ')
+          ..write('zreport_id: $zreport_id')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(product, amount_kg, farmer_number);
+  int get hashCode => Object.hash(
+      id, date, product, amount_kg, farmer_number, username, zreport_id);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Purchase &&
+          other.id == this.id &&
+          other.date == this.date &&
           other.product == this.product &&
           other.amount_kg == this.amount_kg &&
-          other.farmer_number == this.farmer_number);
+          other.farmer_number == this.farmer_number &&
+          other.username == this.username &&
+          other.zreport_id == this.zreport_id);
 }
 
 class PurchasesCompanion extends UpdateCompanion<Purchase> {
+  final Value<int> id;
+  final Value<DateTime> date;
   final Value<String> product;
   final Value<double> amount_kg;
   final Value<String> farmer_number;
+  final Value<String> username;
+  final Value<int?> zreport_id;
   const PurchasesCompanion({
+    this.id = const Value.absent(),
+    this.date = const Value.absent(),
     this.product = const Value.absent(),
     this.amount_kg = const Value.absent(),
     this.farmer_number = const Value.absent(),
+    this.username = const Value.absent(),
+    this.zreport_id = const Value.absent(),
   });
   PurchasesCompanion.insert({
+    this.id = const Value.absent(),
+    required DateTime date,
     required String product,
     required double amount_kg,
     required String farmer_number,
-  })  : product = Value(product),
+    required String username,
+    this.zreport_id = const Value.absent(),
+  })  : date = Value(date),
+        product = Value(product),
         amount_kg = Value(amount_kg),
-        farmer_number = Value(farmer_number);
+        farmer_number = Value(farmer_number),
+        username = Value(username);
   static Insertable<Purchase> custom({
+    Expression<int>? id,
+    Expression<DateTime>? date,
     Expression<String>? product,
     Expression<double>? amount_kg,
     Expression<String>? farmer_number,
+    Expression<String>? username,
+    Expression<int?>? zreport_id,
   }) {
     return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (date != null) 'date': date,
       if (product != null) 'product': product,
       if (amount_kg != null) 'amount_kg': amount_kg,
       if (farmer_number != null) 'farmer_number': farmer_number,
+      if (username != null) 'username': username,
+      if (zreport_id != null) 'zreport_id': zreport_id,
     });
   }
 
   PurchasesCompanion copyWith(
-      {Value<String>? product,
+      {Value<int>? id,
+      Value<DateTime>? date,
+      Value<String>? product,
       Value<double>? amount_kg,
-      Value<String>? farmer_number}) {
+      Value<String>? farmer_number,
+      Value<String>? username,
+      Value<int?>? zreport_id}) {
     return PurchasesCompanion(
+      id: id ?? this.id,
+      date: date ?? this.date,
       product: product ?? this.product,
       amount_kg: amount_kg ?? this.amount_kg,
       farmer_number: farmer_number ?? this.farmer_number,
+      username: username ?? this.username,
+      zreport_id: zreport_id ?? this.zreport_id,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
     if (product.present) {
       map['product'] = Variable<String>(product.value);
     }
@@ -357,15 +592,25 @@ class PurchasesCompanion extends UpdateCompanion<Purchase> {
     if (farmer_number.present) {
       map['farmer_number'] = Variable<String>(farmer_number.value);
     }
+    if (username.present) {
+      map['username'] = Variable<String>(username.value);
+    }
+    if (zreport_id.present) {
+      map['zreport_id'] = Variable<int?>(zreport_id.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('PurchasesCompanion(')
+          ..write('id: $id, ')
+          ..write('date: $date, ')
           ..write('product: $product, ')
           ..write('amount_kg: $amount_kg, ')
-          ..write('farmer_number: $farmer_number')
+          ..write('farmer_number: $farmer_number, ')
+          ..write('username: $username, ')
+          ..write('zreport_id: $zreport_id')
           ..write(')'))
         .toString();
   }
@@ -377,6 +622,16 @@ class $PurchasesTable extends Purchases
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $PurchasesTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime?> date = GeneratedColumn<DateTime?>(
+      'date', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _productMeta = const VerificationMeta('product');
   @override
   late final GeneratedColumn<String?> product = GeneratedColumn<String?>(
@@ -393,8 +648,19 @@ class $PurchasesTable extends Purchases
   late final GeneratedColumn<String?> farmer_number = GeneratedColumn<String?>(
       'farmer_number', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _usernameMeta = const VerificationMeta('username');
   @override
-  List<GeneratedColumn> get $columns => [product, amount_kg, farmer_number];
+  late final GeneratedColumn<String?> username = GeneratedColumn<String?>(
+      'username', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _zreport_idMeta = const VerificationMeta('zreport_id');
+  @override
+  late final GeneratedColumn<int?> zreport_id = GeneratedColumn<int?>(
+      'zreport_id', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, date, product, amount_kg, farmer_number, username, zreport_id];
   @override
   String get aliasedName => _alias ?? 'purchases';
   @override
@@ -404,6 +670,15 @@ class $PurchasesTable extends Purchases
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
     if (data.containsKey('product')) {
       context.handle(_productMeta,
           product.isAcceptableOrUnknown(data['product']!, _productMeta));
@@ -424,11 +699,23 @@ class $PurchasesTable extends Purchases
     } else if (isInserting) {
       context.missing(_farmer_numberMeta);
     }
+    if (data.containsKey('username')) {
+      context.handle(_usernameMeta,
+          username.isAcceptableOrUnknown(data['username']!, _usernameMeta));
+    } else if (isInserting) {
+      context.missing(_usernameMeta);
+    }
+    if (data.containsKey('zreport_id')) {
+      context.handle(
+          _zreport_idMeta,
+          zreport_id.isAcceptableOrUnknown(
+              data['zreport_id']!, _zreport_idMeta));
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Purchase map(Map<String, dynamic> data, {String? tablePrefix}) {
     return Purchase.fromData(data,
@@ -616,13 +903,13 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
 }
 
 class Xreport extends DataClass implements Insertable<Xreport> {
-  final int id;
+  final String username;
   final int transactions_sold;
   final int transactions_bought;
   final double units_sold;
   final double units_bought;
   Xreport(
-      {required this.id,
+      {required this.username,
       required this.transactions_sold,
       required this.transactions_bought,
       required this.units_sold,
@@ -630,8 +917,8 @@ class Xreport extends DataClass implements Insertable<Xreport> {
   factory Xreport.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Xreport(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      username: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}username'])!,
       transactions_sold: const IntType().mapFromDatabaseResponse(
           data['${effectivePrefix}transactions_sold'])!,
       transactions_bought: const IntType().mapFromDatabaseResponse(
@@ -645,7 +932,7 @@ class Xreport extends DataClass implements Insertable<Xreport> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
+    map['username'] = Variable<String>(username);
     map['transactions_sold'] = Variable<int>(transactions_sold);
     map['transactions_bought'] = Variable<int>(transactions_bought);
     map['units_sold'] = Variable<double>(units_sold);
@@ -655,7 +942,7 @@ class Xreport extends DataClass implements Insertable<Xreport> {
 
   XreportsCompanion toCompanion(bool nullToAbsent) {
     return XreportsCompanion(
-      id: Value(id),
+      username: Value(username),
       transactions_sold: Value(transactions_sold),
       transactions_bought: Value(transactions_bought),
       units_sold: Value(units_sold),
@@ -667,7 +954,7 @@ class Xreport extends DataClass implements Insertable<Xreport> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Xreport(
-      id: serializer.fromJson<int>(json['id']),
+      username: serializer.fromJson<String>(json['username']),
       transactions_sold: serializer.fromJson<int>(json['transactions_sold']),
       transactions_bought:
           serializer.fromJson<int>(json['transactions_bought']),
@@ -679,7 +966,7 @@ class Xreport extends DataClass implements Insertable<Xreport> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
+      'username': serializer.toJson<String>(username),
       'transactions_sold': serializer.toJson<int>(transactions_sold),
       'transactions_bought': serializer.toJson<int>(transactions_bought),
       'units_sold': serializer.toJson<double>(units_sold),
@@ -688,13 +975,13 @@ class Xreport extends DataClass implements Insertable<Xreport> {
   }
 
   Xreport copyWith(
-          {int? id,
+          {String? username,
           int? transactions_sold,
           int? transactions_bought,
           double? units_sold,
           double? units_bought}) =>
       Xreport(
-        id: id ?? this.id,
+        username: username ?? this.username,
         transactions_sold: transactions_sold ?? this.transactions_sold,
         transactions_bought: transactions_bought ?? this.transactions_bought,
         units_sold: units_sold ?? this.units_sold,
@@ -703,7 +990,7 @@ class Xreport extends DataClass implements Insertable<Xreport> {
   @override
   String toString() {
     return (StringBuffer('Xreport(')
-          ..write('id: $id, ')
+          ..write('username: $username, ')
           ..write('transactions_sold: $transactions_sold, ')
           ..write('transactions_bought: $transactions_bought, ')
           ..write('units_sold: $units_sold, ')
@@ -713,13 +1000,13 @@ class Xreport extends DataClass implements Insertable<Xreport> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, transactions_sold, transactions_bought, units_sold, units_bought);
+  int get hashCode => Object.hash(username, transactions_sold,
+      transactions_bought, units_sold, units_bought);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Xreport &&
-          other.id == this.id &&
+          other.username == this.username &&
           other.transactions_sold == this.transactions_sold &&
           other.transactions_bought == this.transactions_bought &&
           other.units_sold == this.units_sold &&
@@ -727,37 +1014,38 @@ class Xreport extends DataClass implements Insertable<Xreport> {
 }
 
 class XreportsCompanion extends UpdateCompanion<Xreport> {
-  final Value<int> id;
+  final Value<String> username;
   final Value<int> transactions_sold;
   final Value<int> transactions_bought;
   final Value<double> units_sold;
   final Value<double> units_bought;
   const XreportsCompanion({
-    this.id = const Value.absent(),
+    this.username = const Value.absent(),
     this.transactions_sold = const Value.absent(),
     this.transactions_bought = const Value.absent(),
     this.units_sold = const Value.absent(),
     this.units_bought = const Value.absent(),
   });
   XreportsCompanion.insert({
-    this.id = const Value.absent(),
+    required String username,
     required int transactions_sold,
     required int transactions_bought,
     required double units_sold,
     required double units_bought,
-  })  : transactions_sold = Value(transactions_sold),
+  })  : username = Value(username),
+        transactions_sold = Value(transactions_sold),
         transactions_bought = Value(transactions_bought),
         units_sold = Value(units_sold),
         units_bought = Value(units_bought);
   static Insertable<Xreport> custom({
-    Expression<int>? id,
+    Expression<String>? username,
     Expression<int>? transactions_sold,
     Expression<int>? transactions_bought,
     Expression<double>? units_sold,
     Expression<double>? units_bought,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
+      if (username != null) 'username': username,
       if (transactions_sold != null) 'transactions_sold': transactions_sold,
       if (transactions_bought != null)
         'transactions_bought': transactions_bought,
@@ -767,13 +1055,13 @@ class XreportsCompanion extends UpdateCompanion<Xreport> {
   }
 
   XreportsCompanion copyWith(
-      {Value<int>? id,
+      {Value<String>? username,
       Value<int>? transactions_sold,
       Value<int>? transactions_bought,
       Value<double>? units_sold,
       Value<double>? units_bought}) {
     return XreportsCompanion(
-      id: id ?? this.id,
+      username: username ?? this.username,
       transactions_sold: transactions_sold ?? this.transactions_sold,
       transactions_bought: transactions_bought ?? this.transactions_bought,
       units_sold: units_sold ?? this.units_sold,
@@ -784,8 +1072,8 @@ class XreportsCompanion extends UpdateCompanion<Xreport> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
+    if (username.present) {
+      map['username'] = Variable<String>(username.value);
     }
     if (transactions_sold.present) {
       map['transactions_sold'] = Variable<int>(transactions_sold.value);
@@ -805,7 +1093,7 @@ class XreportsCompanion extends UpdateCompanion<Xreport> {
   @override
   String toString() {
     return (StringBuffer('XreportsCompanion(')
-          ..write('id: $id, ')
+          ..write('username: $username, ')
           ..write('transactions_sold: $transactions_sold, ')
           ..write('transactions_bought: $transactions_bought, ')
           ..write('units_sold: $units_sold, ')
@@ -820,13 +1108,11 @@ class $XreportsTable extends Xreports with TableInfo<$XreportsTable, Xreport> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $XreportsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  final VerificationMeta _usernameMeta = const VerificationMeta('username');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
-      'id', aliasedName, false,
-      type: const IntType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  late final GeneratedColumn<String?> username = GeneratedColumn<String?>(
+      'username', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _transactions_soldMeta =
       const VerificationMeta('transactions_sold');
   @override
@@ -851,8 +1137,13 @@ class $XreportsTable extends Xreports with TableInfo<$XreportsTable, Xreport> {
       'units_bought', aliasedName, false,
       type: const RealType(), requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, transactions_sold, transactions_bought, units_sold, units_bought];
+  List<GeneratedColumn> get $columns => [
+        username,
+        transactions_sold,
+        transactions_bought,
+        units_sold,
+        units_bought
+      ];
   @override
   String get aliasedName => _alias ?? 'xreports';
   @override
@@ -862,8 +1153,11 @@ class $XreportsTable extends Xreports with TableInfo<$XreportsTable, Xreport> {
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    if (data.containsKey('username')) {
+      context.handle(_usernameMeta,
+          username.isAcceptableOrUnknown(data['username']!, _usernameMeta));
+    } else if (isInserting) {
+      context.missing(_usernameMeta);
     }
     if (data.containsKey('transactions_sold')) {
       context.handle(
@@ -901,7 +1195,7 @@ class $XreportsTable extends Xreports with TableInfo<$XreportsTable, Xreport> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {username};
   @override
   Xreport map(Map<String, dynamic> data, {String? tablePrefix}) {
     return Xreport.fromData(data,
@@ -921,13 +1215,15 @@ class Zreport extends DataClass implements Insertable<Zreport> {
   final double units_sold;
   final double units_bought;
   final String username;
+  final int zreport_id;
   Zreport(
       {required this.date,
       required this.transactions_sold,
       required this.transactions_bought,
       required this.units_sold,
       required this.units_bought,
-      required this.username});
+      required this.username,
+      required this.zreport_id});
   factory Zreport.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Zreport(
@@ -943,6 +1239,8 @@ class Zreport extends DataClass implements Insertable<Zreport> {
           .mapFromDatabaseResponse(data['${effectivePrefix}units_bought'])!,
       username: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}username'])!,
+      zreport_id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}zreport_id'])!,
     );
   }
   @override
@@ -954,6 +1252,7 @@ class Zreport extends DataClass implements Insertable<Zreport> {
     map['units_sold'] = Variable<double>(units_sold);
     map['units_bought'] = Variable<double>(units_bought);
     map['username'] = Variable<String>(username);
+    map['zreport_id'] = Variable<int>(zreport_id);
     return map;
   }
 
@@ -965,6 +1264,7 @@ class Zreport extends DataClass implements Insertable<Zreport> {
       units_sold: Value(units_sold),
       units_bought: Value(units_bought),
       username: Value(username),
+      zreport_id: Value(zreport_id),
     );
   }
 
@@ -979,6 +1279,7 @@ class Zreport extends DataClass implements Insertable<Zreport> {
       units_sold: serializer.fromJson<double>(json['units_sold']),
       units_bought: serializer.fromJson<double>(json['units_bought']),
       username: serializer.fromJson<String>(json['username']),
+      zreport_id: serializer.fromJson<int>(json['zreport_id']),
     );
   }
   @override
@@ -991,6 +1292,7 @@ class Zreport extends DataClass implements Insertable<Zreport> {
       'units_sold': serializer.toJson<double>(units_sold),
       'units_bought': serializer.toJson<double>(units_bought),
       'username': serializer.toJson<String>(username),
+      'zreport_id': serializer.toJson<int>(zreport_id),
     };
   }
 
@@ -1000,7 +1302,8 @@ class Zreport extends DataClass implements Insertable<Zreport> {
           int? transactions_bought,
           double? units_sold,
           double? units_bought,
-          String? username}) =>
+          String? username,
+          int? zreport_id}) =>
       Zreport(
         date: date ?? this.date,
         transactions_sold: transactions_sold ?? this.transactions_sold,
@@ -1008,6 +1311,7 @@ class Zreport extends DataClass implements Insertable<Zreport> {
         units_sold: units_sold ?? this.units_sold,
         units_bought: units_bought ?? this.units_bought,
         username: username ?? this.username,
+        zreport_id: zreport_id ?? this.zreport_id,
       );
   @override
   String toString() {
@@ -1017,14 +1321,15 @@ class Zreport extends DataClass implements Insertable<Zreport> {
           ..write('transactions_bought: $transactions_bought, ')
           ..write('units_sold: $units_sold, ')
           ..write('units_bought: $units_bought, ')
-          ..write('username: $username')
+          ..write('username: $username, ')
+          ..write('zreport_id: $zreport_id')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(date, transactions_sold, transactions_bought,
-      units_sold, units_bought, username);
+      units_sold, units_bought, username, zreport_id);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1034,7 +1339,8 @@ class Zreport extends DataClass implements Insertable<Zreport> {
           other.transactions_bought == this.transactions_bought &&
           other.units_sold == this.units_sold &&
           other.units_bought == this.units_bought &&
-          other.username == this.username);
+          other.username == this.username &&
+          other.zreport_id == this.zreport_id);
 }
 
 class ZreportsCompanion extends UpdateCompanion<Zreport> {
@@ -1044,6 +1350,7 @@ class ZreportsCompanion extends UpdateCompanion<Zreport> {
   final Value<double> units_sold;
   final Value<double> units_bought;
   final Value<String> username;
+  final Value<int> zreport_id;
   const ZreportsCompanion({
     this.date = const Value.absent(),
     this.transactions_sold = const Value.absent(),
@@ -1051,6 +1358,7 @@ class ZreportsCompanion extends UpdateCompanion<Zreport> {
     this.units_sold = const Value.absent(),
     this.units_bought = const Value.absent(),
     this.username = const Value.absent(),
+    this.zreport_id = const Value.absent(),
   });
   ZreportsCompanion.insert({
     required DateTime date,
@@ -1059,6 +1367,7 @@ class ZreportsCompanion extends UpdateCompanion<Zreport> {
     required double units_sold,
     required double units_bought,
     required String username,
+    this.zreport_id = const Value.absent(),
   })  : date = Value(date),
         transactions_sold = Value(transactions_sold),
         transactions_bought = Value(transactions_bought),
@@ -1072,6 +1381,7 @@ class ZreportsCompanion extends UpdateCompanion<Zreport> {
     Expression<double>? units_sold,
     Expression<double>? units_bought,
     Expression<String>? username,
+    Expression<int>? zreport_id,
   }) {
     return RawValuesInsertable({
       if (date != null) 'date': date,
@@ -1081,6 +1391,7 @@ class ZreportsCompanion extends UpdateCompanion<Zreport> {
       if (units_sold != null) 'units_sold': units_sold,
       if (units_bought != null) 'units_bought': units_bought,
       if (username != null) 'username': username,
+      if (zreport_id != null) 'zreport_id': zreport_id,
     });
   }
 
@@ -1090,7 +1401,8 @@ class ZreportsCompanion extends UpdateCompanion<Zreport> {
       Value<int>? transactions_bought,
       Value<double>? units_sold,
       Value<double>? units_bought,
-      Value<String>? username}) {
+      Value<String>? username,
+      Value<int>? zreport_id}) {
     return ZreportsCompanion(
       date: date ?? this.date,
       transactions_sold: transactions_sold ?? this.transactions_sold,
@@ -1098,6 +1410,7 @@ class ZreportsCompanion extends UpdateCompanion<Zreport> {
       units_sold: units_sold ?? this.units_sold,
       units_bought: units_bought ?? this.units_bought,
       username: username ?? this.username,
+      zreport_id: zreport_id ?? this.zreport_id,
     );
   }
 
@@ -1122,6 +1435,9 @@ class ZreportsCompanion extends UpdateCompanion<Zreport> {
     if (username.present) {
       map['username'] = Variable<String>(username.value);
     }
+    if (zreport_id.present) {
+      map['zreport_id'] = Variable<int>(zreport_id.value);
+    }
     return map;
   }
 
@@ -1133,7 +1449,8 @@ class ZreportsCompanion extends UpdateCompanion<Zreport> {
           ..write('transactions_bought: $transactions_bought, ')
           ..write('units_sold: $units_sold, ')
           ..write('units_bought: $units_bought, ')
-          ..write('username: $username')
+          ..write('username: $username, ')
+          ..write('zreport_id: $zreport_id')
           ..write(')'))
         .toString();
   }
@@ -1177,6 +1494,11 @@ class $ZreportsTable extends Zreports with TableInfo<$ZreportsTable, Zreport> {
   late final GeneratedColumn<String?> username = GeneratedColumn<String?>(
       'username', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _zreport_idMeta = const VerificationMeta('zreport_id');
+  @override
+  late final GeneratedColumn<int?> zreport_id = GeneratedColumn<int?>(
+      'zreport_id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         date,
@@ -1184,7 +1506,8 @@ class $ZreportsTable extends Zreports with TableInfo<$ZreportsTable, Zreport> {
         transactions_bought,
         units_sold,
         units_bought,
-        username
+        username,
+        zreport_id
       ];
   @override
   String get aliasedName => _alias ?? 'zreports';
@@ -1239,11 +1562,17 @@ class $ZreportsTable extends Zreports with TableInfo<$ZreportsTable, Zreport> {
     } else if (isInserting) {
       context.missing(_usernameMeta);
     }
+    if (data.containsKey('zreport_id')) {
+      context.handle(
+          _zreport_idMeta,
+          zreport_id.isAcceptableOrUnknown(
+              data['zreport_id']!, _zreport_idMeta));
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  Set<GeneratedColumn> get $primaryKey => {zreport_id};
   @override
   Zreport map(Map<String, dynamic> data, {String? tablePrefix}) {
     return Zreport.fromData(data,

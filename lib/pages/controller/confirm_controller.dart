@@ -16,6 +16,7 @@ class ConfirmController extends GetxController
   String message = "";
 
   late AppDatabase database =  Get.find<AppDatabase>();
+  final salesDao = Get.find<SalesDao>();
   final AppController appController = Get.find<AppController>();
   List<Xreport> xreportList =[];
 
@@ -57,7 +58,7 @@ class ConfirmController extends GetxController
       return;
     }
 
-    xreportList = await database.getXreportList();
+    xreportList = await database.getXreportList(appController.username);
 
     Xreport xreport_object = xreportList[0];
 
@@ -74,9 +75,14 @@ class ConfirmController extends GetxController
 
     if(action=="buy_product")
     {
-      Purchase p = Purchase(farmer_number: current_data["farmer_number"],
+      Purchase p = Purchase(
+        id: await generate_purchase_id(),
+        farmer_number: current_data["farmer_number"],
         product: current_data["product"],
         amount_kg: double.parse(current_data["amount"]),
+        date: DateTime.now(),
+        username: appController.username,
+        zreport_id: -1,
       );
 
       int rows  =  await database.insertPurchase(p);
@@ -89,7 +95,7 @@ class ConfirmController extends GetxController
         // transaction did happen.
 
         Xreport xreport_updated = Xreport(
-          id:xreport_object.id,
+        username: appController.username,
           transactions_bought: (xreport_object.transactions_bought + 1),
           transactions_sold: (xreport_object.transactions_sold),
           units_bought: (xreport_object.units_bought + p.amount_kg),
@@ -164,11 +170,16 @@ class ConfirmController extends GetxController
     }
     else if(action=="sell_product")
     {
-      Sale s = Sale(farmer_number: current_data["farmer_number"],
+      final s = Sale(
+        id : await generate_sale_id() ,
+        farmer_number: current_data["farmer_number"],
         product: current_data["product"],
         amount_kg: double.parse(current_data["amount"]),
+        date: DateTime.now(),
+        username: appController.username,
+        zreport_id: -1,
       );
-      final salesDao = Get.find<SalesDao>();
+   
 
       int rows  =  await salesDao.insertSale(s);
       if(rows <= 0)
@@ -180,7 +191,7 @@ class ConfirmController extends GetxController
         // transaction did happen.
 
         Xreport xreport_updated = Xreport(
-          id:(xreport_object.id),
+          username: appController.username,
           transactions_bought: (xreport_object.transactions_bought),
           transactions_sold: (xreport_object.transactions_sold + 1),
           units_bought: (xreport_object.units_bought),
@@ -247,6 +258,26 @@ class ConfirmController extends GetxController
           print("\$\$ insertion to total sales table FAILED");
         }
       }
+    }
+  }
+  Future<int> generate_sale_id()
+  async{
+    List<Sale> sale_list = await salesDao.getSaleList();
+    if(sale_list.isEmpty)
+    {return 1;}
+    else
+    {
+      return (sale_list[sale_list.length -1]).id + 1 ;
+    }
+  }
+  Future<int> generate_purchase_id()
+  async{
+    List<Purchase> purchase_list = await database.getPurchaseList();
+    if(purchase_list.isEmpty)
+    {return 1;}
+    else
+    {
+      return (purchase_list[purchase_list.length -1]).id+ 1 ;
     }
   }
 

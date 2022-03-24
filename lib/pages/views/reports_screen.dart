@@ -6,9 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 
-
-
-
 class ReportsScreen extends StatelessWidget {
 
   final ReportsController reportsController = Get.put(ReportsController());

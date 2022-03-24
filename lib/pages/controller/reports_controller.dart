@@ -1,4 +1,5 @@
 
+import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/database/database.dart';
 import 'package:agric/styles/text_style.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:intl/intl.dart';
 
 class ReportsController extends GetxController
 {
+  late AppController appController = Get.find<AppController>();
   late AppDatabase database  = Get.find<AppDatabase>();
   final SalesDao salesDao = Get.find<SalesDao>();
   List<Sale> salesList =[];
@@ -18,9 +20,12 @@ class ReportsController extends GetxController
   {
     salesList = await salesDao.getSaleList();
     purchaseList = await database.getPurchaseList();
-    zreportList = await database.getZreportList();
+    zreportList = await database.getZreportList(appController.username);
     // after we get values we recall build by update
     update();
+    print("Z REPORT DATA IS \n\n ${zreportList}");
+    print("PURCHASE  DATA IS \n\n ${purchaseList}");
+    print("SALE  DATA IS \n\n ${salesList}");
   }
   /// make row of SALES
   Widget makerow_of_sales(Sale sale)
