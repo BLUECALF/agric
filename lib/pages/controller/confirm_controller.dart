@@ -127,7 +127,7 @@ class ConfirmController extends GetxController
 
           if(rows_affected>0)
           {
-            print("## the insertion to total purchase table was recorded successfully");
+            print("## the insertion of NEW total purchase was recorded successfully");
             // proceed to printing screen
             Get.off(PrintingScreen(),arguments: {
               "merchant":merchant,
@@ -152,7 +152,7 @@ class ConfirmController extends GetxController
 
           if(rows_affected)
           {
-            print("## the insertion to total purchase table was recorded successfully");
+            print("## the UPDATE  to total purchase table was recorded successfully");
             //proceed to printing screen
             Get.off(PrintingScreen(),arguments: {
               "merchant":merchant,
@@ -211,7 +211,7 @@ class ConfirmController extends GetxController
 
         if(totalSaleList.isEmpty)
         {
-          // means there is no record of tis type of TotalSale in db
+          // means there is no record of this type of TotalSale in db
           //so we add a new one.
           new_total_sale_object = TotalSale(
               product: current_data["product"],
@@ -222,7 +222,7 @@ class ConfirmController extends GetxController
 
           if(rows_affected>0)
           {
-            print("## the insertion to total sale table was recorded successfully");
+            print("## the insertion  OF NEW total sale was recorded successfully");
             Get.off(PrintingScreen(),arguments: {
               "merchant":merchant,
               "action":"sell_product",
@@ -247,7 +247,7 @@ class ConfirmController extends GetxController
 
         if(rows_affected)
         {
-          print("## the insertion to total sale table was recorded successfully");
+          print("## the UPDATE to total sale table was recorded successfully");
           Get.off(PrintingScreen(),arguments: {
             "merchant":merchant,
             "action":"sell_product",

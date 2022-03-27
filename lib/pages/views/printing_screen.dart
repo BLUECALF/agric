@@ -12,7 +12,7 @@ class PrintingScreen extends GetView{
   @override
   Widget build(BuildContext context) {
     printingController.get_data_from_trade_screen(context);
-    printingController.get_data_from_db();
+
 
     return Scaffold(
       appBar: AppBar(
@@ -20,8 +20,7 @@ class PrintingScreen extends GetView{
         centerTitle: true,
         backgroundColor: Colors.green,
       ),
-      body: GetBuilder<PrintingController>(builder: (_)
-    {return Column(
+      body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("AGRIC TRANSACTION RECIEPT",style: MyTextStyle.make("body"),),
@@ -34,7 +33,8 @@ class PrintingScreen extends GetView{
           Text(printingController.show_transaction_details(printingController.action),style: MyTextStyle.make("body"),),
           printingController.render_net_total(),
         ],
-      );}),
+      ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: (){printingController.on_press_print();},
         child: Icon(Icons.print),

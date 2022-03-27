@@ -195,6 +195,9 @@ class AppDatabase extends _$AppDatabase{
   Future<List<Purchase>> getPurchaseList_by_username_and_zreport_id(String username) async
   {  return await   (select(purchases)..where((tbl) => tbl.username.equals(username) & tbl.zreport_id.equals(-1) )).get();
   }
+  Future<List<Purchase>> getPurchaseList_by_zreport_id(int zreport_id) async
+  {  return await   (select(purchases)..where((tbl) => tbl.zreport_id.equals(zreport_id))).get();
+  }
 
   //update value in db
   Future<bool> updatePurchase(Purchase) async
@@ -370,6 +373,9 @@ class SalesDao extends DatabaseAccessor<AppDatabase> with _$SalesDaoMixin {
   //getlist of sale obt
   Future<List<Sale>> getSaleList_by_username_and_zreport_id(String username) async
   {  return await   (select(sales)..where((tbl) => tbl.username.equals(username) & tbl.zreport_id.equals(-1))).get();
+  }
+  Future<List<Sale>> getSaleList_by_zreport_id(int zreport_id) async
+  {  return await   (select(sales)..where((tbl) => tbl.zreport_id.equals(zreport_id))).get();
   }
 
 

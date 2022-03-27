@@ -1,6 +1,8 @@
 
 import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/database/database.dart';
+import 'package:agric/pages/views/detailed_report_screen.dart';
+import 'package:agric/styles/button_decoration.dart';
 import 'package:agric/styles/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -92,53 +94,69 @@ class ReportsController extends GetxController
     final _yearFormater = DateFormat('y');
 
     var date = "${_dayFormater.format(full_date)}-${_monthFormater.format(full_date)}-${_yearFormater.format(full_date)}";
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        Row(
+          children: [
 
-        Expanded(
-          flex: 2,
-          child: Container(child: Text("${date}"), decoration: BoxDecoration(
-            color: Colors.grey,
-          ),),
-        ),
-        Expanded(
-          flex: 2,
-          child: Container(
-            child: Text("${z.transactions_sold}"), decoration: BoxDecoration(
-            color: Colors.grey[400],
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            child: Text("${z.units_sold}"), decoration: BoxDecoration(
-            color: Colors.grey[300],
-          ),),
-        ),
-        Expanded(
-          flex: 2,
-          child: Container(
-            child: Text("${z.transactions_bought}"), decoration: BoxDecoration(
-            color: Colors.grey[300],
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            child: Text("${z.units_bought}"), decoration: BoxDecoration(
-            color: Colors.grey[300],
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            child: Text("${z.username}",style: MyTextStyle.make("small"),), decoration: BoxDecoration(
-            color: Colors.grey[300],
-          ),),
-        ),
+            Expanded(
+              flex: 2,
+              child: Container(child: Text("${date}"), decoration: BoxDecoration(
+                color: Colors.grey,
+              ),),
+            ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                child: Text("${z.transactions_sold}"), decoration: BoxDecoration(
+                color: Colors.grey[400],
+              ),),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                child: Text("${z.units_sold}"), decoration: BoxDecoration(
+                color: Colors.grey[300],
+              ),),
+            ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                child: Text("${z.transactions_bought}"), decoration: BoxDecoration(
+                color: Colors.grey[300],
+              ),),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                child: Text("${z.units_bought}"), decoration: BoxDecoration(
+                color: Colors.grey[300],
+              ),),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                child: Text("${z.username}",style: MyTextStyle.make("small"),), decoration: BoxDecoration(
+                color: Colors.grey[300],
+              ),),
+            ),
 
+          ],
+
+        ),
+        Container(
+          height: 20,
+          child: ElevatedButton(onPressed: ()
+          {
+            print("the Z report has id of ${z.zreport_id}");
+            Get.to(DetailedReportsScreen(),arguments: {"zreport_id":z.zreport_id});
+
+            },
+              child: Text("View Details",style: MyTextStyle.make("tiny"),),
+              ),
+        ),
       ],
-
     );
   }
 

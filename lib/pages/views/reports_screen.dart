@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 
-class ReportsScreen extends StatelessWidget {
+class ReportsScreen extends GetView{
 
   final ReportsController reportsController = Get.put(ReportsController());
   @override
@@ -82,69 +82,7 @@ class ReportsScreen extends StatelessWidget {
                   Column(
                     children: reportsController.zreportList.map((z) => reportsController.makerow_of_zreport(z)).toList(),
                   ),
-                  SizedBox(height:20),
 
-                  Text(
-                    " Purchased Products",style: MyTextStyle.make("body"),
-                  ),
-                  SizedBox(height:10),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Container( child: Text("Product"),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-
-                        ),),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(child: Text("Farmer No"),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                        ),),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(child: Text("amount In kg",),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                        ),),
-                      ),
-
-                    ],
-                  ),
-                  Column(
-                    children: reportsController.purchaseList.map((purchase) => reportsController.makerow_of_purchase(purchase)).toList(),
-                  ),
-                  SizedBox(height: 20,),
-                  Text(
-                    " Sold Products",style: MyTextStyle.make("body"),
-                  ),
-                  SizedBox(height:10),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Container(child: Text("Product"),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                        ),),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(child: Text("Farmer No"),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                        ),),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(child: Text("Amount in kg"),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                        ),),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: reportsController.salesList.map((sales) => reportsController.makerow_of_sales(sales)).toList(),
-                  ),
             ]);}),),
           ),
         ),

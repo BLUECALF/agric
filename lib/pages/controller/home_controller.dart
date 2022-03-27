@@ -209,7 +209,7 @@ class HomeController extends GetxController
       print("NEw purchase  OBJ IS $purchase_obj");
       if(!affected) return "Purchase update failed";
     }
-    return "${sales_list}  purchase list \n\n ${purchase_list}";
+    return " Z - report Production success";
   }
   Future<int> generate_zreport_id()
   async{
