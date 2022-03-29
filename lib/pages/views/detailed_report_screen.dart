@@ -14,7 +14,6 @@ class DetailedReportsScreen extends GetView{
   @override
   Widget build(BuildContext context) {
     detailedReportController.get_data_from_previous_screen();
-    detailedReportController.get_objects();
 
     return Scaffold(
       appBar: AppBar(
@@ -23,14 +22,13 @@ class DetailedReportsScreen extends GetView{
       ),
       backgroundColor: Colors.greenAccent,
       body: SafeArea(
-        child:Center(
+        child:SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: Card(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20,50,20,0),
-
-              child:ListView(
-                  scrollDirection: Axis.vertical,
-                  children: [
+              child:Column(
+                    children: [
                     Text(
                       " Detailed Reports screen",style: MyTextStyle.make("title"),
                     ),
@@ -42,80 +40,51 @@ class DetailedReportsScreen extends GetView{
                       " Purchased Products",style: MyTextStyle.make("body"),
                     ),
                     SizedBox(height:10),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Container( child: Text("Product"),decoration: BoxDecoration(
-                            color: Colors.greenAccent,
+                    FutureBuilder(future : detailedReportController.salesDao.getSaleList_by_zreport_id(detailedReportController.zreport_id),
+                        builder: (context, snapshot)
+                        {
+                          detailedReportController.salesList = snapshot.data as List<Sale>;
+                          return  DataTable(
+                              columns: [
+                                DataColumn(label: Text("Id")),
+                                DataColumn(label: Text("Date")),
+                                DataColumn(label: Text("Product")),
+                                DataColumn(label: Text("Amount kg")),
+                                DataColumn(label: Text("farmer number")),
+                                DataColumn(label: Text("User Name")),
 
-                          ),),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(child: Text("Farmer No"),decoration: BoxDecoration(
-                            color: Colors.greenAccent,
-                          ),),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(child: Text("amount In kg",),decoration: BoxDecoration(
-                            color: Colors.greenAccent,
-                          ),),
-                        ),
+                              ],
 
-                      ],
-                    ),
-                    FutureBuilder(
-                      future: detailedReportController.database.getPurchaseList_by_zreport_id(detailedReportController.zreport_id),
-                      builder:(context,snapshot) {
-                        List<Purchase> purchaseList = snapshot.data as List<Purchase>;
-                        return Column(
-                        children: purchaseList.map((purchase) => detailedReportController.makerow_of_purchase(purchase)).toList(),
-                      );},
-                    ),
+                              rows: detailedReportController.salesList.map((e) => detailedReportController.makedatarow_of_sales(e)).toList());
+
+                        }),
                     SizedBox(height: 20,),
                     Text(
                       " Sold Products",style: MyTextStyle.make("body"),
                     ),
                     SizedBox(height:10),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Container(child: Text("Product"),decoration: BoxDecoration(
-                            color: Colors.greenAccent,
-                          ),),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(child: Text("Farmer No"),decoration: BoxDecoration(
-                            color: Colors.greenAccent,
-                          ),),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(child: Text("Amount in kg"),decoration: BoxDecoration(
-                            color: Colors.greenAccent,
-                          ),),
-                        ),
-                      ],
-                    ),
-                    FutureBuilder(
-                      future: detailedReportController.salesDao.getSaleList_by_zreport_id(detailedReportController.zreport_id),
-                      builder:(context,snapshot) {
-                        List<Sale> saleList = snapshot.data as List<Sale>;
-                        return Column(
-                          children: saleList.map((sale) => detailedReportController.makerow_of_sales(sale)).toList(),
-                        );},
-                    ),
+                    FutureBuilder(future : detailedReportController.database.getPurchaseList_by_zreport_id(detailedReportController.zreport_id),
+                        builder: (context, snapshot)
+                        {
+                          detailedReportController.purchaseList = snapshot.data as List<Purchase>;
+                          return  DataTable(
+                              columns: [
+                                DataColumn(label: Text("Id")),
+                                DataColumn(label: Text("Date")),
+                                DataColumn(label: Text("Product")),
+                                DataColumn(label: Text("Amount kg")),
+                                DataColumn(label: Text("farmer number")),
+                                DataColumn(label: Text("User Name")),
+
+                              ],
+
+                              rows: detailedReportController.purchaseList.map((e) => detailedReportController.makedatarow_of_purchases(e)).toList());
+
+                        }),
                   ])),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {print("refresh called");
-      detailedReportController.update();
-      },child: Icon(Icons.refresh,color: Colors.redAccent[300],),),
     );
   }
 }

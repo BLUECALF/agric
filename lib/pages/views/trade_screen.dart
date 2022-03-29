@@ -104,8 +104,17 @@ class TradeScreen extends GetView{
                           SizedBox(height: 20,),
                           FormBuilderTextField(name: "amount",
                             style: MyTextStyle.make("body"),
-                            decoration: MyTextFieldDecoration.make("Amount in kgs"),
-                            cursorColor: Colors.white,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(width: 2),
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(20),
+                                ),
+                              ),
+                              hintText: " Quantity",
+                              suffix: Card(child: Text("KGs" ,style: MyTextStyle.make("body"),)),
+                            ),
+                            cursorColor: Colors.black,
                             keyboardType: TextInputType.number,
                             cursorWidth: 5,
                             validator: (value){
@@ -134,18 +143,8 @@ class TradeScreen extends GetView{
         ),
       ),
       floatingActionButton: FloatingActionButton(onPressed: (){Get.to(HomeScreen());},child: Icon(Icons.exit_to_app),),
-
+floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
     );
 
   }
-
-
-
-
-
-
-
-
-
-
 }

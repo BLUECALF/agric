@@ -20,71 +20,42 @@ class DetailedReportController extends GetxController
     zreport_id = Get.arguments["zreport_id"];
   }
 
+  DataRow makedatarow_of_sales(Sale s) {
+    var full_date =  s.date;
+    final _dayFormater = DateFormat('d');
+    final _monthFormater = DateFormat('M');
+    final _yearFormater = DateFormat('y');
 
-  // get data from db
-  get_objects() async
-  {
-    salesList = await salesDao.getSaleList_by_zreport_id(zreport_id);
-    purchaseList = await database.getPurchaseList_by_zreport_id(zreport_id);
-    // after we get values we recall build by update
+    var date = "${_dayFormater.format(full_date)}-${_monthFormater.format(full_date)}-${_yearFormater.format(full_date)}";
+    return DataRow(
+        cells: [
+          DataCell(Text("${s.id}")),
+          DataCell(Text("${date}")),
+          DataCell(Text("${s.product}")),
+          DataCell(Text("${s.amount_kg}")),
+          DataCell(Text("${s.farmer_number}")),
+          DataCell(Text("${s.username}")),
 
-    print("PURCHASE  DATA IS \n\n ${purchaseList}");
-    print("SALE  DATA IS \n\n ${salesList}");
+        ]);
   }
-  /// make row of SALES
-  Widget makerow_of_sales(Sale sale)
-  {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(child: Text("${sale.product}"),decoration: BoxDecoration(
-            color: Colors.grey,
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(child: Text("${sale.farmer_number}"),decoration: BoxDecoration(
-            color: Colors.grey[400],
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(child: Text("${sale.amount_kg}"),decoration: BoxDecoration(
-            color: Colors.grey[300],
-          ),),
-        ),
 
-      ],
+  DataRow makedatarow_of_purchases(Purchase s) {
+    var full_date =  s.date;
+    final _dayFormater = DateFormat('d');
+    final _monthFormater = DateFormat('M');
+    final _yearFormater = DateFormat('y');
 
-    );
-  }
-  /// make ro of PURCHASE
-  Widget makerow_of_purchase(Purchase purchase)
-  {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(child: Text("${purchase.product}"),decoration: BoxDecoration(
-            color: Colors.grey,
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(child: Text("${purchase.farmer_number}"),decoration: BoxDecoration(
-            color: Colors.grey[400],
-          ),),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(child: Text("${purchase.amount_kg}"),decoration: BoxDecoration(
-            color: Colors.grey[300],
-          ),),
-        ),
-      ],
+    var date = "${_dayFormater.format(full_date)}-${_monthFormater.format(full_date)}-${_yearFormater.format(full_date)}";
+    return DataRow(
+        cells: [
+          DataCell(Text("${s.id}")),
+          DataCell(Text("${date}")),
+          DataCell(Text("${s.product}")),
+          DataCell(Text("${s.amount_kg}")),
+          DataCell(Text("${s.farmer_number}")),
+          DataCell(Text("${s.username}")),
 
-    );
+        ]);
   }
 
 }

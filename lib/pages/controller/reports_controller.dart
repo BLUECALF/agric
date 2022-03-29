@@ -161,6 +161,33 @@ class ReportsController extends GetxController
   }
 
 
+  DataRow makedatarow_of_zreport(Zreport z) {
+    var full_date =  z.date;
+    final _dayFormater = DateFormat('d');
+    final _monthFormater = DateFormat('M');
+    final _yearFormater = DateFormat('y');
+
+    var date = "${_dayFormater.format(full_date)}-${_monthFormater.format(full_date)}-${_yearFormater.format(full_date)}";
+    return DataRow(
+        cells: [
+   DataCell(Text("${date}")),
+          DataCell(Text("${z.transactions_sold}")),
+          DataCell(Text("${z.units_sold}")),
+          DataCell(Text("${z.transactions_bought}")),
+          DataCell(Text("${z.units_bought}")),
+          DataCell(Text("${z.username}")),
+          DataCell(ElevatedButton(onPressed: ()
+          {
+            print("the Z report has id of ${z.zreport_id}");
+            Get.to(DetailedReportsScreen(),arguments: {"zreport_id":z.zreport_id});
+
+          },
+            child: Text("View Details",style: MyTextStyle.make("tiny"),),
+          ),),
+
+    ]);
+  }
+
 
 
 }

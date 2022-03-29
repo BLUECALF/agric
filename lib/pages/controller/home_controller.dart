@@ -83,6 +83,7 @@ class HomeController extends GetxController
     );
   }
 
+
  void alert_dialog(String title,String body,context)
   {
     var alertDialog = AlertDialog(
@@ -255,6 +256,28 @@ class HomeController extends GetxController
     );
   }
   void update_xreport() => get_xreport_list();
+
+  Widget render_drawer_widgets()
+  {
+
+    return ListView(
+      children: [
+        DrawerHeader(
+          decoration: BoxDecoration(
+            color: Colors.orange,
+
+          ),
+          child: Column(
+          children: [
+            CircleAvatar(backgroundImage: AssetImage("assets/profile_image.png"),radius: 60,),
+
+          ],
+        ),),
+        render_username(),
+        ListTile(title : Text("Milk collector" , style: MyTextStyle.make("body"),))
+      ],
+    );
+  }
 
 
 }

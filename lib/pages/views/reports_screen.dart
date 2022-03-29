@@ -1,5 +1,6 @@
 
 
+import 'package:agric/database/database.dart';
 import 'package:agric/pages/controller/reports_controller.dart';
 import 'package:agric/styles/text_style.dart';
 import 'package:flutter/material.dart';
@@ -21,75 +22,39 @@ class ReportsScreen extends GetView{
       ),
       backgroundColor: Colors.greenAccent,
       body: SafeArea(
-        child:Center(
+        child:SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: Card(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20,50,20,0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Z report List",style: MyTextStyle.make("title"),),
+                SizedBox(height: 20,),
+                FutureBuilder(future : reportsController.database.getZreportList(reportsController.appController.username),
+                    builder: (context, snapshot)
+                {
+                  reportsController.zreportList = snapshot.data as List<Zreport>;
+                  return  DataTable(
+                      columns: [
+                        DataColumn(label: Text("Date")),
+                        DataColumn(label: Text("Transactions Sold")),
+                        DataColumn(label: Text("Units Sold")),
+                        DataColumn(label: Text("Transactions Bought")),
+                        DataColumn(label: Text("Units Bought")),
+                        DataColumn(label: Text("User Name")),
+                        DataColumn(label: Text("View Detailed")),
+                      ],
 
-              child: GetBuilder<ReportsController>(builder: (_){ return ListView(
-                scrollDirection: Axis.vertical,
-                children: [
-                  Text(
-                    " Reports screen",style: MyTextStyle.make("title"),
-                  ),
-                  SizedBox(height:10),
-                  Text(
-                    " Z- reports ",style: MyTextStyle.make("body"),
-                  ),
-                  SizedBox(height:10),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Container( child: Text("Date",style: MyTextStyle.make("tiny"),),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
+                      rows: reportsController.zreportList.map((e) => reportsController.makedatarow_of_zreport(e)).toList());
 
-                        ),),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(child: Text("Transactions sold",style: MyTextStyle.make("tiny"),),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                        ),),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(child: Text("Units Sold",style: MyTextStyle.make("tiny"),),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                        ),),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(child: Text("transactions bought",style: MyTextStyle.make("tiny"),),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                        ),),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(child: Text("Units Bought",style: MyTextStyle.make("tiny"),),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                        ),),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(child: Text("User Name ",style: MyTextStyle.make("tiny"),),decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                        ),),
-                      ),
-
-                    ],
-                  ),
-                  Column(
-                    children: reportsController.zreportList.map((z) => reportsController.makerow_of_zreport(z)).toList(),
-                  ),
-
-            ]);}),),
+                }),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(onPressed: () {print("refresh called");
-       reportsController.update();
-      },child: Icon(Icons.refresh,color: Colors.redAccent[300],),),
-    );
+        ),
+      );
+
+
   }
 }

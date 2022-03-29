@@ -23,6 +23,8 @@ final HomeController  homeController =  Get.put(HomeController());
         backgroundColor: Colors.green,
       ),
 
+      drawer: Drawer(child : homeController.render_drawer_widgets()),
+
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -37,7 +39,7 @@ final HomeController  homeController =  Get.put(HomeController());
                 //Text(" Activities Page ",style: MyTextStyle.make("title"),),
                 SizedBox(height: 20),
                 CircleAvatar(backgroundImage: AssetImage("assets/fresh_milk.jpg"),radius: 20,),
-                homeController.render_username(),
+
                 SizedBox(height: 20),
 
                 StreamBuilder(
@@ -64,11 +66,10 @@ final HomeController  homeController =  Get.put(HomeController());
 
                 children: [
                   homeController.render_button(icon_name:Icons.add_shopping_cart, function:(){homeController.trade();} , text: "Purchase / Sell Product"),
-                  homeController.render_button(icon_name:Icons.computer, function:(){} , text: "Connect to server"),
+                  homeController.render_button(icon_name:Icons.refresh, function:(){} , text: "Connect to server"),
                   homeController.render_button(icon_name:Icons.read_more, function:(){homeController.print_reports(context);} , text: "Print Reports"),
                   homeController.render_button(icon_name:Icons.add, function:(){Get.to(ProductsScreen());} , text: "add/remove products"),
                   homeController.render_button(icon_name:Icons.print, function:(){homeController.on_press_of_produce_zreport(context);} , text: "Produce Z Report "),
-                  homeController.render_button(icon_name:Icons.refresh, function:(){homeController.update_xreport();} , text: " Update X report"),
 
                 ],
               ),

@@ -14,5 +14,6 @@ static InputDecoration make(String hint){
   filled:true,
   hintText: hint,
 
+
   );}
 }
