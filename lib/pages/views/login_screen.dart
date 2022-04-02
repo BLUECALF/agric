@@ -21,64 +21,63 @@ class LoginScreen extends GetView{
 
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.greenAccent,
-        elevation: 0,
-      ),
-      backgroundColor: Colors.greenAccent,
-      body: Container(
-         decoration: BoxDecoration(
-           image: DecorationImage(
-             image: AssetImage("assets/agriculture.jpg"),
-             fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          height: Get.height,
+           decoration: BoxDecoration(
+             image: DecorationImage(
+               image: AssetImage("assets/agriculture.jpg"),
+               fit: BoxFit.cover,
+             ),
            ),
-         ),
-        child: SafeArea(
-          child:Center(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20,50,20,0),
+          child: SafeArea(
+            child:Center(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20,50,20,0),
 
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Welcome Back",style: MyTextStyle.make("title-white"),
-                  ),
-                  SizedBox(height: 20,),
-                  FormBuilder(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-
-                    child: Column(
-                      children: [
-                        FormBuilderTextField(name: "username",
-                          style: MyTextStyle.make("body"),
-                          decoration: MyTextFieldDecoration.make("Enter Username"),
-                          cursorColor: Colors.white,
-                          cursorWidth: 5,
-                          validator:(value)=>loginController.validate_username(value),
-                        ),
-                        SizedBox(height: 20,),
-                        FormBuilderTextField(name: "password",
-                          style: MyTextStyle.make("body"),
-                          decoration: MyTextFieldDecoration.make("Enter Password"),
-                          cursorColor: Colors.white,
-                          obscureText: true,
-                          cursorWidth: 5,
-                          validator: (value)=>loginController.validate_password(value),
-                        ),
-                        SizedBox(height: 20,),
-                      ],
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Welcome Back",style: MyTextStyle.make("title-white"),
                     ),
-                  ),
+                    SizedBox(height: 20,),
+                    FormBuilder(
+                      key: _formKey,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
 
-                  Container(
-                    width: double.infinity,
-                    child: TextButton(onPressed:()=> loginController.validate_login_form(_formKey, context)
-                    , child: Text("Log In",style: MyTextStyle.make("body-white"),),style: MyButtonDecoration.make(),),
-                  ),
-                ],
+                      child: Column(
+                        children: [
+                          FormBuilderTextField(name: "username",
+                            style: MyTextStyle.make("body"),
+                            decoration: MyTextFieldDecoration.make("Enter Username"),
+                            cursorColor: Colors.white,
+                            cursorWidth: 5,
+                            validator:(value)=>loginController.validate_username(value),
+                          ),
+                          SizedBox(height: 20,),
+                          FormBuilderTextField(name: "password",
+                            style: MyTextStyle.make("body"),
+                            decoration: MyTextFieldDecoration.make("Enter Password"),
+                            cursorColor: Colors.white,
+                            obscureText: true,
+                            cursorWidth: 5,
+                            validator: (value)=>loginController.validate_password(value),
+                          ),
+                          SizedBox(height: 20,),
+                        ],
+                      ),
+                    ),
+
+                    Container(
+                      width: double.infinity,
+                      child: TextButton(onPressed:()=> loginController.validate_login_form(_formKey, context)
+                      , child: Text("Log In",style: MyTextStyle.make("body-white"),),style: MyButtonDecoration.make(),),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

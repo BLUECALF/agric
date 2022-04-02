@@ -5,11 +5,15 @@ import 'package:agric/styles/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../AppController/app_controller.dart';
+
 class PrintingController extends GetxController
 {
+  final AppController appController = Get.find<AppController>();
   final AppDatabase database = Get.find<AppDatabase>();
   Map previous_data ={};
   late String farmer_number;
+  late Map<String, dynamic> data;
 
   // what i need to make the recipt
   late String transaction_type;
@@ -19,6 +23,7 @@ class PrintingController extends GetxController
   late String action;
   var transaction_object;
   late List<TotalSale> total_sale_list=[];
+  late Map<String,dynamic> current_transaction;
 
   late List<TotalPurchase> total_purchase_list=[];
 
@@ -54,6 +59,18 @@ class PrintingController extends GetxController
           "Product : ${current_sale.product} \n"
           "Farmer number : ${current_sale.farmer_number} \n"
           "Amount in KG :${current_sale.amount_kg}";
+
+      current_transaction =
+      {
+        "transaction_type":transaction_type,
+        "id": current_sale.id,
+        "product" : current_sale.product,
+        "farmer_number":current_sale.farmer_number,
+        "username":current_sale.username,
+        "amount_kg":current_sale.amount_kg
+      };
+
+
       return details;
     }
     if(action=="buy_product")
@@ -65,6 +82,15 @@ class PrintingController extends GetxController
           "\n""Product : ${current_purchase.product} \n"
           "Farmer number : ${current_purchase.farmer_number} \n"
           "Amount in KG :${current_purchase.amount_kg}";
+      current_transaction =
+      {
+        "transaction_type":transaction_type,
+        "id": current_purchase.id,
+        "product" : current_purchase.product,
+        "farmer_number":current_purchase.farmer_number,
+        "username":current_purchase.username,
+        "amount_kg":current_purchase.amount_kg
+      };
       return details;
     }
     return "";
@@ -113,9 +139,25 @@ class PrintingController extends GetxController
       ),
     );
   }
-  void on_press_print()
+  void on_press_print() async
   {
-    Get.defaultDialog(title: "Printing ......");
+    // make a map containing everything in recipt
+    data  = {
+      "logo":"assets/fresh_milk.jpg",
+      "company":"Agric Sacco",
+      "address":"PO BOX 67,Olenguruone",
+      "country":"Kenya",
+      "email" : "info@agricsacco.com",
+      "phone" : "+254741942765",
+      "current_transaction":current_transaction,
+      "total_sale_list":total_sale_list,
+      "total_purchase_list":total_purchase_list,
+    };
+
+    await appController.prepare_text(data);
+    appController.bluePrintPos.printReceiptText(appController.receiptText);
+    print("we are printing recipt @@@@@@@@@");
+    await Get.defaultDialog(title: "Printing ......");
     Get.off(TradeScreen());
   }
 

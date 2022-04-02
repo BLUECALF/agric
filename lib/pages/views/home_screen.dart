@@ -5,6 +5,7 @@ import 'package:agric/pages/views/products_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'add_printer_screen.dart';
 import 'login_screen.dart';
 
 class HomeScreen extends StatelessWidget{
@@ -70,6 +71,7 @@ final HomeController  homeController =  Get.put(HomeController());
                   homeController.render_button(icon_name:Icons.read_more, function:(){homeController.print_reports(context);} , text: "Print Reports"),
                   homeController.render_button(icon_name:Icons.add, function:(){Get.to(ProductsScreen());} , text: "add/remove products"),
                   homeController.render_button(icon_name:Icons.print, function:(){homeController.on_press_of_produce_zreport(context);} , text: "Produce Z Report "),
+                  homeController.render_button(icon_name:Icons.add, function:(){Get.to(AddPrinter());} , text: "Add Thermal Printer"),
 
                 ],
               ),

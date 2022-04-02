@@ -9,9 +9,11 @@ class PrintingScreen extends GetView{
 
   final PrintingController printingController = Get.put(PrintingController());
 
+
   @override
   Widget build(BuildContext context) {
     printingController.get_data_from_trade_screen(context);
+
 
 
     return Scaffold(
