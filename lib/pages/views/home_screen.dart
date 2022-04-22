@@ -47,6 +47,8 @@ final HomeController  homeController =  Get.put(HomeController());
                   stream: homeController.database.getXreportListStream(homeController.appController.username),
                     builder: (context , snapshot)
                     {
+                      if(snapshot.data == null)
+                        {return Text("There are no X reports");}
                       print("snaphot  data is ");
                       print(snapshot.data);
                       if(snapshot.hasError)

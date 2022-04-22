@@ -33,6 +33,8 @@ class ReportsScreen extends GetView{
                 FutureBuilder(future : reportsController.database.getZreportList(reportsController.appController.username),
                     builder: (context, snapshot)
                 {
+                  if(snapshot.data == null)
+                  {return Text("There are no Z reports");}
                   reportsController.zreportList = snapshot.data as List<Zreport>;
                   return  DataTable(
                       columns: [
