@@ -2,10 +2,12 @@
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/views/trade_screen.dart';
 import 'package:agric/styles/text_style.dart';
+import 'package:blue_print_pos/receipt/receipt.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-
 import '../../AppController/app_controller.dart';
+import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 
 class PrintingController extends GetxController
 {
@@ -110,6 +112,10 @@ class PrintingController extends GetxController
               future: database.getTotalPurchaseList_of_farmer_number(farmer_number),
               builder: (context, snapshot)
               {
+                if(snapshot.data == null)
+                {
+                  return Text("There is no Purchases");
+                }
                 total_purchase_list = snapshot.data as List<TotalPurchase>;
                 return  Column(
                   children: total_purchase_list.map((e) => Text("${e.product} \t"
@@ -125,6 +131,10 @@ class PrintingController extends GetxController
               future: database.getTotalSaleList_of_farmer_number(farmer_number),
               builder: (context, snapshot)
               {
+                if(snapshot.data == null)
+                  {
+                    return Text("There is no Sales");
+                  }
                 total_sale_list = snapshot.data as List<TotalSale>;
                 return Column(
                   children: total_sale_list.map((e) => Text("${e.product} \t"
@@ -155,9 +165,24 @@ class PrintingController extends GetxController
     };
 
     await appController.prepare_text(data);
-    appController.bluePrintPos.printReceiptText(appController.receiptText);
+    await appController.bluePrintPos.printReceiptText(
+        appController.receiptText,
+      paperSize: PaperSize.mm72,
+        useCut: true,
+      feedCount: -50,
+      useRaster: true
+    );
+    await appController.bluePrintPos.printQR(data["current_transaction"]["id"].toString());
+    ReceiptSectionText endl = ReceiptSectionText();
+    endl.addText("end of qr code ",size: ReceiptTextSizeType.extraLarge);
+    endl.addSpacer();
+    appController.bluePrintPos.printReceiptText(endl);
+
     print("we are printing recipt @@@@@@@@@");
-    await Get.defaultDialog(title: "Printing ......");
+    await Get.defaultDialog(title: "Printing",content: SpinKitChasingDots(
+      size: 50.0,
+      color: Colors.black,
+    ),);
     Get.off(TradeScreen());
   }
 

@@ -6,6 +6,7 @@ import 'package:agric/styles/text_style.dart';
 import "package:flutter/material.dart";
 import 'package:get/get.dart';
 import "package:flutter/foundation.dart";
+import 'package:http/http.dart' as http;
 
 class HomeController extends GetxController
 {
@@ -180,8 +181,6 @@ class HomeController extends GetxController
       Get.defaultDialog(title: "Z report Info",content: Text("$message"),onConfirm: (){Get.back();});
 
     }
-
-
   }
   Future<String> update_sales_and_purchases(int zreport_id,String message) async
   {
@@ -277,6 +276,17 @@ class HomeController extends GetxController
         ListTile(title : Text("Milk collector" , style: MyTextStyle.make("body"),))
       ],
     );
+  }
+
+  void connect_to_server() async
+  {
+    // use http request to connect to server
+    var url = Uri.parse('https://example.com/whatsit/create');
+    var response = await http.post(url, body: {'name': 'doodle', 'color': 'blue'},);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    print(await http.read(Uri.parse('https://example.com/foobar.txt')));
   }
 
 }

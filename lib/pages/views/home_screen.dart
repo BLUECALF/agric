@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'add_printer_screen.dart';
 import 'login_screen.dart';
 
-class HomeScreen extends StatelessWidget{
+class HomeScreen extends GetView{
 
 final HomeController  homeController =  Get.put(HomeController());
 
@@ -69,11 +69,11 @@ final HomeController  homeController =  Get.put(HomeController());
 
                 children: [
                   homeController.render_button(icon_name:Icons.add_shopping_cart, function:(){homeController.trade();} , text: "Purchase / Sell Product"),
-                  homeController.render_button(icon_name:Icons.refresh, function:(){} , text: "Connect to server"),
+                  homeController.render_button(icon_name:Icons.refresh, function:(){homeController.connect_to_server();} , text: "Connect to server"),
                   homeController.render_button(icon_name:Icons.read_more, function:(){homeController.print_reports(context);} , text: "Print Reports"),
-                  homeController.render_button(icon_name:Icons.add, function:(){Get.to(ProductsScreen());} , text: "add/remove products"),
+                  homeController.render_button(icon_name:Icons.add, function:(){Get.to(() => ProductsScreen());} , text: "add/remove products"),
                   homeController.render_button(icon_name:Icons.print, function:(){homeController.on_press_of_produce_zreport(context);} , text: "Produce Z Report "),
-                  homeController.render_button(icon_name:Icons.add, function:(){Get.to(AddPrinter());} , text: "Add Thermal Printer"),
+                  homeController.render_button(icon_name:Icons.add, function:(){Get.to(() =>AddPrinter());} , text: "Add Thermal Printer"),
 
                 ],
               ),

@@ -3,6 +3,7 @@ import 'package:blue_print_pos/models/models.dart';
 import 'package:blue_print_pos/receipt/receipt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -22,24 +23,32 @@ class AddPrinter extends GetView{
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+
               Text("Select Printer"),
+              SizedBox(width: 20,),
               ElevatedButton(
                 onPressed: () async{
-                  await appController.scann_devices();
+                  await appController.scan_devices();
                 },
                 child:Text("Scan Devices"),
               )
             ],
           ),
-          backgroundColor: Colors.redAccent,
+          backgroundColor: Colors.greenAccent,
         ),
         body: FutureBuilder(
-                future: appController.scann_devices(),
+                future: appController.scan_devices(),
                 builder: (c,snapshot)
             {
+
               if(snapshot.hasData && !snapshot.hasError)
                 {
                   _devices = snapshot.data as List<BlueDevice>;
+                }
+              if(listEquals([], _devices))
+                {
+                  print("there are no devices");
+                  return Text("There are  no devices ");
                 }
 
               return ListView.builder(

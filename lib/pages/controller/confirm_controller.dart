@@ -30,16 +30,21 @@ class ConfirmController extends GetxController
     current_data = all_data["data"];
     action = all_data["action"];
     appController.transaction_data = {};
+
   }
 
 
-  void on_press_confirm()
+  Future<void> on_press_confirm()
   async{
 
     message ="";
     title = (action == "buy_product")? "BUY PRODUCT":"SELL PRODUCT";
     message = "$title of ${current_data["product"]} Recorded Successfully";
     await insert_to_database(action);
+    var tran_status = await database.transaction(() async {
+       return "Completed";
+    });
+    print("TRANSACTION STATUS IS $tran_status");
 
     // show results
     Get.defaultDialog(

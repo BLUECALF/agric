@@ -34,7 +34,8 @@ class ConfirmScreen extends GetView{
                 Container(
                   width: double.infinity,
                   child: TextButton(onPressed:() async{
-                   confirmController.on_press_confirm();
+                    await confirmController.database.transaction(() => confirmController.on_press_confirm());
+
                   }, child: Text("Confirm",style: MyTextStyle.make("body-white"),),style: MyButtonDecoration.make(),),
                 ),
                 SizedBox(height:20),
