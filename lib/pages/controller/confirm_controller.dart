@@ -36,7 +36,6 @@ class ConfirmController extends GetxController
 
   Future<void> on_press_confirm()
   async{
-
     message ="";
     title = (action == "buy_product")? "BUY PRODUCT":"SELL PRODUCT";
     message = "$title of ${current_data["product"]} Recorded Successfully";

@@ -99,6 +99,7 @@ class PrintingController extends GetxController
   }
   Widget render_net_total()
   {
+    on_press_print();
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -168,9 +169,8 @@ class PrintingController extends GetxController
     await appController.bluePrintPos.printReceiptText(
         appController.receiptText,
       paperSize: PaperSize.mm72,
-        useCut: true,
-      feedCount: -50,
-      useRaster: true
+        useCut: false,
+      feedCount: -10
     );
     await appController.bluePrintPos.printQR(data["current_transaction"]["id"].toString());
     ReceiptSectionText endl = ReceiptSectionText();
@@ -178,13 +178,15 @@ class PrintingController extends GetxController
     endl.addSpacer();
     appController.bluePrintPos.printReceiptText(endl);
 
-    print("we are printing recipt @@@@@@@@@");
-    await Get.defaultDialog(title: "Printing",content: SpinKitChasingDots(
-      size: 50.0,
-      color: Colors.black,
+    await Get.defaultDialog(title: "Printing",content: Column(
+      children: [
+        SpinKitChasingDots(
+          size: 50.0,
+          color: Colors.black,
+        ),
+        ElevatedButton(onPressed: (){Get.back();}, child: Text("OK")),
+      ],
     ),);
     Get.off(TradeScreen());
   }
-
-
 }

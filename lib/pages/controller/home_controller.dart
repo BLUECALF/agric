@@ -121,11 +121,13 @@ class HomeController extends GetxController
   }
   void on_press_of_produce_zreport(BuildContext context) async
   {
-  await confirm_dialog("Alert", "Are you sure to produce z report This will reset all X report records", context, (){on_accept_to_produce_zreport();});
+  await confirm_dialog("Alert", "Are you sure to produce z report This will reset all X report records", context, ()async{
+   await database.transaction(() => on_accept_to_produce_zreport());
+  });
 
   }
 
-  void on_accept_to_produce_zreport() async
+  Future<void> on_accept_to_produce_zreport() async
   {
     await produce_z_report();  //xreport list should be in observable state
     xreport_list = [Xreport(username: appController.username,

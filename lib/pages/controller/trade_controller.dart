@@ -3,7 +3,6 @@ import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/views/choose_product_screen.dart';
 import 'package:agric/pages/views/confirm_screen.dart';
-import 'package:agric/pages/views/printing_screen.dart';
 import 'package:agric/styles/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -81,6 +80,14 @@ class TradeController extends GetxController
 
  void on_press_submit(GlobalKey<FormBuilderState> _formKey,TextEditingController textEditingController)
   async{
+    // check if there are printers connected
+    if(!appController.bluePrintPos.isConnected)
+      {
+        // user has no printing device ... canot transact
+        Get.defaultDialog(title: "Error",content: Text("Please Add a bluetooth printer to continue"));
+        return;
+      }
+
     bool accept;
     message ="";
  /// validate form
