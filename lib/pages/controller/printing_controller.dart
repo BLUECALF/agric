@@ -168,7 +168,7 @@ class PrintingController extends GetxController
     await appController.prepare_text(data);
     await appController.bluePrintPos.printReceiptText(
         appController.receiptText,
-      paperSize: PaperSize.mm72,
+      // paperSize: PaperSize.mm72,
         useCut: false,
       feedCount: -10
     );
