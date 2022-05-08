@@ -314,6 +314,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  gradient_ui_widgets:
+    dependency: "direct main"
+    description:
+      name: gradient_ui_widgets
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2-nullsafety"
   graphs:
     dependency: transitive
     description:
@@ -453,7 +460,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.1"
+    version: "1.8.0"
   path_provider:
     dependency: "direct main"
     description:
@@ -689,7 +696,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.9"
+    version: "0.4.8"
   timing:
     dependency: transitive
     description:

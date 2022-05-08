@@ -17,9 +17,11 @@ class LoadingScreen extends GetView{
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SpinKitChasingDots(
-              size: 100.0,
-              color: Colors.white,
+            Center(
+              child: SpinKitFoldingCube(
+                size: 100.0,
+                color: Colors.white,
+              ),
             ),
           ],
         ),

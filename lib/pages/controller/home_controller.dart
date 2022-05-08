@@ -1,4 +1,5 @@
 import 'package:agric/AppController/app_controller.dart';
+import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/views/reports_screen.dart';
 import 'package:agric/pages/views/trade_screen.dart';
@@ -14,6 +15,7 @@ class HomeController extends GetxController
    final appController = Get.find<AppController>();
    final SalesDao salesDao = Get.put(AppDatabase().salesDao);
   String message ="";
+   late Xreport x ;
 
 
   late List<Xreport>  xreport_list = [
@@ -45,11 +47,15 @@ class HomeController extends GetxController
   {
     if(listEquals(xreport_list,[])==true)
     {return Text("There is No xreport data ");}
-    else{return   Card(
+    else{
+      x = xreport_list[0];
+
+      return   a.GradientCard(
+      gradient: appController.g2,
       child: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.orange[100],
+          color: Colors.transparent,
 
         ),
         child:
@@ -229,6 +235,15 @@ class HomeController extends GetxController
 
   void trade()
   {
+    // check if there are printers connected
+    if(!appController.bluePrintPos.isConnected)
+    {
+      // user has no printing device ... canot transact
+      Get.defaultDialog(title: "Error",content: Text("Please Add a bluetooth printer to continue"),
+          textConfirm: "ok",
+          onConfirm: (){Get.back();});
+      return;
+    }
     Get.to(()=> TradeScreen());
   }
   void print_reports(context)
@@ -238,7 +253,8 @@ class HomeController extends GetxController
 
   Widget render_button({required IconData icon_name,required Function function,required String text})
   {
-    return ElevatedButton(
+    return a.GradientElevatedButton(
+      gradient: appController.g3,
       child:Padding(
         padding: const EdgeInsets.all(5.0),
         child: Column(
@@ -280,6 +296,22 @@ class HomeController extends GetxController
     );
   }
 
+  Future<void> print_xreport()
+  async {
+    // check if there are printers connected
+    if(!appController.bluePrintPos.isConnected)
+    {
+      // user has no printing device ... canot transact
+      Get.defaultDialog(title: "Error",content: Text("Please Add a bluetooth printer to continue"),
+          textConfirm: "ok",
+          onConfirm: (){Get.back();});
+      return;
+    }
+    // MAKE RECEIPTSECTION TEXT FOR THE X REPORT
+     await appController.bluePrintPos.printReceiptText(await appController.prepare_xreport_receipt(x));
+
+  }
+
   void connect_to_server() async
   {
     // use http request to connect to server
@@ -287,7 +319,6 @@ class HomeController extends GetxController
     var response = await http.post(url, body: {'name': 'doodle', 'color': 'blue'},);
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
-
     print(await http.read(Uri.parse('https://example.com/foobar.txt')));
   }
 

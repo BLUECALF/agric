@@ -2,9 +2,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:agric/database/database.dart';
 import 'package:blue_print_pos/blue_print_pos.dart';
 import 'package:blue_print_pos/models/models.dart';
 import 'package:blue_print_pos/receipt/receipt.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +17,22 @@ class AppController extends GetxController
   DateTime? current_date = null;
   Map transaction_data = {};
 
+  /// WE NEED GRADIENTS FOR COLORS WELL USE IN THE APP
+  Gradient g1 = LinearGradient(
+    colors: [
+      Colors.blue,
+      Colors.lightBlueAccent,
+      Colors.white
+    ],
+  );
+  Gradient g2 = LinearGradient(colors: [
+    Colors.yellowAccent,
+    Colors.white
+  ]);
+  Gradient g3 = LinearGradient(colors: [
+    Colors.green,
+    Colors.lightGreenAccent
+  ]);
   /// Details for the blueprint printter
   late ReceiptSectionText receiptText ;
   BluePrintPos bluePrintPos = BluePrintPos.instance;
@@ -94,6 +112,34 @@ class AppController extends GetxController
     receiptText.addText("Farmers best Friend", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.bold ,alignment: ReceiptAlignment.center);
     receiptText.addText("Thank You, please come again ", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.bold ,alignment: ReceiptAlignment.center);
 
+  }
+  Future<ReceiptSectionText> prepare_xreport_receipt(Xreport x) async
+  {
+    var  receiptText = ReceiptSectionText();
+    // prepare logo
+    final ByteData logoBytes = await rootBundle.load("assets/cow_w_mlk.png");
+    receiptText.addImage(
+      base64.encode(Uint8List.view(logoBytes.buffer)),
+      width: 300,
+    );
+    var l = ReceiptTextSizeType.large;
+    receiptText.addSpacer(useDashed: true); // line with dshes like -------
+    receiptText.addText("Agric Sacco", size: ReceiptTextSizeType.extraLarge, style: ReceiptTextStyleType.bold,alignment: ReceiptAlignment.center);
+    receiptText.addText("123 road", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal , alignment: ReceiptAlignment.center);
+    receiptText.addText("Olenguruone", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.bold ,alignment: ReceiptAlignment.center);
+    receiptText.addSpacer();
+    receiptText.addText("X Report", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal , alignment: ReceiptAlignment.center);
+
+    receiptText.addLeftRightText("Transactions Sold", x.transactions_sold.toString(),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
+    receiptText.addLeftRightText("Transactions Bought", x.transactions_bought.toString(),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
+    receiptText.addLeftRightText("Units sold", x.units_sold.toString(),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
+    receiptText.addLeftRightText("Units bought", x.units_bought.toString(),leftSize: l,rightSize: l);
+    receiptText.addSpacer(count: 4);
+
+    return receiptText;
   }
 
 }

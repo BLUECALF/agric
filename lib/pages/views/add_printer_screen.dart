@@ -1,4 +1,4 @@
-
+import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
 import 'package:blue_print_pos/models/models.dart';
 import 'package:blue_print_pos/receipt/receipt.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +26,12 @@ class AddPrinter extends GetView{
 
               Text("Select Printer"),
               SizedBox(width: 20,),
-              ElevatedButton(
+              ElevatedButton.icon(
+                icon: Icon(Icons.search),
                 onPressed: () async{
                   await appController.scan_devices();
                 },
-                child:Text("Scan Devices"),
+                label:Text("Scan"),
               )
             ],
           ),
@@ -70,17 +71,25 @@ class AddPrinter extends GetView{
                       ConnectionStatus conn = await appController.bluePrintPos.connect(_devices[i]);
                       if(conn == ConnectionStatus.connected)
                       {
-                       Get.defaultDialog(title:"Connected to ${_devices[i].name}");
+                       Get.defaultDialog(title:"Connected to ${_devices[i].name}",
+                           textConfirm: "ok",content: Text(""),
+                         onConfirm: (){Get.back();}
+                       );
                        appController.prompt.value = "disconnect";
                       }
                       else if(conn == ConnectionStatus.disconnect)
                       {
-                        Get.defaultDialog(title:"NOT connected to ${_devices[i].name}");
+                        Get.defaultDialog(title:"NOT connected to ${_devices[i].name}",
+                            textConfirm: "ok",content: Text(""),
+                            onConfirm: (){Get.back();});
                         appController.prompt.value = "";
                       }
                       else if(conn == ConnectionStatus.timeout)
                       {
-                        Get.defaultDialog(title:"Connection Failed Due to Timeout !!");
+                        Get.defaultDialog(title:"Connection Failed Due to Timeout !!"
+                        , textConfirm: "ok",content: Text(""),
+                            onConfirm: (){Get.back();}
+                        );
                         appController.prompt.value = "";
                       }
                     },

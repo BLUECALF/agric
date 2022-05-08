@@ -80,13 +80,7 @@ class TradeController extends GetxController
 
  void on_press_submit(GlobalKey<FormBuilderState> _formKey,TextEditingController textEditingController)
   async{
-    // check if there are printers connected
-    if(!appController.bluePrintPos.isConnected)
-      {
-        // user has no printing device ... canot transact
-        Get.defaultDialog(title: "Error",content: Text("Please Add a bluetooth printer to continue"));
-        return;
-      }
+
 
     bool accept;
     message ="";
