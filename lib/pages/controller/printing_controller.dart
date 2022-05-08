@@ -172,11 +172,8 @@ class PrintingController extends GetxController
         useCut: false,
       feedCount: -10
     );
-    await appController.bluePrintPos.printQR(data["current_transaction"]["id"].toString());
-    ReceiptSectionText endl = ReceiptSectionText();
-    endl.addText("end of qr code ",size: ReceiptTextSizeType.extraLarge);
-    endl.addSpacer();
-    appController.bluePrintPos.printReceiptText(endl);
+    await appController.bluePrintPos.printQR(data["current_transaction"]["id"].toString(), useCut: false);
+    await appController.bluePrintPos.printReceiptText(ReceiptSectionText()..addSpacer(count: 3));
 
     await Get.defaultDialog(title: "Printing",content: Column(
       children: [

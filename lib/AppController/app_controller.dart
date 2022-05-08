@@ -52,14 +52,10 @@ class AppController extends GetxController
     );
     receiptText.addSpacer(useDashed: true); // line with dshes like -------
     receiptText.addText(data["company"], size: ReceiptTextSizeType.extraLarge, style: ReceiptTextStyleType.bold,alignment: ReceiptAlignment.center);
-    receiptText.addSpacer();
-    receiptText.addText(data["address"], size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal , alignment: ReceiptAlignment.left);
-    receiptText.addSpacer();
-    receiptText.addText(data["country"], size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.bold ,alignment: ReceiptAlignment.left);
-    receiptText.addSpacer();
-    receiptText.addText(data["email"], size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal , alignment: ReceiptAlignment.left);
-    receiptText.addSpacer();
-    receiptText.addText(data["phone"], size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal ,alignment: ReceiptAlignment.left);
+    receiptText.addText(data["address"], size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal , alignment: ReceiptAlignment.center);
+    receiptText.addText(data["country"], size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.bold ,alignment: ReceiptAlignment.center);
+    receiptText.addText(data["email"], size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal , alignment: ReceiptAlignment.center);
+    receiptText.addText(data["phone"], size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal ,alignment: ReceiptAlignment.center);
 
     receiptText.addSpacer(useDashed: true); // line with dshes like -------
     receiptText.addSpacer(useDashed: true);
@@ -95,12 +91,7 @@ class AppController extends GetxController
       receiptText.addSpacer();
       receiptText.addLeftRightText(data["total_sale_list"][i].product,"${data["total_sale_list"][i].amount_kg} KGS",leftSize: l,rightSize: l);
     }
-    receiptText.addSpacer();
-    receiptText.addSpacer();
-    receiptText.addSpacer();
-    receiptText.addSpacer();
     receiptText.addText("Farmers best Friend", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.bold ,alignment: ReceiptAlignment.center);
-    receiptText.addSpacer();
     receiptText.addText("Thank You, please come again ", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.bold ,alignment: ReceiptAlignment.center);
 
   }
