@@ -33,6 +33,11 @@ class AppController extends GetxController
     Colors.green,
     Colors.lightGreenAccent
   ]);
+  Gradient g4 = LinearGradient(colors: [
+    Colors.yellowAccent,
+    Colors.lightGreenAccent
+  ]);
+
   /// Details for the blueprint printter
   late ReceiptSectionText receiptText ;
   BluePrintPos bluePrintPos = BluePrintPos.instance;
@@ -123,6 +128,8 @@ class AppController extends GetxController
       width: 300,
     );
     var l = ReceiptTextSizeType.large;
+    var b = ReceiptTextStyleType.bold;
+
     receiptText.addSpacer(useDashed: true); // line with dshes like -------
     receiptText.addText("Agric Sacco", size: ReceiptTextSizeType.extraLarge, style: ReceiptTextStyleType.bold,alignment: ReceiptAlignment.center);
     receiptText.addText("123 road", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal , alignment: ReceiptAlignment.center);
@@ -137,8 +144,9 @@ class AppController extends GetxController
     receiptText.addLeftRightText("Units sold", x.units_sold.toString(),leftSize: l,rightSize: l);
     receiptText.addSpacer();
     receiptText.addLeftRightText("Units bought", x.units_bought.toString(),leftSize: l,rightSize: l);
+    receiptText.addSpacer(count: 2);
+    receiptText.addLeftRightText("Printed by", username,leftSize: l,rightSize: l,leftStyle: b,rightStyle: b);
     receiptText.addSpacer(count: 4);
-
     return receiptText;
   }
 
