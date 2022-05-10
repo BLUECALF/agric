@@ -24,6 +24,15 @@ class AppController extends GetxController
       Colors.lightBlueAccent,
       Colors.white
     ],
+  );  Gradient g5 = LinearGradient(
+    colors: [
+     // Colors.blue,
+      Colors.lightGreenAccent,
+      Colors.white,
+      Colors.white,
+      Colors.white,
+      Colors.lightGreenAccent,
+    ],
   );
   Gradient g2 = LinearGradient(colors: [
     Colors.yellowAccent,
@@ -144,6 +153,39 @@ class AppController extends GetxController
     receiptText.addLeftRightText("Units sold", x.units_sold.toString(),leftSize: l,rightSize: l);
     receiptText.addSpacer();
     receiptText.addLeftRightText("Units bought", x.units_bought.toString(),leftSize: l,rightSize: l);
+    receiptText.addSpacer(count: 2);
+    receiptText.addLeftRightText("Printed by", username,leftSize: l,rightSize: l,leftStyle: b,rightStyle: b);
+    receiptText.addSpacer(count: 4);
+    return receiptText;
+  }
+  Future<ReceiptSectionText> prepare_zreport_receipt(Zreport z) async
+  {
+    var  receiptText = ReceiptSectionText();
+    // prepare logo
+    final ByteData logoBytes = await rootBundle.load("assets/cow_w_mlk.png");
+    receiptText.addImage(
+      base64.encode(Uint8List.view(logoBytes.buffer)),
+      width: 300,
+    );
+    var l = ReceiptTextSizeType.large;
+    var b = ReceiptTextStyleType.bold;
+
+    receiptText.addSpacer(useDashed: true); // line with dshes like -------
+    receiptText.addText("Agric Sacco", size: ReceiptTextSizeType.extraLarge, style: ReceiptTextStyleType.bold,alignment: ReceiptAlignment.center);
+    receiptText.addText("123 road", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal , alignment: ReceiptAlignment.center);
+    receiptText.addText("Olenguruone", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.bold ,alignment: ReceiptAlignment.center);
+    receiptText.addSpacer();
+    receiptText.addText("Z Report", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal , alignment: ReceiptAlignment.center);
+
+    receiptText.addLeftRightText("ID ", z.zreport_id.toString(),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
+    receiptText.addLeftRightText("Transactions Sold", z.transactions_sold.toString(),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
+    receiptText.addLeftRightText("Transactions Bought", z.transactions_bought.toString(),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
+    receiptText.addLeftRightText("Units sold", z.units_sold.toString(),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
+    receiptText.addLeftRightText("Units bought", z.units_bought.toString(),leftSize: l,rightSize: l);
     receiptText.addSpacer(count: 2);
     receiptText.addLeftRightText("Printed by", username,leftSize: l,rightSize: l,leftStyle: b,rightStyle: b);
     receiptText.addSpacer(count: 4);

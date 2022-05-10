@@ -27,61 +27,64 @@ class DetailedReportsScreen extends GetView{
           child: Card(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20,50,20,0),
-              child:Column(
-                    children: [
-                    Text(
-                      " Detailed Reports screen",style: MyTextStyle.make("title"),
-                    ),
-                    SizedBox(height:20),
-                    Text(
-                      "Z report ID : ${detailedReportController.zreport_id}",style: MyTextStyle.make("title"),
-                    ),
-                    Text(
-                      " Purchased Products",style: MyTextStyle.make("body"),
-                    ),
-                    SizedBox(height:10),
-                    FutureBuilder(future : detailedReportController.salesDao.getSaleList_by_zreport_id(detailedReportController.zreport_id),
-                        builder: (context, snapshot)
-                        {
-                          detailedReportController.salesList = snapshot.data as List<Sale>;
-                          return  DataTable(
-                              columns: [
-                                DataColumn(label: Text("Id")),
-                                DataColumn(label: Text("Date")),
-                                DataColumn(label: Text("Product")),
-                                DataColumn(label: Text("Amount kg")),
-                                DataColumn(label: Text("farmer number")),
-                                DataColumn(label: Text("User Name")),
+              child:SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                      children: [
+                      Text(
+                        " Detailed Reports screen",style: MyTextStyle.make("title"),
+                      ),
+                      SizedBox(height:20),
+                      Text(
+                        "Z report ID : ${detailedReportController.zreport_id}",style: MyTextStyle.make("title"),
+                      ),
+                      Text(
+                        " Sold Products",style: MyTextStyle.make("body"),
+                      ),
+                      SizedBox(height:10),
+                      FutureBuilder(future : detailedReportController.salesDao.getSaleList_by_zreport_id(detailedReportController.zreport_id),
+                          builder: (context, snapshot)
+                          {
+                            detailedReportController.salesList = snapshot.data as List<Sale>;
+                            return  DataTable(
+                                columns: [
+                                  DataColumn(label: Text("Id")),
+                                  DataColumn(label: Text("Date")),
+                                  DataColumn(label: Text("Product")),
+                                  DataColumn(label: Text("Amount kg")),
+                                  DataColumn(label: Text("farmer number")),
+                                  DataColumn(label: Text("User Name")),
 
-                              ],
+                                ],
 
-                              rows: detailedReportController.salesList.map((e) => detailedReportController.makedatarow_of_sales(e)).toList());
+                                rows: detailedReportController.salesList.map((e) => detailedReportController.makedatarow_of_sales(e)).toList());
 
-                        }),
-                    SizedBox(height: 20,),
-                    Text(
-                      " Sold Products",style: MyTextStyle.make("body"),
-                    ),
-                    SizedBox(height:10),
-                    FutureBuilder(future : detailedReportController.database.getPurchaseList_by_zreport_id(detailedReportController.zreport_id),
-                        builder: (context, snapshot)
-                        {
-                          detailedReportController.purchaseList = snapshot.data as List<Purchase>;
-                          return  DataTable(
-                              columns: [
-                                DataColumn(label: Text("Id")),
-                                DataColumn(label: Text("Date")),
-                                DataColumn(label: Text("Product")),
-                                DataColumn(label: Text("Amount kg")),
-                                DataColumn(label: Text("farmer number")),
-                                DataColumn(label: Text("User Name")),
+                          }),
+                      SizedBox(height: 20,),
+                      Text(
+                        " Purchased Products",style: MyTextStyle.make("body"),
+                      ),
+                      SizedBox(height:10),
+                      FutureBuilder(future : detailedReportController.database.getPurchaseList_by_zreport_id(detailedReportController.zreport_id),
+                          builder: (context, snapshot)
+                          {
+                            detailedReportController.purchaseList = snapshot.data as List<Purchase>;
+                            return  DataTable(
+                                columns: [
+                                  DataColumn(label: Text("Id")),
+                                  DataColumn(label: Text("Date")),
+                                  DataColumn(label: Text("Product")),
+                                  DataColumn(label: Text("Amount kg")),
+                                  DataColumn(label: Text("farmer number")),
+                                  DataColumn(label: Text("User Name")),
 
-                              ],
+                                ],
 
-                              rows: detailedReportController.purchaseList.map((e) => detailedReportController.makedatarow_of_purchases(e)).toList());
+                                rows: detailedReportController.purchaseList.map((e) => detailedReportController.makedatarow_of_purchases(e)).toList());
 
-                        }),
-                  ])),
+                          }),
+                    ]),
+              )),
           ),
         ),
       ),

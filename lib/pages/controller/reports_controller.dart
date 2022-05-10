@@ -1,8 +1,7 @@
-
+import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
 import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/views/detailed_report_screen.dart';
-import 'package:agric/styles/button_decoration.dart';
 import 'package:agric/styles/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -176,18 +175,39 @@ class ReportsController extends GetxController
           DataCell(Text("${z.transactions_bought}")),
           DataCell(Text("${z.units_bought}")),
           DataCell(Text("${z.username}")),
-          DataCell(ElevatedButton(onPressed: ()
-          {
-            print("the Z report has id of ${z.zreport_id}");
-            Get.to(DetailedReportsScreen(),arguments: {"zreport_id":z.zreport_id});
+          DataCell(Row(
+            children: [
+              a.GradientElevatedButton(onPressed: ()
+              {
+                print("the Z report has id of ${z.zreport_id}");
+                Get.to(DetailedReportsScreen(),arguments: {"zreport_id":z.zreport_id});
 
-          },
-            child: Text("View Details",style: MyTextStyle.make("tiny"),),
+              },
+                gradient:appController.g3,
+                child: Text("View Details",style: MyTextStyle.make("tiny"),),
+              ),
+              IconButton(onPressed: ()
+              async{
+                // check if there are printers connected
+                if(!appController.bluePrintPos.isConnected)
+                {
+                  // user has no printing device ... canot transact
+                  Get.defaultDialog(title: "Error",content: Text("Please Add a bluetooth printer to continue"),
+                      textConfirm: "ok",
+                      onConfirm: (){Get.back();});
+                  return;
+                }
+                // MAKE RECEIPTSECTION TEXT FOR THE X REPORT
+                await appController.bluePrintPos.printReceiptText(await appController.prepare_zreport_receipt(z));
+
+              print("the Z report has id of ${z.zreport_id}");
+              },
+              icon: Icon(Icons.receipt),
+              ),
+            ],
           ),),
 
     ]);
   }
-
-
 
 }
