@@ -168,22 +168,19 @@ class PrintingController extends GetxController
     await appController.prepare_text(data);
     await appController.bluePrintPos.printReceiptText(
         appController.receiptText,
-      // paperSize: PaperSize.mm72,
-        useCut: false,
-      feedCount: -10
     );
     await appController.bluePrintPos.printQR(data["current_transaction"]["id"].toString(), useCut: false);
     await appController.bluePrintPos.printReceiptText(ReceiptSectionText()..addSpacer(count: 3));
 
-    await Get.defaultDialog(title: "Printing",content: Column(
-      children: [
-        SpinKitChasingDots(
-          size: 50.0,
-          color: Colors.black,
-        ),
-        ElevatedButton(onPressed: (){Get.back();}, child: Text("OK")),
-      ],
-    ),);
+    // await Get.defaultDialog(title: "Printing",content: Column(
+    //   children: [
+    //     SpinKitChasingDots(
+    //       size: 50.0,
+    //       color: Colors.black,
+    //     ),
+    //     ElevatedButton(onPressed: (){Get.back();}, child: Text("OK")),
+    //   ],
+    // ),);
     Get.off(TradeScreen());
   }
 }
