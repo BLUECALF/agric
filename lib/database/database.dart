@@ -276,6 +276,10 @@ class AppDatabase extends _$AppDatabase{
   Future<List<Sellable_product>> getSellable_productList() async
   {  return await select(sellableProducts).get(); }
 
+  //getlist of object in stream
+  Stream<List<Sellable_product>> getSellable_productListStream()
+  {  return select(sellableProducts).watch();}
+
   // insert get and delete of Buyable_products
 
   //delete object
@@ -289,6 +293,9 @@ class AppDatabase extends _$AppDatabase{
   //getlist of object
   Future<List<Buyable_product>> getBuyable_productList() async
   {  return await select(buyableProducts).get(); }
+  //getlist of object in stream
+  Stream<List<Buyable_product>> getBuyable_productListStream()
+  {  return select(buyableProducts).watch(); }
     
   // INSERT UPDATE AND DELETE OF TOTAL SALES TABLE
 

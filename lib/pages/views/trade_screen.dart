@@ -26,10 +26,12 @@ class TradeScreen extends GetView{
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.greenAccent,
+        backgroundColor: Colors.green,
+        title:Text("Trade screen "),
+        centerTitle: true,
         elevation: 0,
       ),
-      backgroundColor: Colors.greenAccent,
+      backgroundColor: Colors.green,
       body: SafeArea(
         child:Center(
           child: Card(
@@ -41,10 +43,6 @@ class TradeScreen extends GetView{
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      "Trade screen ",style: MyTextStyle.make("title"),
-                    ),
-                    SizedBox(height: 20,),
                     Text("${tradeController.title} ",style: MyTextStyle.make("body"),),
                     SizedBox(height: 10,),
                     Text("Choose Transaction",style: MyTextStyle.make("body"),),
@@ -142,8 +140,7 @@ class TradeScreen extends GetView{
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: (){Get.to(HomeScreen());},child: Icon(Icons.exit_to_app),),
-floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
+
     );
 
   }

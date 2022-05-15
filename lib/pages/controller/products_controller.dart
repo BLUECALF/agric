@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
+import '../../AppController/app_controller.dart';
+
 class ProductsController extends GetxController
 {
   final database = Get.find<AppDatabase>();
+  final appController = Get.find<AppController>();
   final _formKey = GlobalKey<FormBuilderState>();
   Map current_data={};
   String message="";
@@ -26,7 +29,7 @@ class ProductsController extends GetxController
     current_data = _formKey.currentState!.value;
     print("current data amap $current_data");
     print(current_data);
-    message = "${current_data["action"]} of ${_formKey.currentState?.fields["product"]?.value} Recorded Successfully";
+    message = "${_formKey.currentState?.fields["product"]?.value} product was added successfully";
     _formKey.currentState?.reset();
     return true;
     }
@@ -43,17 +46,17 @@ class ProductsController extends GetxController
 
     // show results
     Get.defaultDialog(
-      title: "Information",
+      title: "Notice",
       content:Text("${message}"),
       actions: [
-        TextButton(onPressed: (){Get.back();}, child: Text(" OK")),
+        TextButton(onPressed: (){Get.back();Get.back();}, child: Text(" OK")),
       ],
     );
   }
 
   // perform action
   Perform_action(Map current_data) async {
-    String action = current_data["action"];
+    String action = "add product";
     String product = current_data["product"];
     String product_type = current_data["product_type"];
 
@@ -84,7 +87,7 @@ class ProductsController extends GetxController
         if(row<0)
         {
           // product was not inserted
-          message = "Error Occured in $action of $product_type";
+          message = "Error occured in $action of $product_type";
         }
       }
       catch(e)
@@ -240,5 +243,52 @@ class ProductsController extends GetxController
       }
     }
     return false;
+  }
+
+  Widget render_purchasable_products(List<Buyable_product> l) {
+    
+   return ListView.builder(
+        itemCount: l.length,
+        itemBuilder: (BuildContext c, int i)
+    {
+      return Card(
+          child: ListTile(
+          leading: Icon(Icons.square),
+          trailing: IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: ()async{
+              await database.deleteBuyable_product(l[i]);
+            },
+          ),
+
+          title:Text("${l[i].product_name}")
+      ));
+
+    }
+    );
+  }
+
+  Widget render_sellable_products(List<Sellable_product> l) {
+
+    return ListView.builder(
+        itemCount: l.length,
+        itemBuilder: (BuildContext c, int i)
+        {
+          return Card(
+            child: ListTile(
+                leading: Icon(Icons.square),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: ()async{
+                    await database.deleteSellable_product(l[i]);
+                  },
+                ),
+
+                title:Text("${l[i].product_name}")
+            ),
+          );
+
+        }
+    );
   }
 }

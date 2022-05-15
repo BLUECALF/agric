@@ -1,3 +1,4 @@
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
 import 'package:blue_print_pos/models/models.dart';
 import 'package:blue_print_pos/receipt/receipt.dart';
@@ -67,8 +68,15 @@ class AddPrinter extends GetView{
                       onTap: () async
                       {
                         await appController.bluePrintPos.disconnect();
+                        Get.defaultDialog(title:"" ,
+                          barrierDismissible: false,
+                          content: SpinKitRing(
+                           color: Colors.lightGreenAccent,
+                          ),
+                        );
                         // take device  and connect then print.
                         ConnectionStatus conn = await appController.bluePrintPos.connect(_devices[i]);
+                        if(appController.bluePrintPos.isConnected){Get.back();}
                         if(conn == ConnectionStatus.connected)
                         {
                          Get.defaultDialog(title:"Connected to ${_devices[i].name}",
@@ -81,14 +89,14 @@ class AddPrinter extends GetView{
                         {
                           Get.defaultDialog(title:"NOT connected to ${_devices[i].name}",
                               textConfirm: "ok",content: Text(""),
-                              onConfirm: (){Get.back();});
+                              onConfirm: (){Get.back();Get.back();});
                           appController.prompt.value = "";
                         }
                         else if(conn == ConnectionStatus.timeout)
                         {
                           Get.defaultDialog(title:"Connection Failed Due to Timeout !!"
                           , textConfirm: "ok",content: Text(""),
-                              onConfirm: (){Get.back();}
+                              onConfirm: (){Get.back();Get.back();}
                           );
                           appController.prompt.value = "";
                         }

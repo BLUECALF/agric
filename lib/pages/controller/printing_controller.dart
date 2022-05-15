@@ -99,7 +99,7 @@ class PrintingController extends GetxController
   }
   Widget render_net_total()
   {
-    on_press_print();
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -137,6 +137,7 @@ class PrintingController extends GetxController
                     return Text("There is no Sales");
                   }
                 total_sale_list = snapshot.data as List<TotalSale>;
+                on_press_print();
                 return Column(
                   children: total_sale_list.map((e) => Text("${e.product} \t"
                       "${e.amount_kg} KGS"
@@ -152,6 +153,7 @@ class PrintingController extends GetxController
   }
   void on_press_print() async
   {
+
     // make a map containing everything in recipt
     data  = {
       "logo":"assets/fresh_milk.jpg",
@@ -172,15 +174,6 @@ class PrintingController extends GetxController
     await appController.bluePrintPos.printQR(data["current_transaction"]["id"].toString(), useCut: false);
     await appController.bluePrintPos.printReceiptText(ReceiptSectionText()..addSpacer(count: 3));
 
-    // await Get.defaultDialog(title: "Printing",content: Column(
-    //   children: [
-    //     SpinKitChasingDots(
-    //       size: 50.0,
-    //       color: Colors.black,
-    //     ),
-    //     ElevatedButton(onPressed: (){Get.back();}, child: Text("OK")),
-    //   ],
-    // ),);
     Get.off(TradeScreen());
   }
 }
