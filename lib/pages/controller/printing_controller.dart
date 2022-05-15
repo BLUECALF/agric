@@ -167,9 +167,10 @@ class PrintingController extends GetxController
       "total_purchase_list":total_purchase_list,
     };
 
+    await appController.bluePrintPos.printReceiptText(ReceiptSectionText());
     await appController.prepare_text(data);
     await appController.bluePrintPos.printReceiptText(
-        appController.receiptText,
+        appController.receiptText, feedCount: 0
     );
     await appController.bluePrintPos.printQR(data["current_transaction"]["id"].toString(), useCut: false);
     await appController.bluePrintPos.printReceiptText(ReceiptSectionText()..addSpacer(count: 3));
