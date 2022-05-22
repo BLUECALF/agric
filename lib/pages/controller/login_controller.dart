@@ -64,6 +64,7 @@ class LoginController extends GetxController
         Get.off(()=> HomeScreen(),);
         // update app conroller
          appController.username = data["username"];
+         appController.password = data["password"];
          appController.current_date = DateTime.now();
        }
        else{

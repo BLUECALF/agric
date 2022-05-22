@@ -12,8 +12,12 @@ import 'package:get/get.dart';
 
 class AppController extends GetxController
 {
+  String appname = "Milk Sacco";
+  // AUTHRISATION DETAILS
 
   String username = ""; // holds username of the operator
+  String password = ""; // holds password of the operator
+  String access_token = "";
   DateTime? current_date = null;
   Map transaction_data = {};
 

@@ -42,7 +42,7 @@ class LoginScreen extends GetView{
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "Agric Sacco",style: MyTextStyle.make("title-white"),
+                        "${loginController.appController.appname}",style: MyTextStyle.make("title-white"),
                       ),
                       SizedBox(height: 20,),
                       CircleAvatar(

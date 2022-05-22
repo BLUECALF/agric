@@ -1,4 +1,8 @@
+import 'dart:io';
+
+
 import 'package:agric/AppController/app_controller.dart';
+import 'package:agric/server_connection/server_connection.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/views/reports_screen.dart';
@@ -7,13 +11,14 @@ import 'package:agric/styles/text_style.dart';
 import "package:flutter/material.dart";
 import 'package:get/get.dart';
 import "package:flutter/foundation.dart";
-import 'package:http/http.dart' as http;
+
 
 class HomeController extends GetxController
 {
    final database = Get.find<AppDatabase>();
    final appController = Get.find<AppController>();
    final SalesDao salesDao = Get.put(AppDatabase().salesDao);
+   final serverConn =  Get.put(ServerConnection());
   String message ="";
    late Xreport x ;
 
@@ -314,12 +319,9 @@ class HomeController extends GetxController
 
   void connect_to_server() async
   {
-    // use http request to connect to server
-    var url = Uri.parse('https://example.com/whatsit/create');
-    var response = await http.post(url, body: {'name': 'doodle', 'color': 'blue'},);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-    print(await http.read(Uri.parse('https://example.com/foobar.txt')));
+    serverConn.connect_to_server();
+    await serverConn.postPurchase();
+
   }
 
 }
