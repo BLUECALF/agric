@@ -319,9 +319,9 @@ class HomeController extends GetxController
 
   void connect_to_server() async
   {
-    serverConn.connect_to_server();
+    await serverConn.connect_to_server();
     await serverConn.postPurchase();
-
+    var farmersList = await serverConn.getFarmersList();
   }
 
 }

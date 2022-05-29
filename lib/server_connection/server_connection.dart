@@ -9,7 +9,7 @@ class ServerConnection extends GetxController
 {
   final database = Get.find<AppDatabase>();
   final appController = Get.find<AppController>();
-  void connect_to_server() async
+  Future<void> connect_to_server() async
   {
     var headers = {
       'Authorization': 'Basic c2FjY29tYW4tOWlSeWYyMTQ6MTE4MDYwY2U4ODg1OGVlMjM5NmMxZWVhMzMzMDE5MTE5ZjVhNjVmNjUyMWYzMjlmMjg0MzkwNTJkYmY4Y2ViYQ==',
@@ -86,7 +86,29 @@ class ServerConnection extends GetxController
 
   }
 
+  Future<List> getFarmersList() async
+  {
+    var headers = {
+      'Authorization': 'Bearer ${appController.access_token}'
+    };
+    var request = http.Request('POST', Uri.parse('https://agric.dev.ol-digital.com/rest/v2/services/saccoman_RestService/getFarmerAccount'));
 
+    request.headers.addAll(headers);
+
+    http.StreamedResponse streamedResponse = await request.send();
+
+    var response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 200) {
+      List<dynamic> farmersList = jsonDecode(response.body);
+      print(farmersList);
+      return farmersList;
+  }
+  else {
+  print(response.reasonPhrase);
+  return [];
+  }
+  }
 
 
 }

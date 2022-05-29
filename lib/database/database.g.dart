@@ -2314,6 +2314,184 @@ class $TotalPurchasesTable extends TotalPurchases
   }
 }
 
+class Farmer extends DataClass implements Insertable<Farmer> {
+  final String fullname;
+  final String farmer_number;
+  Farmer({required this.fullname, required this.farmer_number});
+  factory Farmer.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return Farmer(
+      fullname: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}fullname'])!,
+      farmer_number: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}farmer_number'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['fullname'] = Variable<String>(fullname);
+    map['farmer_number'] = Variable<String>(farmer_number);
+    return map;
+  }
+
+  FarmersCompanion toCompanion(bool nullToAbsent) {
+    return FarmersCompanion(
+      fullname: Value(fullname),
+      farmer_number: Value(farmer_number),
+    );
+  }
+
+  factory Farmer.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Farmer(
+      fullname: serializer.fromJson<String>(json['fullname']),
+      farmer_number: serializer.fromJson<String>(json['farmer_number']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'fullname': serializer.toJson<String>(fullname),
+      'farmer_number': serializer.toJson<String>(farmer_number),
+    };
+  }
+
+  Farmer copyWith({String? fullname, String? farmer_number}) => Farmer(
+        fullname: fullname ?? this.fullname,
+        farmer_number: farmer_number ?? this.farmer_number,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Farmer(')
+          ..write('fullname: $fullname, ')
+          ..write('farmer_number: $farmer_number')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(fullname, farmer_number);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Farmer &&
+          other.fullname == this.fullname &&
+          other.farmer_number == this.farmer_number);
+}
+
+class FarmersCompanion extends UpdateCompanion<Farmer> {
+  final Value<String> fullname;
+  final Value<String> farmer_number;
+  const FarmersCompanion({
+    this.fullname = const Value.absent(),
+    this.farmer_number = const Value.absent(),
+  });
+  FarmersCompanion.insert({
+    required String fullname,
+    required String farmer_number,
+  })  : fullname = Value(fullname),
+        farmer_number = Value(farmer_number);
+  static Insertable<Farmer> custom({
+    Expression<String>? fullname,
+    Expression<String>? farmer_number,
+  }) {
+    return RawValuesInsertable({
+      if (fullname != null) 'fullname': fullname,
+      if (farmer_number != null) 'farmer_number': farmer_number,
+    });
+  }
+
+  FarmersCompanion copyWith(
+      {Value<String>? fullname, Value<String>? farmer_number}) {
+    return FarmersCompanion(
+      fullname: fullname ?? this.fullname,
+      farmer_number: farmer_number ?? this.farmer_number,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (fullname.present) {
+      map['fullname'] = Variable<String>(fullname.value);
+    }
+    if (farmer_number.present) {
+      map['farmer_number'] = Variable<String>(farmer_number.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FarmersCompanion(')
+          ..write('fullname: $fullname, ')
+          ..write('farmer_number: $farmer_number')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FarmersTable extends Farmers with TableInfo<$FarmersTable, Farmer> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FarmersTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _fullnameMeta = const VerificationMeta('fullname');
+  @override
+  late final GeneratedColumn<String?> fullname = GeneratedColumn<String?>(
+      'fullname', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _farmer_numberMeta =
+      const VerificationMeta('farmer_number');
+  @override
+  late final GeneratedColumn<String?> farmer_number = GeneratedColumn<String?>(
+      'farmer_number', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [fullname, farmer_number];
+  @override
+  String get aliasedName => _alias ?? 'farmers';
+  @override
+  String get actualTableName => 'farmers';
+  @override
+  VerificationContext validateIntegrity(Insertable<Farmer> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('fullname')) {
+      context.handle(_fullnameMeta,
+          fullname.isAcceptableOrUnknown(data['fullname']!, _fullnameMeta));
+    } else if (isInserting) {
+      context.missing(_fullnameMeta);
+    }
+    if (data.containsKey('farmer_number')) {
+      context.handle(
+          _farmer_numberMeta,
+          farmer_number.isAcceptableOrUnknown(
+              data['farmer_number']!, _farmer_numberMeta));
+    } else if (isInserting) {
+      context.missing(_farmer_numberMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {farmer_number};
+  @override
+  Farmer map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Farmer.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $FarmersTable createAlias(String alias) {
+    return $FarmersTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $SalesTable sales = $SalesTable(this);
@@ -2327,6 +2505,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $Sellable_productsTable(this);
   late final $TotalSalesTable totalSales = $TotalSalesTable(this);
   late final $TotalPurchasesTable totalPurchases = $TotalPurchasesTable(this);
+  late final $FarmersTable farmers = $FarmersTable(this);
   late final SalesDao salesDao = SalesDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
@@ -2340,7 +2519,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         buyableProducts,
         sellableProducts,
         totalSales,
-        totalPurchases
+        totalPurchases,
+        farmers
       ];
 }
 

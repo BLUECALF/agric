@@ -54,7 +54,6 @@ class Users extends Table {
 }
 
 
-
 // x report
 
 class Xreports extends Table {
@@ -91,6 +90,11 @@ class Buyable_products extends Table {
 
   Set<Column> get primaryKey => {product_name};
 }
+class Farmers extends Table {
+  TextColumn get fullname => text()();
+  TextColumn get farmer_number => text()();
+  Set<Column> get primaryKey => {farmer_number};
+}
 
 
 LazyDatabase _openConnection() {
@@ -109,13 +113,13 @@ LazyDatabase _openConnection() {
 //the annotation tells drift to prepare a databse class that uses both of the
 //tables we just defined. well see how to use that databse class in amoment
 
-@DriftDatabase(tables: [Sales,Purchases,Users,Xreports,Zreports,Buyable_products,Sellable_products,TotalSales,TotalPurchases],daos:[SalesDao])
+@DriftDatabase(tables: [Sales,Purchases,Users,Xreports,Zreports,Buyable_products,Sellable_products,TotalSales,TotalPurchases,Farmers],daos:[SalesDao])
 class AppDatabase extends _$AppDatabase{
 
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   //make a miration strategy for the schemer version 1
   MigrationStrategy get migration => MigrationStrategy(
@@ -152,6 +156,10 @@ class AppDatabase extends _$AppDatabase{
 
 
         }
+      if(from == 3)
+        {
+          await migrator.createTable(farmers);
+        }
 
 
     }
@@ -180,7 +188,10 @@ class AppDatabase extends _$AppDatabase{
   Future<int> deleteUser(User) async
   { return await delete(users).delete(User);}
 
-
+  //Farmers
+  //insert
+  /*Future<int> insertFarmer(Farmer) async
+  { return await into(farmers).insert(Farmer);}*/
   //insert ,get ,update and delete For Purchases
 
   //insert
