@@ -321,7 +321,23 @@ class HomeController extends GetxController
   {
     await serverConn.connect_to_server();
     await serverConn.postPurchase();
-    var farmersList = await serverConn.getFarmersList();
+    List farmersList = await serverConn.getFarmersList(); //we got d]farmers list from network
+    List<Farmer> localfarmersList = await database.getFarmerList();
+    
+    for( int i=0;i < localfarmersList.length;i++)  // delete all Local Farmers before reinserting them
+      {
+        await database.deleteFarmer(localfarmersList[i]);
+      }
+
+    for( int i=0;i < farmersList.length;i++)  // add farmers 
+        {
+         var farmer_with_acc_obj = farmersList[i];
+         var farmer_obj = farmer_with_acc_obj["farmer"];
+        int index = await database.insertFarmer(
+          Farmer(fullname: farmer_obj["_instanceName"], id: farmer_obj["id"], farmer_number: farmer_with_acc_obj["accountId"])
+        );
+        print("THE INDEX OF INSERTED FARMER IS ${index}");
+    }
   }
 
 }

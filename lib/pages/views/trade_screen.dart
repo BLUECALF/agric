@@ -94,7 +94,7 @@ class TradeScreen extends GetView{
                             keyboardType: TextInputType.number,
                             cursorWidth: 5,
                             validator: (value){
-                              if(value == "" || value == null || value.length < 5)
+                              if(value == "" || value == null)
                               {return "Enter Farmer Number";}
                               else{return null;}
                             },

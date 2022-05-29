@@ -92,6 +92,7 @@ class Buyable_products extends Table {
 }
 class Farmers extends Table {
   TextColumn get fullname => text()();
+  TextColumn get id => text()();
   TextColumn get farmer_number => text()();
   Set<Column> get primaryKey => {farmer_number};
 }
@@ -119,7 +120,7 @@ class AppDatabase extends _$AppDatabase{
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   //make a miration strategy for the schemer version 1
   MigrationStrategy get migration => MigrationStrategy(
@@ -160,6 +161,10 @@ class AppDatabase extends _$AppDatabase{
         {
           await migrator.createTable(farmers);
         }
+      if(from == 4)
+        {
+          await migrator.addColumn(farmers,farmers.id);
+        }
 
 
     }
@@ -189,10 +194,25 @@ class AppDatabase extends _$AppDatabase{
   { return await delete(users).delete(User);}
 
   //Farmers
-  //insert
-  /*Future<int> insertFarmer(Farmer) async
-  { return await into(farmers).insert(Farmer);}*/
-  //insert ,get ,update and delete For Purchases
+  Future<int> insertFarmer(Farmer) async
+  { return await into(farmers).insert(Farmer);}
+
+  Future<List<Farmer>> getFarmerList() async
+  {  return await select(farmers).get(); }
+  Future<List<Farmer>> getFarmer(String farmer_number) async
+  {  return await (select(farmers)..where((tbl) => tbl.farmer_number.equals(farmer_number))).get(); }
+
+  //update value in db
+  Future<bool> updateFarmer(Farmer) async
+  {
+    return await update(farmers).replace(Farmer);
+  }
+
+  //delete object
+  Future<int> deleteFarmer(Farmer) async
+  { return await delete(farmers).delete(Farmer);}
+
+  //Purchases
 
   //insert
   Future<int> insertPurchase(Purchase) async

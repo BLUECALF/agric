@@ -2316,13 +2316,17 @@ class $TotalPurchasesTable extends TotalPurchases
 
 class Farmer extends DataClass implements Insertable<Farmer> {
   final String fullname;
+  final String id;
   final String farmer_number;
-  Farmer({required this.fullname, required this.farmer_number});
+  Farmer(
+      {required this.fullname, required this.id, required this.farmer_number});
   factory Farmer.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Farmer(
       fullname: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}fullname'])!,
+      id: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       farmer_number: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}farmer_number'])!,
     );
@@ -2331,6 +2335,7 @@ class Farmer extends DataClass implements Insertable<Farmer> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['fullname'] = Variable<String>(fullname);
+    map['id'] = Variable<String>(id);
     map['farmer_number'] = Variable<String>(farmer_number);
     return map;
   }
@@ -2338,6 +2343,7 @@ class Farmer extends DataClass implements Insertable<Farmer> {
   FarmersCompanion toCompanion(bool nullToAbsent) {
     return FarmersCompanion(
       fullname: Value(fullname),
+      id: Value(id),
       farmer_number: Value(farmer_number),
     );
   }
@@ -2347,6 +2353,7 @@ class Farmer extends DataClass implements Insertable<Farmer> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Farmer(
       fullname: serializer.fromJson<String>(json['fullname']),
+      id: serializer.fromJson<String>(json['id']),
       farmer_number: serializer.fromJson<String>(json['farmer_number']),
     );
   }
@@ -2355,59 +2362,73 @@ class Farmer extends DataClass implements Insertable<Farmer> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'fullname': serializer.toJson<String>(fullname),
+      'id': serializer.toJson<String>(id),
       'farmer_number': serializer.toJson<String>(farmer_number),
     };
   }
 
-  Farmer copyWith({String? fullname, String? farmer_number}) => Farmer(
+  Farmer copyWith({String? fullname, String? id, String? farmer_number}) =>
+      Farmer(
         fullname: fullname ?? this.fullname,
+        id: id ?? this.id,
         farmer_number: farmer_number ?? this.farmer_number,
       );
   @override
   String toString() {
     return (StringBuffer('Farmer(')
           ..write('fullname: $fullname, ')
+          ..write('id: $id, ')
           ..write('farmer_number: $farmer_number')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(fullname, farmer_number);
+  int get hashCode => Object.hash(fullname, id, farmer_number);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Farmer &&
           other.fullname == this.fullname &&
+          other.id == this.id &&
           other.farmer_number == this.farmer_number);
 }
 
 class FarmersCompanion extends UpdateCompanion<Farmer> {
   final Value<String> fullname;
+  final Value<String> id;
   final Value<String> farmer_number;
   const FarmersCompanion({
     this.fullname = const Value.absent(),
+    this.id = const Value.absent(),
     this.farmer_number = const Value.absent(),
   });
   FarmersCompanion.insert({
     required String fullname,
+    required String id,
     required String farmer_number,
   })  : fullname = Value(fullname),
+        id = Value(id),
         farmer_number = Value(farmer_number);
   static Insertable<Farmer> custom({
     Expression<String>? fullname,
+    Expression<String>? id,
     Expression<String>? farmer_number,
   }) {
     return RawValuesInsertable({
       if (fullname != null) 'fullname': fullname,
+      if (id != null) 'id': id,
       if (farmer_number != null) 'farmer_number': farmer_number,
     });
   }
 
   FarmersCompanion copyWith(
-      {Value<String>? fullname, Value<String>? farmer_number}) {
+      {Value<String>? fullname,
+      Value<String>? id,
+      Value<String>? farmer_number}) {
     return FarmersCompanion(
       fullname: fullname ?? this.fullname,
+      id: id ?? this.id,
       farmer_number: farmer_number ?? this.farmer_number,
     );
   }
@@ -2417,6 +2438,9 @@ class FarmersCompanion extends UpdateCompanion<Farmer> {
     final map = <String, Expression>{};
     if (fullname.present) {
       map['fullname'] = Variable<String>(fullname.value);
+    }
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
     }
     if (farmer_number.present) {
       map['farmer_number'] = Variable<String>(farmer_number.value);
@@ -2428,6 +2452,7 @@ class FarmersCompanion extends UpdateCompanion<Farmer> {
   String toString() {
     return (StringBuffer('FarmersCompanion(')
           ..write('fullname: $fullname, ')
+          ..write('id: $id, ')
           ..write('farmer_number: $farmer_number')
           ..write(')'))
         .toString();
@@ -2444,6 +2469,11 @@ class $FarmersTable extends Farmers with TableInfo<$FarmersTable, Farmer> {
   late final GeneratedColumn<String?> fullname = GeneratedColumn<String?>(
       'fullname', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String?> id = GeneratedColumn<String?>(
+      'id', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _farmer_numberMeta =
       const VerificationMeta('farmer_number');
   @override
@@ -2451,7 +2481,7 @@ class $FarmersTable extends Farmers with TableInfo<$FarmersTable, Farmer> {
       'farmer_number', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [fullname, farmer_number];
+  List<GeneratedColumn> get $columns => [fullname, id, farmer_number];
   @override
   String get aliasedName => _alias ?? 'farmers';
   @override
@@ -2466,6 +2496,11 @@ class $FarmersTable extends Farmers with TableInfo<$FarmersTable, Farmer> {
           fullname.isAcceptableOrUnknown(data['fullname']!, _fullnameMeta));
     } else if (isInserting) {
       context.missing(_fullnameMeta);
+    }
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
     }
     if (data.containsKey('farmer_number')) {
       context.handle(
