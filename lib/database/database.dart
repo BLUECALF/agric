@@ -51,6 +51,7 @@ class Users extends Table {
 
   TextColumn get username => text()();
   TextColumn get password => text()();
+  Set<Column> get primaryKey => {username};
 }
 
 
@@ -165,6 +166,7 @@ class AppDatabase extends _$AppDatabase{
         {
           await migrator.addColumn(farmers,farmers.id);
         }
+
 
 
     }

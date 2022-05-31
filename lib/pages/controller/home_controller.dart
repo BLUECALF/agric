@@ -18,8 +18,8 @@ class HomeController extends GetxController
    final database = Get.find<AppDatabase>();
    final appController = Get.find<AppController>();
    final SalesDao salesDao = Get.put(AppDatabase().salesDao);
-   final serverConn =  Get.put(ServerConnection());
-  String message ="";
+   final serverConn = Get.find<ServerConnection>();
+   String message ="";
    late Xreport x ;
 
 

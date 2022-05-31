@@ -9,7 +9,7 @@ class ServerConnection extends GetxController
 {
   final database = Get.find<AppDatabase>();
   final appController = Get.find<AppController>();
-  Future<void> connect_to_server() async
+  Future<bool> connect_to_server() async
   {
     var headers = {
       'Authorization': 'Basic c2FjY29tYW4tOWlSeWYyMTQ6MTE4MDYwY2U4ODg1OGVlMjM5NmMxZWVhMzMzMDE5MTE5ZjVhNjVmNjUyMWYzMjlmMjg0MzkwNTJkYmY4Y2ViYQ==',
@@ -36,13 +36,15 @@ class ServerConnection extends GetxController
           , textConfirm: "ok",content: Text("Connected to server"),
           onConfirm: (){Get.back();Get.back();}
       );*/
+      return true;
     }
     else {
       print(response.reasonPhrase);
-      Get.defaultDialog(title:"Notice"
+     /* Get.defaultDialog(title:"Notice"
           , textConfirm: "ok",content: Text("Connection Failed"),
           onConfirm: (){Get.back();Get.back();}
-      );
+      );*/
+      return false;
     }
   }
   postPurchase() async
