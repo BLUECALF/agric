@@ -17,11 +17,12 @@ class ChooseProduct extends GetView{
       ),
       body: Column(
         children: [
+          SizedBox(height: 20),
           Expanded(
             flex: 1,
             child: GridView.count(
               mainAxisSpacing: 2,
-              crossAxisSpacing: 2,
+              crossAxisSpacing: 5,
               crossAxisCount: 3,
 
               children: chooseProductController.render_buttons(),

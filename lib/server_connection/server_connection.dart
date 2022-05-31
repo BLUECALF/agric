@@ -47,43 +47,41 @@ class ServerConnection extends GetxController
       return false;
     }
   }
-  postPurchase() async
+  Future<void> postPurchase() async
   {
+    List<Purchase> purchaseList = await database.getPurchaseList_by_username(appController.username);
+print(purchaseList);
     var headers = {
       'Authorization': 'Bearer ${appController.access_token}',
       'Content-Type': 'application/json'
     };
-    var request = http.Request('POST', Uri.parse('https://agric.dev.ol-digital.com/rest/v2/services/saccoman_RestService/postSaleEntry'));
-    request.body = json.encode({
-      "entry": {
-        "farmerAccount": "1006",
-        "amount": 17
+
+    for(int i = 0; i < purchaseList.length;i++)
+      {
+        Purchase p = purchaseList[i];
+        if(p.uploaded == null|| p.uploaded == false)
+          {
+            // we upload it.
+            var request = http.Request('POST', Uri.parse('https://agric.dev.ol-digital.com/rest/v2/services/saccoman_RestService/postSaleEntry'));
+            request.body = json.encode({
+              "entry": {
+                "farmerAccount": p.farmer_number,
+                "amount": p.amount_kg
+              }
+            });
+            request.headers.addAll(headers);
+
+            http.StreamedResponse response = await request.send();
+
+            if (response.statusCode == 200) {
+              // it was uploaded successfully .. update record
+              print("purchase uploaded");
+              await database.updatePurchase(
+                  Purchase(id: p.id, date: p.date,
+                      product: p.product, amount_kg: p.amount_kg, farmer_number: p.farmer_number,
+                      username: p.username,uploaded: true));
+          }
       }
-    });
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      var resp_str = await response.stream.bytesToString();
-      print("resp_str: ${resp_str}");
-      if (resp_str== "OK")
-      {Get.defaultDialog(title:"Notice"
-          , textConfirm: "ok",content: Text("Purchase recorded successfully"),
-          onConfirm: (){Get.back();Get.back();}
-      );}
-      else{
-      Get.defaultDialog(title:"Notice"
-          , textConfirm: "ok",content: Text("Failed : ${resp_str}"),
-          onConfirm: (){Get.back();Get.back();}
-      );}
-  }
-  else {
-  print(response.reasonPhrase);
-  Get.defaultDialog(title:"Notice"
-      , textConfirm: "ok",content: Text("Purchase upload failed"),
-      onConfirm: (){Get.back();Get.back();}
-  );
   }
 
   }

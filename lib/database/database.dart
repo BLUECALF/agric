@@ -17,6 +17,7 @@ class Sales extends Table {
   TextColumn get farmer_number => text()();
   TextColumn get username => text()();
   IntColumn get zreport_id => integer().nullable()();
+  BoolColumn get uploaded => boolean().nullable()();
   Set<Column> get primaryKey => {id};
 }
 
@@ -36,11 +37,12 @@ class Purchases extends Table {
   TextColumn get farmer_number => text()();
   TextColumn get username => text()();
   IntColumn get zreport_id => integer().nullable()();
+  BoolColumn get uploaded => boolean().nullable()();
   Set<Column> get primaryKey => {id};
+
 }
 
 class TotalPurchases extends Table {
-
   TextColumn get product => text()();
   RealColumn get amount_kg => real()();
   TextColumn get farmer_number => text()();
@@ -121,7 +123,7 @@ class AppDatabase extends _$AppDatabase{
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   //make a miration strategy for the schemer version 1
   MigrationStrategy get migration => MigrationStrategy(
@@ -165,6 +167,11 @@ class AppDatabase extends _$AppDatabase{
       if(from == 4)
         {
           await migrator.addColumn(farmers,farmers.id);
+        }
+      if(from == 5)
+        {
+          await migrator.addColumn(sales,sales.uploaded);
+          await migrator.addColumn(purchases,purchases.uploaded);
         }
 
 
@@ -230,6 +237,9 @@ class AppDatabase extends _$AppDatabase{
   }
   Future<List<Purchase>> getPurchaseList_by_zreport_id(int zreport_id) async
   {  return await   (select(purchases)..where((tbl) => tbl.zreport_id.equals(zreport_id))).get();
+  }
+  Future<List<Purchase>> getPurchaseList_by_username(String username) async
+  {  return await   (select(purchases)..where((tbl) => tbl.username.equals(username))).get();
   }
 
   //update value in db

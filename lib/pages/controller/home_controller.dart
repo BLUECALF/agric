@@ -326,7 +326,7 @@ class HomeController extends GetxController
         color: Colors.lightGreenAccent,
       ),
     );
-    await serverConn.connect_to_server();
+
     await serverConn.postPurchase();
     List farmersList = await serverConn.getFarmersList(); //we got d]farmers list from network
     List<Farmer> localfarmersList = await database.getFarmerList();
@@ -345,6 +345,7 @@ class HomeController extends GetxController
         );
         print("THE INDEX OF INSERTED FARMER IS ${index}");
     }
+    Get.back();
   }
 
 }

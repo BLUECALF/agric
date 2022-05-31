@@ -15,6 +15,7 @@ class Sale extends DataClass implements Insertable<Sale> {
   final String farmer_number;
   final String username;
   final int? zreport_id;
+  final bool? uploaded;
   Sale(
       {required this.id,
       required this.date,
@@ -22,7 +23,8 @@ class Sale extends DataClass implements Insertable<Sale> {
       required this.amount_kg,
       required this.farmer_number,
       required this.username,
-      this.zreport_id});
+      this.zreport_id,
+      this.uploaded});
   factory Sale.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Sale(
@@ -40,6 +42,8 @@ class Sale extends DataClass implements Insertable<Sale> {
           .mapFromDatabaseResponse(data['${effectivePrefix}username'])!,
       zreport_id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}zreport_id']),
+      uploaded: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}uploaded']),
     );
   }
   @override
@@ -53,6 +57,9 @@ class Sale extends DataClass implements Insertable<Sale> {
     map['username'] = Variable<String>(username);
     if (!nullToAbsent || zreport_id != null) {
       map['zreport_id'] = Variable<int?>(zreport_id);
+    }
+    if (!nullToAbsent || uploaded != null) {
+      map['uploaded'] = Variable<bool?>(uploaded);
     }
     return map;
   }
@@ -68,6 +75,9 @@ class Sale extends DataClass implements Insertable<Sale> {
       zreport_id: zreport_id == null && nullToAbsent
           ? const Value.absent()
           : Value(zreport_id),
+      uploaded: uploaded == null && nullToAbsent
+          ? const Value.absent()
+          : Value(uploaded),
     );
   }
 
@@ -82,6 +92,7 @@ class Sale extends DataClass implements Insertable<Sale> {
       farmer_number: serializer.fromJson<String>(json['farmer_number']),
       username: serializer.fromJson<String>(json['username']),
       zreport_id: serializer.fromJson<int?>(json['zreport_id']),
+      uploaded: serializer.fromJson<bool?>(json['uploaded']),
     );
   }
   @override
@@ -95,6 +106,7 @@ class Sale extends DataClass implements Insertable<Sale> {
       'farmer_number': serializer.toJson<String>(farmer_number),
       'username': serializer.toJson<String>(username),
       'zreport_id': serializer.toJson<int?>(zreport_id),
+      'uploaded': serializer.toJson<bool?>(uploaded),
     };
   }
 
@@ -105,7 +117,8 @@ class Sale extends DataClass implements Insertable<Sale> {
           double? amount_kg,
           String? farmer_number,
           String? username,
-          int? zreport_id}) =>
+          int? zreport_id,
+          bool? uploaded}) =>
       Sale(
         id: id ?? this.id,
         date: date ?? this.date,
@@ -114,6 +127,7 @@ class Sale extends DataClass implements Insertable<Sale> {
         farmer_number: farmer_number ?? this.farmer_number,
         username: username ?? this.username,
         zreport_id: zreport_id ?? this.zreport_id,
+        uploaded: uploaded ?? this.uploaded,
       );
   @override
   String toString() {
@@ -124,14 +138,15 @@ class Sale extends DataClass implements Insertable<Sale> {
           ..write('amount_kg: $amount_kg, ')
           ..write('farmer_number: $farmer_number, ')
           ..write('username: $username, ')
-          ..write('zreport_id: $zreport_id')
+          ..write('zreport_id: $zreport_id, ')
+          ..write('uploaded: $uploaded')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, date, product, amount_kg, farmer_number, username, zreport_id);
+  int get hashCode => Object.hash(id, date, product, amount_kg, farmer_number,
+      username, zreport_id, uploaded);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -142,7 +157,8 @@ class Sale extends DataClass implements Insertable<Sale> {
           other.amount_kg == this.amount_kg &&
           other.farmer_number == this.farmer_number &&
           other.username == this.username &&
-          other.zreport_id == this.zreport_id);
+          other.zreport_id == this.zreport_id &&
+          other.uploaded == this.uploaded);
 }
 
 class SalesCompanion extends UpdateCompanion<Sale> {
@@ -153,6 +169,7 @@ class SalesCompanion extends UpdateCompanion<Sale> {
   final Value<String> farmer_number;
   final Value<String> username;
   final Value<int?> zreport_id;
+  final Value<bool?> uploaded;
   const SalesCompanion({
     this.id = const Value.absent(),
     this.date = const Value.absent(),
@@ -161,6 +178,7 @@ class SalesCompanion extends UpdateCompanion<Sale> {
     this.farmer_number = const Value.absent(),
     this.username = const Value.absent(),
     this.zreport_id = const Value.absent(),
+    this.uploaded = const Value.absent(),
   });
   SalesCompanion.insert({
     this.id = const Value.absent(),
@@ -170,6 +188,7 @@ class SalesCompanion extends UpdateCompanion<Sale> {
     required String farmer_number,
     required String username,
     this.zreport_id = const Value.absent(),
+    this.uploaded = const Value.absent(),
   })  : date = Value(date),
         product = Value(product),
         amount_kg = Value(amount_kg),
@@ -183,6 +202,7 @@ class SalesCompanion extends UpdateCompanion<Sale> {
     Expression<String>? farmer_number,
     Expression<String>? username,
     Expression<int?>? zreport_id,
+    Expression<bool?>? uploaded,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -192,6 +212,7 @@ class SalesCompanion extends UpdateCompanion<Sale> {
       if (farmer_number != null) 'farmer_number': farmer_number,
       if (username != null) 'username': username,
       if (zreport_id != null) 'zreport_id': zreport_id,
+      if (uploaded != null) 'uploaded': uploaded,
     });
   }
 
@@ -202,7 +223,8 @@ class SalesCompanion extends UpdateCompanion<Sale> {
       Value<double>? amount_kg,
       Value<String>? farmer_number,
       Value<String>? username,
-      Value<int?>? zreport_id}) {
+      Value<int?>? zreport_id,
+      Value<bool?>? uploaded}) {
     return SalesCompanion(
       id: id ?? this.id,
       date: date ?? this.date,
@@ -211,6 +233,7 @@ class SalesCompanion extends UpdateCompanion<Sale> {
       farmer_number: farmer_number ?? this.farmer_number,
       username: username ?? this.username,
       zreport_id: zreport_id ?? this.zreport_id,
+      uploaded: uploaded ?? this.uploaded,
     );
   }
 
@@ -238,6 +261,9 @@ class SalesCompanion extends UpdateCompanion<Sale> {
     if (zreport_id.present) {
       map['zreport_id'] = Variable<int?>(zreport_id.value);
     }
+    if (uploaded.present) {
+      map['uploaded'] = Variable<bool?>(uploaded.value);
+    }
     return map;
   }
 
@@ -250,7 +276,8 @@ class SalesCompanion extends UpdateCompanion<Sale> {
           ..write('amount_kg: $amount_kg, ')
           ..write('farmer_number: $farmer_number, ')
           ..write('username: $username, ')
-          ..write('zreport_id: $zreport_id')
+          ..write('zreport_id: $zreport_id, ')
+          ..write('uploaded: $uploaded')
           ..write(')'))
         .toString();
   }
@@ -297,9 +324,24 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
   late final GeneratedColumn<int?> zreport_id = GeneratedColumn<int?>(
       'zreport_id', aliasedName, true,
       type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _uploadedMeta = const VerificationMeta('uploaded');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, date, product, amount_kg, farmer_number, username, zreport_id];
+  late final GeneratedColumn<bool?> uploaded = GeneratedColumn<bool?>(
+      'uploaded', aliasedName, true,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (uploaded IN (0, 1))');
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        date,
+        product,
+        amount_kg,
+        farmer_number,
+        username,
+        zreport_id,
+        uploaded
+      ];
   @override
   String get aliasedName => _alias ?? 'sales';
   @override
@@ -350,6 +392,10 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
           zreport_id.isAcceptableOrUnknown(
               data['zreport_id']!, _zreport_idMeta));
     }
+    if (data.containsKey('uploaded')) {
+      context.handle(_uploadedMeta,
+          uploaded.isAcceptableOrUnknown(data['uploaded']!, _uploadedMeta));
+    }
     return context;
   }
 
@@ -375,6 +421,7 @@ class Purchase extends DataClass implements Insertable<Purchase> {
   final String farmer_number;
   final String username;
   final int? zreport_id;
+  final bool? uploaded;
   Purchase(
       {required this.id,
       required this.date,
@@ -382,7 +429,8 @@ class Purchase extends DataClass implements Insertable<Purchase> {
       required this.amount_kg,
       required this.farmer_number,
       required this.username,
-      this.zreport_id});
+      this.zreport_id,
+      this.uploaded});
   factory Purchase.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Purchase(
@@ -400,6 +448,8 @@ class Purchase extends DataClass implements Insertable<Purchase> {
           .mapFromDatabaseResponse(data['${effectivePrefix}username'])!,
       zreport_id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}zreport_id']),
+      uploaded: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}uploaded']),
     );
   }
   @override
@@ -413,6 +463,9 @@ class Purchase extends DataClass implements Insertable<Purchase> {
     map['username'] = Variable<String>(username);
     if (!nullToAbsent || zreport_id != null) {
       map['zreport_id'] = Variable<int?>(zreport_id);
+    }
+    if (!nullToAbsent || uploaded != null) {
+      map['uploaded'] = Variable<bool?>(uploaded);
     }
     return map;
   }
@@ -428,6 +481,9 @@ class Purchase extends DataClass implements Insertable<Purchase> {
       zreport_id: zreport_id == null && nullToAbsent
           ? const Value.absent()
           : Value(zreport_id),
+      uploaded: uploaded == null && nullToAbsent
+          ? const Value.absent()
+          : Value(uploaded),
     );
   }
 
@@ -442,6 +498,7 @@ class Purchase extends DataClass implements Insertable<Purchase> {
       farmer_number: serializer.fromJson<String>(json['farmer_number']),
       username: serializer.fromJson<String>(json['username']),
       zreport_id: serializer.fromJson<int?>(json['zreport_id']),
+      uploaded: serializer.fromJson<bool?>(json['uploaded']),
     );
   }
   @override
@@ -455,6 +512,7 @@ class Purchase extends DataClass implements Insertable<Purchase> {
       'farmer_number': serializer.toJson<String>(farmer_number),
       'username': serializer.toJson<String>(username),
       'zreport_id': serializer.toJson<int?>(zreport_id),
+      'uploaded': serializer.toJson<bool?>(uploaded),
     };
   }
 
@@ -465,7 +523,8 @@ class Purchase extends DataClass implements Insertable<Purchase> {
           double? amount_kg,
           String? farmer_number,
           String? username,
-          int? zreport_id}) =>
+          int? zreport_id,
+          bool? uploaded}) =>
       Purchase(
         id: id ?? this.id,
         date: date ?? this.date,
@@ -474,6 +533,7 @@ class Purchase extends DataClass implements Insertable<Purchase> {
         farmer_number: farmer_number ?? this.farmer_number,
         username: username ?? this.username,
         zreport_id: zreport_id ?? this.zreport_id,
+        uploaded: uploaded ?? this.uploaded,
       );
   @override
   String toString() {
@@ -484,14 +544,15 @@ class Purchase extends DataClass implements Insertable<Purchase> {
           ..write('amount_kg: $amount_kg, ')
           ..write('farmer_number: $farmer_number, ')
           ..write('username: $username, ')
-          ..write('zreport_id: $zreport_id')
+          ..write('zreport_id: $zreport_id, ')
+          ..write('uploaded: $uploaded')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, date, product, amount_kg, farmer_number, username, zreport_id);
+  int get hashCode => Object.hash(id, date, product, amount_kg, farmer_number,
+      username, zreport_id, uploaded);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -502,7 +563,8 @@ class Purchase extends DataClass implements Insertable<Purchase> {
           other.amount_kg == this.amount_kg &&
           other.farmer_number == this.farmer_number &&
           other.username == this.username &&
-          other.zreport_id == this.zreport_id);
+          other.zreport_id == this.zreport_id &&
+          other.uploaded == this.uploaded);
 }
 
 class PurchasesCompanion extends UpdateCompanion<Purchase> {
@@ -513,6 +575,7 @@ class PurchasesCompanion extends UpdateCompanion<Purchase> {
   final Value<String> farmer_number;
   final Value<String> username;
   final Value<int?> zreport_id;
+  final Value<bool?> uploaded;
   const PurchasesCompanion({
     this.id = const Value.absent(),
     this.date = const Value.absent(),
@@ -521,6 +584,7 @@ class PurchasesCompanion extends UpdateCompanion<Purchase> {
     this.farmer_number = const Value.absent(),
     this.username = const Value.absent(),
     this.zreport_id = const Value.absent(),
+    this.uploaded = const Value.absent(),
   });
   PurchasesCompanion.insert({
     this.id = const Value.absent(),
@@ -530,6 +594,7 @@ class PurchasesCompanion extends UpdateCompanion<Purchase> {
     required String farmer_number,
     required String username,
     this.zreport_id = const Value.absent(),
+    this.uploaded = const Value.absent(),
   })  : date = Value(date),
         product = Value(product),
         amount_kg = Value(amount_kg),
@@ -543,6 +608,7 @@ class PurchasesCompanion extends UpdateCompanion<Purchase> {
     Expression<String>? farmer_number,
     Expression<String>? username,
     Expression<int?>? zreport_id,
+    Expression<bool?>? uploaded,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -552,6 +618,7 @@ class PurchasesCompanion extends UpdateCompanion<Purchase> {
       if (farmer_number != null) 'farmer_number': farmer_number,
       if (username != null) 'username': username,
       if (zreport_id != null) 'zreport_id': zreport_id,
+      if (uploaded != null) 'uploaded': uploaded,
     });
   }
 
@@ -562,7 +629,8 @@ class PurchasesCompanion extends UpdateCompanion<Purchase> {
       Value<double>? amount_kg,
       Value<String>? farmer_number,
       Value<String>? username,
-      Value<int?>? zreport_id}) {
+      Value<int?>? zreport_id,
+      Value<bool?>? uploaded}) {
     return PurchasesCompanion(
       id: id ?? this.id,
       date: date ?? this.date,
@@ -571,6 +639,7 @@ class PurchasesCompanion extends UpdateCompanion<Purchase> {
       farmer_number: farmer_number ?? this.farmer_number,
       username: username ?? this.username,
       zreport_id: zreport_id ?? this.zreport_id,
+      uploaded: uploaded ?? this.uploaded,
     );
   }
 
@@ -598,6 +667,9 @@ class PurchasesCompanion extends UpdateCompanion<Purchase> {
     if (zreport_id.present) {
       map['zreport_id'] = Variable<int?>(zreport_id.value);
     }
+    if (uploaded.present) {
+      map['uploaded'] = Variable<bool?>(uploaded.value);
+    }
     return map;
   }
 
@@ -610,7 +682,8 @@ class PurchasesCompanion extends UpdateCompanion<Purchase> {
           ..write('amount_kg: $amount_kg, ')
           ..write('farmer_number: $farmer_number, ')
           ..write('username: $username, ')
-          ..write('zreport_id: $zreport_id')
+          ..write('zreport_id: $zreport_id, ')
+          ..write('uploaded: $uploaded')
           ..write(')'))
         .toString();
   }
@@ -658,9 +731,24 @@ class $PurchasesTable extends Purchases
   late final GeneratedColumn<int?> zreport_id = GeneratedColumn<int?>(
       'zreport_id', aliasedName, true,
       type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _uploadedMeta = const VerificationMeta('uploaded');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, date, product, amount_kg, farmer_number, username, zreport_id];
+  late final GeneratedColumn<bool?> uploaded = GeneratedColumn<bool?>(
+      'uploaded', aliasedName, true,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (uploaded IN (0, 1))');
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        date,
+        product,
+        amount_kg,
+        farmer_number,
+        username,
+        zreport_id,
+        uploaded
+      ];
   @override
   String get aliasedName => _alias ?? 'purchases';
   @override
@@ -710,6 +798,10 @@ class $PurchasesTable extends Purchases
           _zreport_idMeta,
           zreport_id.isAcceptableOrUnknown(
               data['zreport_id']!, _zreport_idMeta));
+    }
+    if (data.containsKey('uploaded')) {
+      context.handle(_uploadedMeta,
+          uploaded.isAcceptableOrUnknown(data['uploaded']!, _uploadedMeta));
     }
     return context;
   }
