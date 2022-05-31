@@ -26,32 +26,62 @@ class ConfirmScreen extends GetView{
             padding: const EdgeInsets.all(15),
             child: Column(
               children: [
-                SizedBox(height:20),
-                Text("Product : ${confirmController.current_data["product"]}",style: MyTextStyle.make("body"),),
-                SizedBox(height:20),
-                Text("Quantity in kg : ${confirmController.current_data["amount"]}",style: MyTextStyle.make("body")),
-                SizedBox(height:20),
-                Text("Farmer No : ${confirmController.current_data["farmer_number"]}",style: MyTextStyle.make("body")),
-                SizedBox(height:20),
-                FutureBuilder(
-                  future: confirmController.database.getFarmer(confirmController.current_data["farmer_number"]),
-                  builder: (context,snapshot)
-                  {
-                    if(snapshot.data == null || (snapshot.data as List<Farmer> == []))
-                    {
-                      return Text("The Farmer is not in the Database",style: MyTextStyle.make("body"));
-                    }
-                    List<Farmer> farmer_list = (snapshot.data as List<Farmer>);
+                Table(
+                  border: TableBorder.all(),
+                  children: [
+                    TableRow(
+                      children: [
+                        Text("NAME",style: MyTextStyle.make("body"),),
+                        FutureBuilder(
+                          future: confirmController.database.getFarmer(confirmController.current_data["farmer_number"]),
+                          builder: (context,snapshot)
+                          {
+                            if(snapshot.data == null || (snapshot.data as List<Farmer> == []))
+                            {
+                              return Text("The Farmer is not in the Database",style: MyTextStyle.make("body"));
+                            }
+                            List<Farmer> farmer_list = (snapshot.data as List<Farmer>);
 
-                    for(int i = 0;i <farmer_list.length ;i++)
-                      {
-                       Farmer farmer = farmer_list[i];
-                       accepted = true;
-                        return  Text("Name : ${farmer.fullname}" ,style: MyTextStyle.make("body"));
-                      }
-                    return Text("Farmer is not in the Database",style: MyTextStyle.make("body"));
-                  },
+                            for(int i = 0;i <farmer_list.length ;i++)
+                            {
+                              Farmer farmer = farmer_list[i];
+                              accepted = true;
+                              return  Text("${farmer.fullname}" ,style: MyTextStyle.make("body"));
+                            }
+                            return Text("Farmer is not in the Database",style: MyTextStyle.make("body"));
+                          },
+                        ),
+
+
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        Text("PRODUCT",style: MyTextStyle.make("body"),),
+                        Text("${confirmController.current_data["product"]}",style: MyTextStyle.make("body"),),
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        Text("TRANSACTION",style: MyTextStyle.make("body"),),
+                        Text("${confirmController.action == "sell_product"?"sale":"Purchase"}",style: MyTextStyle.make("body"),),
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        Text("QUANTITY KG",style: MyTextStyle.make("body"),),
+                        Text("${confirmController.current_data["amount"]}",style: MyTextStyle.make("body"),),
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        Text("FARMER NO",style: MyTextStyle.make("body"),),
+                        Text("${confirmController.current_data["farmer_number"]}",style: MyTextStyle.make("body"),),
+                      ]
+                    )
+                  ],
                 ),
+                SizedBox(height:20),
                 Container(
                   width: double.infinity,
                   child: TextButton(onPressed:() async{

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/server_connection/server_connection.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/views/reports_screen.dart';
@@ -319,6 +320,12 @@ class HomeController extends GetxController
 
   void connect_to_server() async
   {
+    Get.defaultDialog(title:"" ,
+      barrierDismissible: true,
+      content: SpinKitRing(
+        color: Colors.lightGreenAccent,
+      ),
+    );
     await serverConn.connect_to_server();
     await serverConn.postPurchase();
     List farmersList = await serverConn.getFarmersList(); //we got d]farmers list from network

@@ -324,14 +324,14 @@ class TradeController extends GetxController
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-          Text("Sale",style: MyTextStyle.make("body"),),
+       /*   Text("Sale",style: MyTextStyle.make("body"),),
          Radio(value: "sell_product", groupValue: action,
              onChanged: (value){action=value.toString();
            _formKey.currentState?.reset();
              textEditingController.text = "";
            update();
 
-         }),
+         }),*/
 
           Text("Purchase",style: MyTextStyle.make("body"),),
           Radio(value: "buy_product", groupValue: action,
