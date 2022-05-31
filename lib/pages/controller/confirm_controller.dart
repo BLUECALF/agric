@@ -1,8 +1,9 @@
 
 import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/database/database.dart';
-import 'package:agric/pages/views/printing_screen.dart';
+import 'package:agric/pages/controller/printing_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
 class ConfirmController extends GetxController
@@ -18,6 +19,7 @@ class ConfirmController extends GetxController
   late AppDatabase database =  Get.find<AppDatabase>();
   final salesDao = Get.find<SalesDao>();
   final AppController appController = Get.find<AppController>();
+  final printingControler = Get.put(PrintingController());
   List<Xreport> xreportList =[];
 
   List<Buyable_product> buyable_products = [];
@@ -36,6 +38,12 @@ class ConfirmController extends GetxController
 
   Future<void> on_press_confirm()
   async{
+    Get.defaultDialog(title:"" ,
+      barrierDismissible: false,
+      content: SpinKitRing(
+        color: Colors.lightGreenAccent,
+      ),
+    );
     message ="";
     title = (action == "buy_product")? "BUY PRODUCT":"SELL PRODUCT";
     message = "$title of ${current_data["product"]} Recorded Successfully";
@@ -46,10 +54,6 @@ class ConfirmController extends GetxController
     print("TRANSACTION STATUS IS $tran_status");
 
     // show results
-    Get.defaultDialog(
-      title: title,
-      content:Text("${message}"),
-    );
 
   }
 
@@ -133,11 +137,14 @@ class ConfirmController extends GetxController
           {
             print("## the insertion of NEW total purchase was recorded successfully");
             // proceed to printing screen
-            Get.off(PrintingScreen(),arguments: {
+            printingControler.get_data_from_confirm_screen({
               "merchant":merchant,
               "action":"buy_product",
               "transaction_object":p,
             });
+            printingControler.show_transaction_details(printingControler.action);
+            await printingControler.get_totals_from_database();
+            printingControler.on_press_print();
           }
           else{
             print("\$\$ insertion to total Purchase table FAILED");
@@ -158,11 +165,14 @@ class ConfirmController extends GetxController
           {
             print("## the UPDATE  to total purchase table was recorded successfully");
             //proceed to printing screen
-            Get.off(PrintingScreen(),arguments: {
+            printingControler.get_data_from_confirm_screen({
               "merchant":merchant,
               "action":"buy_product",
               "transaction_object":p,
             });
+            printingControler.show_transaction_details(printingControler.action);
+            await printingControler.get_totals_from_database();
+            printingControler.on_press_print();
           }
           else{
             print("\$\$ insertion to total Purchase table FAILED");
@@ -227,11 +237,14 @@ class ConfirmController extends GetxController
           if(rows_affected>0)
           {
             print("## the insertion  OF NEW total sale was recorded successfully");
-            Get.off(PrintingScreen(),arguments: {
+            printingControler.get_data_from_confirm_screen({
               "merchant":merchant,
               "action":"sell_product",
               "transaction_object":s,
             });
+            printingControler.show_transaction_details(printingControler.action);
+            await printingControler.get_totals_from_database();
+            printingControler.on_press_print();
           }
           else{
             print("\$\$ insertion to total sales table FAILED");
@@ -252,11 +265,14 @@ class ConfirmController extends GetxController
         if(rows_affected)
         {
           print("## the UPDATE to total sale table was recorded successfully");
-          Get.off(PrintingScreen(),arguments: {
+          printingControler.get_data_from_confirm_screen({
             "merchant":merchant,
             "action":"sell_product",
             "transaction_object":s,
           });
+          printingControler.show_transaction_details(printingControler.action);
+          await printingControler.get_totals_from_database();
+          printingControler.on_press_print();
         }
         else{
           print("\$\$ insertion to total sales table FAILED");

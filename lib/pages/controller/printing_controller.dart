@@ -29,10 +29,10 @@ class PrintingController extends GetxController
 
   late List<TotalPurchase> total_purchase_list=[];
 
-  void get_data_from_trade_screen(BuildContext context)
+  void get_data_from_confirm_screen(Map data)
   {
     print(" data from Confirm screen r ${Get.arguments}");
-   previous_data =  ModalRoute.of(context)!.settings.arguments  as Map;
+   previous_data =  data;
    transaction_object = previous_data["transaction_object"];
    merchant = previous_data["merchant"];
    action = previous_data["action"];
@@ -97,7 +97,14 @@ class PrintingController extends GetxController
     }
     return "";
   }
-  Widget render_net_total()
+
+  Future<void> get_totals_from_database() async
+  {
+    total_purchase_list = await database.getTotalPurchaseList_of_farmer_number(farmer_number);
+    total_sale_list = await database.getTotalSaleList_of_farmer_number(farmer_number);
+  }
+
+  /*Widget render_net_total()
   {
 
     return Card(
@@ -150,7 +157,7 @@ class PrintingController extends GetxController
         ),
       ),
     );
-  }
+  }*/
   void on_press_print() async
   {
 
@@ -175,6 +182,9 @@ class PrintingController extends GetxController
     await appController.bluePrintPos.printQR(data["current_transaction"]["id"].toString(), useCut: false);
     await appController.bluePrintPos.printReceiptText(ReceiptSectionText()..addSpacer(count: 3));
 
+    Get.back();
+    Get.back();
     Get.off(TradeScreen());
+
   }
 }
