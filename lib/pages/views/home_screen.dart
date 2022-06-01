@@ -1,3 +1,4 @@
+import 'package:agric/pages/views/farmers_screen.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/controller/home_controller.dart';
@@ -76,6 +77,7 @@ final HomeController  homeController =  Get.put(HomeController());
                   homeController.render_button(icon_name:Icons.print, function:(){homeController.on_press_of_produce_zreport(context);} , text: "Produce Z Report "),
                   homeController.render_button(icon_name:Icons.add, function:(){Get.to(() =>AddPrinter());} , text: "Add Thermal Printer"),
                   homeController.render_button(icon_name:Icons.receipt, function:(){homeController.print_xreport();} , text: "Print X report"),
+                  homeController.render_button(icon_name:Icons.file_copy, function:(){Get.to(() =>FarmersScreen());} , text: "View Farmers"),
 
                 ],
               ),

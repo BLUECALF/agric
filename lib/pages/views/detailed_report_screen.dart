@@ -45,6 +45,10 @@ class DetailedReportsScreen extends GetView{
                       FutureBuilder(future : detailedReportController.salesDao.getSaleList_by_zreport_id(detailedReportController.zreport_id),
                           builder: (context, snapshot)
                           {
+                            if(snapshot.data == null)
+                            {return Text(
+                              "There are no Sales ",style: MyTextStyle.make("body"),
+                            );}
                             detailedReportController.salesList = snapshot.data as List<Sale>;
                             return  DataTable(
                                 columns: [
@@ -68,6 +72,10 @@ class DetailedReportsScreen extends GetView{
                       FutureBuilder(future : detailedReportController.database.getPurchaseList_by_zreport_id(detailedReportController.zreport_id),
                           builder: (context, snapshot)
                           {
+                            if(snapshot.data == null)
+                            {return Text(
+                              "There are no purchases ",style: MyTextStyle.make("body"),
+                            );}
                             detailedReportController.purchaseList = snapshot.data as List<Purchase>;
                             return  DataTable(
                                 columns: [

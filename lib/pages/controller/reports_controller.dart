@@ -180,7 +180,7 @@ class ReportsController extends GetxController
               a.GradientElevatedButton(onPressed: ()
               {
                 print("the Z report has id of ${z.zreport_id}");
-                Get.to(DetailedReportsScreen(),arguments: {"zreport_id":z.zreport_id});
+                Get.to(() => DetailedReportsScreen(),arguments: {"zreport_id":z.zreport_id});
 
               },
                 gradient:appController.g3,
