@@ -1,5 +1,3 @@
-import 'dart:io';
-
 
 import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/server_connection/server_connection.dart';
@@ -9,6 +7,7 @@ import 'package:agric/database/database.dart';
 import 'package:agric/pages/views/reports_screen.dart';
 import 'package:agric/pages/views/trade_screen.dart';
 import 'package:agric/styles/text_style.dart';
+import 'package:agric/styles/gradient_colors.dart';
 import "package:flutter/material.dart";
 import 'package:get/get.dart';
 import "package:flutter/foundation.dart";
@@ -57,7 +56,7 @@ class HomeController extends GetxController
       x = xreport_list[0];
 
       return   a.GradientCard(
-      gradient: appController.g2,
+      gradient: g2,
       child: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -260,7 +259,7 @@ class HomeController extends GetxController
   Widget render_button({required IconData icon_name,required Function function,required String text})
   {
     return a.GradientElevatedButton(
-      gradient: appController.g3,
+      gradient: g3,
       child:Padding(
         padding: const EdgeInsets.all(5.0),
         child: Column(

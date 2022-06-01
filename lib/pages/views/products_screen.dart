@@ -1,5 +1,6 @@
 import 'package:agric/database/database.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
+import 'package:agric/styles/gradient_colors.dart';
 import 'package:agric/pages/controller/products_controller.dart';
 import 'package:agric/styles/button_decoration.dart';
 import 'package:agric/styles/text_field_decoration.dart';
@@ -7,7 +8,7 @@ import 'package:agric/styles/text_style.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
+
 
 class ProductsScreen extends StatelessWidget {
 
@@ -123,7 +124,7 @@ class ProductsScreen extends StatelessWidget {
             label: Text("Add Product"),
             icon: Icon(Icons.add),
             shape: StadiumBorder(),
-            gradient: productsController.appController.g3,
+            gradient: g3,
           ),
     );
   }

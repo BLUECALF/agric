@@ -6,6 +6,7 @@ import 'package:agric/styles/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:agric/styles/gradient_colors.dart';
 
 class ReportsController extends GetxController
 {
@@ -183,7 +184,7 @@ class ReportsController extends GetxController
                 Get.to(() => DetailedReportsScreen(),arguments: {"zreport_id":z.zreport_id});
 
               },
-                gradient:appController.g3,
+                gradient: g3,
                 child: Text("View Details",style: MyTextStyle.make("tiny"),),
               ),
               IconButton(onPressed: ()

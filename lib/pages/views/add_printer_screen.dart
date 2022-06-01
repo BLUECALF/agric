@@ -1,13 +1,11 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
 import 'package:blue_print_pos/models/models.dart';
-import 'package:blue_print_pos/receipt/receipt.dart';
 import 'package:flutter/material.dart';
-
+import 'package:agric/styles/gradient_colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
 import '../../AppController/app_controller.dart';
 
 class AddPrinter extends GetView{
@@ -28,7 +26,7 @@ class AddPrinter extends GetView{
               Text("Select Printer"),
               SizedBox(width: 20,),
               a.GradientElevatedButton.icon(
-                gradient: appController.g3,
+                gradient: g3,
                 icon: Icon(Icons.search),
                 onPressed: () async{
                   await appController.scan_devices();
@@ -59,7 +57,7 @@ class AddPrinter extends GetView{
                 itemBuilder: (c,i)
                 {
                   return a.GradientCard(
-                    gradient: appController.g1,
+                    gradient: g1,
                     child: ListTile(
                       leading: Icon(Icons.print),
                       title: Text(_devices[i].name.toString()),
@@ -125,7 +123,7 @@ class AddPrinter extends GetView{
        print(appController.bluePrintPos.selectedDevice?.name);
        print(d.name);
        return a.GradientElevatedButton(
-         gradient: appController.g3,
+         gradient: g3,
          onPressed: (){appController.bluePrintPos.disconnect();},
          child: Obx(()=> Text("${appController.prompt}"),),
        );

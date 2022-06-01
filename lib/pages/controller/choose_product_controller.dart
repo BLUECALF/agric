@@ -1,4 +1,5 @@
-
+import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
+import 'package:agric/styles/gradient_colors.dart';
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/views/trade_screen.dart';
 import 'package:agric/styles/button_decoration.dart';
@@ -27,7 +28,8 @@ class ChooseProductController extends GetxController
         // we render sellable products
         sellable_products_list = previous_data["items"];
 
-      return  sellable_products_list.map((e) => TextButton(
+      return  sellable_products_list.map((e) => a.GradientElevatedButton(
+        gradient: g6,
            onPressed: (){
              // go back
             Get.back(result: e.product_name);
@@ -41,7 +43,8 @@ class ChooseProductController extends GetxController
       // we render sellable products
       purchasable_products_list = previous_data["items"];
 
-      return  purchasable_products_list.map((e) => TextButton(
+      return  purchasable_products_list.map((e) => a.GradientElevatedButton(
+        gradient: g6,
           onPressed: (){
             // go back
             Get.back(result: e.product_name);

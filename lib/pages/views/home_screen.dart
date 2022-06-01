@@ -5,7 +5,7 @@ import 'package:agric/pages/controller/home_controller.dart';
 import 'package:agric/pages/views/products_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:agric/styles/gradient_colors.dart';
 import 'add_printer_screen.dart';
 import 'login_screen.dart';
 
@@ -85,10 +85,13 @@ final HomeController  homeController =  Get.put(HomeController());
             ]),
       ),
 
-      floatingActionButton: a.GradientFloatingActionButton(
-        gradient: homeController.appController.g1,
+      floatingActionButton: a.GradientFloatingActionButton.extended(
+        shape: StadiumBorder(),
+        label: Text("logout"),
+        gradient: g6,
+        icon: Icon(Icons.logout),
         onPressed: () { Get.off(LoginScreen());
-      },child: Icon(Icons.logout,size: 50,color: Colors.redAccent,),
+      },
       backgroundColor: Colors.white,
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
+import 'package:agric/styles/gradient_colors.dart';
 import 'package:agric/pages/controller/login_controller.dart';
 import 'package:agric/styles/button_decoration.dart';
 import 'package:agric/styles/text_field_decoration.dart';
@@ -24,14 +25,8 @@ class LoginScreen extends GetView{
         scrollDirection: Axis.vertical,
         child: Container(
           height: Get.height,
-           decoration: BoxDecoration(
-          /*   image: DecorationImage(
-               image: AssetImage("assets/agriculture.jpg"),
-               fit: BoxFit.cover,
-             ),*/
-           ),
           child: a.GradientCard(
-            gradient: loginController.appController.g1,
+            gradient: g1,
             child: SafeArea(
               child:Center(
                 child: Padding(
@@ -81,7 +76,7 @@ class LoginScreen extends GetView{
                       Container(
                         width: double.infinity,
                         child: a.GradientElevatedButton(
-                          gradient: loginController.appController.g3,
+                          gradient: g3,
                           onPressed:()=> loginController.validate_login_form(_formKey, context)
                         , child: Text("Log In",style: MyTextStyle.make("body-white"),),style: MyButtonDecoration.make(),),
                       ),

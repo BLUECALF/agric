@@ -1,6 +1,7 @@
 
 import 'package:agric/pages/controller/trade_controller.dart';
-import 'package:agric/pages/views/home_screen.dart';
+import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
+import 'package:agric/styles/gradient_colors.dart';
 import 'package:agric/styles/button_decoration.dart';
 import 'package:agric/styles/text_field_decoration.dart';
 import 'package:agric/styles/text_style.dart';
@@ -59,7 +60,9 @@ class TradeScreen extends GetView{
                           SizedBox(height:20),
                           Container(
                             width: double.infinity,
-                            child: TextButton(onPressed:(){ tradeController.on_press_choose_product(textEditingController);
+                            child: a.GradientElevatedButton(
+                              gradient: g3,
+                              onPressed:(){ tradeController.on_press_choose_product(textEditingController);
                             }, child: Text("Choose a Product",style: MyTextStyle.make("body-white"),),style: MyButtonDecoration.make(),),
                           ),
 
@@ -128,7 +131,9 @@ class TradeScreen extends GetView{
 
                     Container(
                       width: double.infinity,
-                      child: TextButton(onPressed:() async{
+                      child: a.GradientElevatedButton(
+                        gradient: g6,
+                        onPressed:() async{
                         tradeController.on_press_submit(_formKey,textEditingController);
                       }, child: Text("Post",style: MyTextStyle.make("body-white"),),style: MyButtonDecoration.make(),),
                     ),

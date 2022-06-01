@@ -1,12 +1,10 @@
 
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:agric/database/database.dart';
 import 'package:blue_print_pos/blue_print_pos.dart';
 import 'package:blue_print_pos/models/models.dart';
 import 'package:blue_print_pos/receipt/receipt.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
@@ -21,35 +19,7 @@ class AppController extends GetxController
   DateTime? current_date = null;
   Map transaction_data = {};
 
-  /// WE NEED GRADIENTS FOR COLORS WELL USE IN THE APP
-  Gradient g1 = LinearGradient(
-    colors: [
-      Colors.blue,
-      Colors.lightBlueAccent,
-      Colors.white
-    ],
-  );  Gradient g5 = LinearGradient(
-    colors: [
-     // Colors.blue,
-      Colors.lightGreenAccent,
-      Colors.white,
-      Colors.white,
-      Colors.white,
-      Colors.lightGreenAccent,
-    ],
-  );
-  Gradient g2 = LinearGradient(colors: [
-    Colors.yellowAccent,
-    Colors.white
-  ]);
-  Gradient g3 = LinearGradient(colors: [
-    Colors.green,
-    Colors.lightGreenAccent
-  ]);
-  Gradient g4 = LinearGradient(colors: [
-    Colors.yellowAccent,
-    Colors.lightGreenAccent
-  ]);
+
 
   /// Details for the blueprint printter
   late ReceiptSectionText receiptText ;
@@ -98,7 +68,6 @@ class AppController extends GetxController
     receiptText.addText(data["current_transaction"]["transaction_type"], size: ReceiptTextSizeType.extraLarge, style: ReceiptTextStyleType.bold , alignment: ReceiptAlignment.center);
     receiptText.addSpacer();
     var l = ReceiptTextSizeType.large;
-    var xl = ReceiptTextSizeType.extraLarge;
     receiptText.addLeftRightText("Id", data["current_transaction"]["id"].toString(),leftSize: l,rightSize: l);
     receiptText.addSpacer();
     receiptText.addLeftRightText("Product", data["current_transaction"]["product"],leftSize: l,rightSize: l);
