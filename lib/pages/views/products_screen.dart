@@ -28,7 +28,10 @@ class ProductsScreen extends StatelessWidget {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            Text("Purchasable Products"),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text("Purchasable Products"),
+            ),
             Container(
               height: 200,
               width: Get.width,
@@ -47,7 +50,10 @@ class ProductsScreen extends StatelessWidget {
               ),
             ),
 
-            Text("Sellable Products"),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text("Sellable Products"),
+            ),
             Container(
               height: 200,
               width: Get.width,

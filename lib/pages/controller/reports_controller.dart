@@ -170,7 +170,7 @@ class ReportsController extends GetxController
     var date = "${_dayFormater.format(full_date)}-${_monthFormater.format(full_date)}-${_yearFormater.format(full_date)}";
     return DataRow(
         cells: [
-   DataCell(Text("${date}")),
+   DataCell(Text("${z.date}")),
           DataCell(Text("${z.transactions_sold}")),
           DataCell(Text("${z.units_sold}")),
           DataCell(Text("${z.transactions_bought}")),

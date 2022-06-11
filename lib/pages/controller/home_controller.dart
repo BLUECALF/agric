@@ -141,13 +141,13 @@ class HomeController extends GetxController
   Future<void> on_accept_to_produce_zreport() async
   {
     await produce_z_report();  //xreport list should be in observable state
-    xreport_list = [Xreport(username: appController.username,
+   /* xreport_list = [Xreport(username: appController.username,
       transactions_bought: 0,
       transactions_sold: 0,
       units_bought: 0,
       units_sold: 0,
     )];
-    update();
+    update();*/
   }
 
   produce_z_report() async{
@@ -157,6 +157,14 @@ class HomeController extends GetxController
     //get current x report
     List<Xreport> xreport_list = await database.getXreportList(appController.username);
     Xreport xreport_object = xreport_list[0];
+    // check if there are no transactions ... no Zreport
+    if(xreport_object.transactions_bought == 0 && xreport_object.transactions_sold == 0)
+      {
+        Get.defaultDialog(title: "Error",content: Text("Cannot produce Zreport on zero transactions"),
+            textConfirm: "ok",
+            onConfirm: (){Get.back();});
+        return;
+      }
 
     // make z object
     int zreport_id   = await generate_zreport_id();
@@ -321,8 +329,13 @@ class HomeController extends GetxController
   {
     Get.defaultDialog(title:"" ,
       barrierDismissible: true,
-      content: SpinKitRing(
-        color: Colors.lightGreenAccent,
+      content: Column(
+        children: [
+          Text("Connecting to server"),
+          SpinKitRing(
+            color: Colors.lightGreenAccent,
+          ),
+        ],
       ),
     );
 

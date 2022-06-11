@@ -66,6 +66,7 @@ class PrintingController extends GetxController
       {
         "transaction_type":transaction_type,
         "id": current_sale.id,
+        "date":current_sale.date,
         "product" : current_sale.product,
         "farmer_number":current_sale.farmer_number,
         "username":current_sale.username,
@@ -88,6 +89,7 @@ class PrintingController extends GetxController
       {
         "transaction_type":transaction_type,
         "id": current_purchase.id,
+        "date":current_purchase.date,
         "product" : current_purchase.product,
         "farmer_number":current_purchase.farmer_number,
         "username":current_purchase.username,
@@ -104,60 +106,7 @@ class PrintingController extends GetxController
     total_sale_list = await database.getTotalSaleList_of_farmer_number(farmer_number);
   }
 
-  /*Widget render_net_total()
-  {
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-
-            Text("NET TOTAL",style: MyTextStyle.make("title"),),
-            Text("Farmer Sold to US:",style: MyTextStyle.make("body"),),
-            FutureBuilder(
-              future: database.getTotalPurchaseList_of_farmer_number(farmer_number),
-              builder: (context, snapshot)
-              {
-                if(snapshot.data == null)
-                {
-                  return Text("There is no Purchases");
-                }
-                total_purchase_list = snapshot.data as List<TotalPurchase>;
-                return  Column(
-                  children: total_purchase_list.map((e) => Text("${e.product} \t"
-                      "${e.amount_kg} KGS"
-                    ,style: MyTextStyle.make("body"),)).toList(),
-                );
-
-              },
-            ),
-            SizedBox(height: 20),
-            Text("Farmer Purchased From US:",style: MyTextStyle.make("body"),),
-            FutureBuilder(
-              future: database.getTotalSaleList_of_farmer_number(farmer_number),
-              builder: (context, snapshot)
-              {
-                if(snapshot.data == null)
-                  {
-                    return Text("There is no Sales");
-                  }
-                total_sale_list = snapshot.data as List<TotalSale>;
-                on_press_print();
-                return Column(
-                  children: total_sale_list.map((e) => Text("${e.product} \t"
-                      "${e.amount_kg} KGS"
-                    ,style: MyTextStyle.make("body"),)).toList(),
-                );
-              },
-            ),
-
-          ],
-        ),
-      ),
-    );
-  }*/
   void on_press_print() async
   {
 

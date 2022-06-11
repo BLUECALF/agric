@@ -1,7 +1,6 @@
 
 import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/database/database.dart';
-import 'package:agric/styles/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -30,7 +29,7 @@ class DetailedReportController extends GetxController
     return DataRow(
         cells: [
           DataCell(Text("${s.id}")),
-          DataCell(Text("${date}")),
+          DataCell(Text("${s.date}")),
           DataCell(Text("${s.product}")),
           DataCell(Text("${s.amount_kg}")),
           DataCell(Text("${s.farmer_number}")),
@@ -49,7 +48,7 @@ class DetailedReportController extends GetxController
     return DataRow(
         cells: [
           DataCell(Text("${s.id}")),
-          DataCell(Text("${date}")),
+          DataCell(Text("${s.date}")),
           DataCell(Text("${s.product}")),
           DataCell(Text("${s.amount_kg}")),
           DataCell(Text("${s.farmer_number}")),

@@ -12,7 +12,7 @@ class ChooseProduct extends GetView{
     return Scaffold(
       appBar: AppBar(
         title: Text("Choose a Product"),
-        backgroundColor: Colors.greenAccent,
+        backgroundColor: Colors.green,
         centerTitle: true,
       ),
       body: Column(

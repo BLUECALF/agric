@@ -68,6 +68,8 @@ class AppController extends GetxController
     receiptText.addText(data["current_transaction"]["transaction_type"], size: ReceiptTextSizeType.extraLarge, style: ReceiptTextStyleType.bold , alignment: ReceiptAlignment.center);
     receiptText.addSpacer();
     var l = ReceiptTextSizeType.large;
+    receiptText.addLeftRightText("Date", data["current_transaction"]["date"].toString(),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
     receiptText.addLeftRightText("Id", data["current_transaction"]["id"].toString(),leftSize: l,rightSize: l);
     receiptText.addSpacer();
     receiptText.addLeftRightText("Product", data["current_transaction"]["product"],leftSize: l,rightSize: l);
@@ -89,13 +91,13 @@ class AppController extends GetxController
         receiptText.addLeftRightText(data["total_purchase_list"][i].product,"${data["total_purchase_list"][i].amount_kg} KGS",leftSize: l,rightSize: l);
       }
     receiptText.addSpacer(useDashed: true);
-    receiptText.addText("FARMER PURCHASED FROM US :", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal ,alignment: ReceiptAlignment.left);
+/*    receiptText.addText("FARMER PURCHASED FROM US :", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal ,alignment: ReceiptAlignment.left);
 
     for(int i = 0; i < data["total_sale_list"].length ; i++)
     {
       receiptText.addSpacer();
       receiptText.addLeftRightText(data["total_sale_list"][i].product,"${data["total_sale_list"][i].amount_kg} KGS",leftSize: l,rightSize: l);
-    }
+    }*/
     receiptText.addText("Farmers best Friend", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.bold ,alignment: ReceiptAlignment.center);
     receiptText.addText("Thank You, please come again ", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.bold ,alignment: ReceiptAlignment.center);
 
@@ -151,6 +153,8 @@ class AppController extends GetxController
     receiptText.addText("Z Report", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal , alignment: ReceiptAlignment.center);
 
     receiptText.addLeftRightText("ID ", z.zreport_id.toString(),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
+    receiptText.addLeftRightText("Date ", z.date.toString(),leftSize: l,rightSize: l);
     receiptText.addSpacer();
     receiptText.addLeftRightText("Transactions Sold", z.transactions_sold.toString(),leftSize: l,rightSize: l);
     receiptText.addSpacer();

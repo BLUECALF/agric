@@ -1,5 +1,6 @@
 
-
+import 'package:gradient_ui_widgets/gradient_ui_widgets.dart' as a;
+import 'package:agric/styles/gradient_colors.dart';
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/controller/confirm_controller.dart';
 import 'package:agric/styles/button_decoration.dart';
@@ -17,7 +18,7 @@ class ConfirmScreen extends GetView{
     return Scaffold(
       appBar: AppBar(
         title: Text("Confirm Details below",style: MyTextStyle.make("body"),),
-        backgroundColor: Colors.greenAccent,
+        backgroundColor: Colors.green,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -84,7 +85,9 @@ class ConfirmScreen extends GetView{
                 SizedBox(height:20),
                 Container(
                   width: double.infinity,
-                  child: TextButton(onPressed:() async{
+                  child: a.GradientElevatedButton(
+                    gradient: g6,
+                    onPressed:() async{
                     if(!accepted){
                       Get.defaultDialog(title:"Notice"
                           , textConfirm: "ok",content: Text("Cannot transact with unknown farmer"),
