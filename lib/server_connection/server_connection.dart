@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get/get.dart';
@@ -108,6 +110,27 @@ print(purchaseList);
   print(response.reasonPhrase);
   return [];
   }
+  }
+
+  Future<bool> is_offline()  async {
+    try {
+
+      final result = await InternetAddress.lookup('example.com').timeout(Duration(seconds: 3));
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        print(result.toString());
+        return false;
+      }
+      else {return true;}
+    } on SocketException catch (_) {
+      print('not connected');
+      return true;
+    }
+    on TimeoutException catch (_) {
+      print('not connected');
+      return true;
+    }
+
   }
 
 

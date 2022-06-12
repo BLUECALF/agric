@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/views/home_screen.dart';
@@ -7,7 +9,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'dart:io';
-import 'package:intl/intl.dart';
+
 
 
 
@@ -50,6 +52,7 @@ class LoginController extends GetxController
        appController.username = data["username"];
        appController.password = data["password"];
        //check if user is offline
+
        bool offline  = await is_offline();
        if(offline)
          {
@@ -111,8 +114,20 @@ class LoginController extends GetxController
   }
 
   Future<bool> is_offline()  async {
+    // add a spiner to show progress
+    Get.defaultDialog(title:"" ,
+      barrierDismissible: true,
+      content: Column(
+        children: [
+          Text("Connecting to server"),
+          SpinKitRing(
+            color: Colors.lightGreenAccent,
+          ),
+        ],
+      ),
+    );
     try {
-      final result = await InternetAddress.lookup('example.com');
+      final result = await InternetAddress.lookup('example.com').timeout(Duration(seconds: 3));
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         print('connected');
         print(result.toString());
@@ -123,11 +138,24 @@ class LoginController extends GetxController
       print('not connected');
       return true;
     }
+    on TimeoutException catch (_) {
+      print('not connected');
+      return true;
+    }
 
   }
 
   void login_with_offline_details() async{
      List<User> userlist =  await database.getUserList();
+     if(userlist.length == 0)
+       {
+         Get.defaultDialog(title:"Notice"
+             , textConfirm: "ok",content: Text("No offline record matching ur details"),
+             onConfirm: (){Get.back();Get.back();}
+         );
+         return;
+       }
+
      for(int i=0;i<userlist.length;i++)
        {
          if(userlist[i].username == appController.username

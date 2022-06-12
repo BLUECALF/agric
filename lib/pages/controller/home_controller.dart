@@ -339,6 +339,18 @@ class HomeController extends GetxController
       ),
     );
 
+    var offline =  await serverConn.is_offline();
+    if(offline)
+      {
+        Get.back();
+        Get.defaultDialog(title:"Offline"
+            , textConfirm: "OK",content: Text("You are offline, connect to internet."),
+            onConfirm: (){
+              Get.back();},
+        );
+        return;
+      }
+
     await serverConn.postPurchase();
     List farmersList = await serverConn.getFarmersList(); //we got d]farmers list from network
     List<Farmer> localfarmersList = await database.getFarmerList();
