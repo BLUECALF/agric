@@ -356,8 +356,48 @@ class HomeController extends GetxController
           Farmer(fullname: farmer_obj["_instanceName"], id: farmer_obj["id"], farmer_number: farmer_with_acc_obj["accountId"])
         );
         print("THE INDEX OF INSERTED FARMER IS ${index}");
+
+        // WE SHOULD UPDATE HIS DETAILS AT TOTAL TABLE.
+      await database.transaction(() => update_total_transaction_records(farmer_with_acc_obj));
     }
     Get.back();
+  }
+
+  Future<void> update_total_transaction_records(Map farmer_with_acc_obj) async
+  {
+    // will update total local transaction records.
+    List<TotalPurchase> totalPurchaseList = await database.getTotalPurchase_using_farmer_no_and_product(
+        farmer_number: farmer_with_acc_obj["accountId"],
+        product: "MILK");
+    // if list is empty  make new . But if i have totals i have to update.
+    if(totalPurchaseList.length == 0)
+      {
+        // make a total purchase object and update
+        TotalPurchase new_object = TotalPurchase(product: "MILK",
+            amount_kg: farmer_with_acc_obj["balance"],
+            farmer_number: farmer_with_acc_obj["accountId"]);
+        //Enter it to db
+        int index = await database.insertTotalPurchase(new_object);
+        if(index > 0)
+        {
+          print("Insert Successful ");
+        }
+        else{print("Insert Failed");}
+      }
+    else
+      {
+        // we have his totals record... have to update...
+        TotalPurchase new_object = TotalPurchase(product: "MILK",
+            amount_kg: farmer_with_acc_obj["balance"],
+            farmer_number: farmer_with_acc_obj["accountId"]);
+        //Enter it to db
+        bool index = await database.updateTotalPurchase(new_object);
+        if(index)
+        {
+          print("Update Successful ");
+        }
+        else{print("update Failed");}
+      }
   }
 
 }

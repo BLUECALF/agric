@@ -32,6 +32,7 @@ class FarmersScreen extends GetView {
                         FutureBuilder(future : database.getFarmerList(),
                             builder: (context, snapshot)
                             {
+
                               if(snapshot.data == null)
                                 {return Text(
                                   "There are no farmers ",style: MyTextStyle.make("body"),
@@ -43,6 +44,7 @@ class FarmersScreen extends GetView {
                                     "There are no farmers ",style: MyTextStyle.make("body"),
                                   );
                                 }
+
                               return  DataTable(
                                   columns: [
                                     DataColumn(label: Text("Full Names")),
