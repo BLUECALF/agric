@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import "package:agric/server_connection/password_hasher.dart";
 import 'package:agric/AppController/app_controller.dart';
 import 'package:agric/database/database.dart';
 import 'package:agric/pages/views/home_screen.dart';
@@ -83,7 +83,8 @@ class LoginController extends GetxController
        Get.back();
        Get.back();
        if (accepted == true) {
-         try{await database.insertUser(User(username: appController.username, password: appController.password));}
+         var hashed_pass = hash_password(appController.password);
+         try{await database.insertUser(User(username: appController.username, password: hashed_pass));}
          catch(_){}
 
          Get.off(()=> HomeScreen(),);
@@ -159,7 +160,7 @@ class LoginController extends GetxController
      for(int i=0;i<userlist.length;i++)
        {
          if(userlist[i].username == appController.username
-             && userlist[i].password == appController.password)
+             && userlist[i].password == hash_password(appController.password))
            {
              // details are correct ... login
              Get.off(()=> HomeScreen(),);

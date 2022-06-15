@@ -48,6 +48,7 @@ dependencies:
     git: https://github.com/kechkibet/blue_print_pos.git
   http: ^0.13.4
   gradient_ui_widgets: ^1.0.2-nullsafety
+  crypto: ^3.0.2
 
 
 dev_dependencies:
