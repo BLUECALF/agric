@@ -50,12 +50,36 @@ class FarmersScreen extends GetView {
                                     DataColumn(label: Text("Full Names")),
                                     DataColumn(label: Text("Unique ID")),
                                     DataColumn(label: Text("Farmer No")),
+                                    DataColumn(label: Text("Milk Balance"))
                                   ],
 
                                   rows: farmers_list.map((e) => DataRow(cells: [
                                     DataCell(Text(e.fullname)),
                                     DataCell(Text(e.id)),
                                     DataCell(Text(e.farmer_number)),
+                                    DataCell(FutureBuilder(
+                                        future: database.getTotalPurchase_using_farmer_no_and_product(farmer_number: e.farmer_number, product: "MILK"),
+                                        builder: (context,snapshot)
+                                        {
+                                          if(snapshot.data == null)
+                                          {return Text("0",style: MyTextStyle.make("body"),
+                                          );
+                                          }
+                                          List<TotalPurchase> total_purchaselist = snapshot.data as List<TotalPurchase>;
+                                          if(total_purchaselist.length == 0)
+                                            {
+                                              return Text("0",style: MyTextStyle.make("body"));
+                                            }
+                                          else
+                                            {
+                                              return Text(total_purchaselist[0].amount_kg.toString(),style: MyTextStyle.make("body"),);
+                                            }
+
+                                        }
+
+                                    )
+
+                                    ),
                                   ])).toList());
 
                             }),

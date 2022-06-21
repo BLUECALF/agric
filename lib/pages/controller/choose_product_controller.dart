@@ -28,14 +28,17 @@ class ChooseProductController extends GetxController
         // we render sellable products
         sellable_products_list = previous_data["items"];
 
-      return  sellable_products_list.map((e) => a.GradientElevatedButton(
-        gradient: g6,
-           onPressed: (){
-             // go back
-            Get.back(result: e.product_name);
-           },
-          style: MyButtonDecoration.make(),
-           child:Text(e.product_name,style: MyTextStyle.make("body-white"),))).toList();
+      return  sellable_products_list.map((e) => Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: a.GradientElevatedButton(
+          gradient: g6,
+             onPressed: (){
+               // go back
+              Get.back(result: e.product_name);
+             },
+            style: MyButtonDecoration.make(),
+             child:Text(e.product_name,style: MyTextStyle.make("body-white"),)),
+      )).toList();
 
       }
     else if(previous_data["action"]=="buy_product")
@@ -43,14 +46,17 @@ class ChooseProductController extends GetxController
       // we render sellable products
       purchasable_products_list = previous_data["items"];
 
-      return  purchasable_products_list.map((e) => a.GradientElevatedButton(
-        gradient: g6,
-          onPressed: (){
-            // go back
-            Get.back(result: e.product_name);
-          },
-          style: MyButtonDecoration.make(),
-          child:Text(e.product_name,style: MyTextStyle.make("body-white"),))).toList();
+      return  purchasable_products_list.map((e) => Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: a.GradientElevatedButton(
+          gradient: g6,
+            onPressed: (){
+              // go back
+              Get.back(result: e.product_name);
+            },
+            style: MyButtonDecoration.make(),
+            child:Text(e.product_name,style: MyTextStyle.make("body-white"),)),
+      )).toList();
     }
     return [Text("Error Occurred")];
   }

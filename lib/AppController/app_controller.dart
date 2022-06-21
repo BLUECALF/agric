@@ -1,4 +1,4 @@
-
+import "package:agric/styles/date_formatter.dart";
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:agric/database/database.dart';
@@ -68,7 +68,9 @@ class AppController extends GetxController
     receiptText.addText(data["current_transaction"]["transaction_type"], size: ReceiptTextSizeType.extraLarge, style: ReceiptTextStyleType.bold , alignment: ReceiptAlignment.center);
     receiptText.addSpacer();
     var l = ReceiptTextSizeType.large;
-    receiptText.addLeftRightText("Date", data["current_transaction"]["date"].toString(),leftSize: l,rightSize: l);
+    receiptText.addLeftRightText("Date", getDateString(data["current_transaction"]["date"]),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
+    receiptText.addLeftRightText("Time", getFormattedTime(data["current_transaction"]["date"]),leftSize: l,rightSize: l);
     receiptText.addSpacer();
     receiptText.addLeftRightText("Id", data["current_transaction"]["id"].toString(),leftSize: l,rightSize: l);
     receiptText.addSpacer();
