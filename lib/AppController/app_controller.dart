@@ -122,7 +122,10 @@ class AppController extends GetxController
     receiptText.addText("Olenguruone", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.bold ,alignment: ReceiptAlignment.center);
     receiptText.addSpacer();
     receiptText.addText("X Report", size: ReceiptTextSizeType.large, style: ReceiptTextStyleType.normal , alignment: ReceiptAlignment.center);
-
+    receiptText.addLeftRightText("Date", getDateString(DateTime.now()),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
+    receiptText.addLeftRightText("Time", getFormattedTime(DateTime.now()),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
     receiptText.addLeftRightText("Transactions Sold", x.transactions_sold.toString(),leftSize: l,rightSize: l);
     receiptText.addSpacer();
     receiptText.addLeftRightText("Transactions Bought", x.transactions_bought.toString(),leftSize: l,rightSize: l);
@@ -156,7 +159,9 @@ class AppController extends GetxController
 
     receiptText.addLeftRightText("ID ", z.zreport_id.toString(),leftSize: l,rightSize: l);
     receiptText.addSpacer();
-    receiptText.addLeftRightText("Date ", z.date.toString(),leftSize: l,rightSize: l);
+    receiptText.addLeftRightText("Date", getDateString(z.date),leftSize: l,rightSize: l);
+    receiptText.addSpacer();
+    receiptText.addLeftRightText("Time", getFormattedTime(z.date),leftSize: l,rightSize: l);
     receiptText.addSpacer();
     receiptText.addLeftRightText("Transactions Sold", z.transactions_sold.toString(),leftSize: l,rightSize: l);
     receiptText.addSpacer();
