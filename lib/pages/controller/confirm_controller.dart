@@ -15,6 +15,7 @@ class ConfirmController extends GetxController
   String merchant = "";
   String action ="";
   String message = "";
+  String farmer_name = "";
 
   late AppDatabase database =  Get.find<AppDatabase>();
   final salesDao = Get.find<SalesDao>();
@@ -68,6 +69,7 @@ class ConfirmController extends GetxController
 
     xreportList = await database.getXreportList(appController.username);
 
+
     Xreport xreport_object = xreportList[0];
 
     List<TotalSale> totalSaleList;
@@ -80,7 +82,8 @@ class ConfirmController extends GetxController
     TotalPurchase total_purchase_object;
 
     // action can be buy_product or sell_product
-
+    List<Farmer> farmer_list  = await database.getFarmer(current_data["farmer_number"]);
+    farmer_name = farmer_list[0].fullname;
     if(action=="buy_product")
     {
       Purchase p = Purchase(
@@ -167,6 +170,7 @@ class ConfirmController extends GetxController
             //proceed to printing screen
             printingControler.get_data_from_confirm_screen({
               "merchant":merchant,
+              "farmer_name":farmer_name,
               "action":"buy_product",
               "transaction_object":p,
             });
@@ -239,6 +243,7 @@ class ConfirmController extends GetxController
             print("## the insertion  OF NEW total sale was recorded successfully");
             printingControler.get_data_from_confirm_screen({
               "merchant":merchant,
+              "farmer_name":farmer_name,
               "action":"sell_product",
               "transaction_object":s,
             });
@@ -267,6 +272,7 @@ class ConfirmController extends GetxController
           print("## the UPDATE to total sale table was recorded successfully");
           printingControler.get_data_from_confirm_screen({
             "merchant":merchant,
+            "farmer_name":farmer_name,
             "action":"sell_product",
             "transaction_object":s,
           });

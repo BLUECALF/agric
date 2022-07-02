@@ -22,6 +22,7 @@ class PrintingController extends GetxController
   late Sale current_sale ;
   late Purchase current_purchase;
   late String merchant;
+  late String farmer_name;
   late String action;
   var transaction_object;
   late List<TotalSale> total_sale_list=[];
@@ -35,7 +36,9 @@ class PrintingController extends GetxController
    previous_data =  data;
    transaction_object = previous_data["transaction_object"];
    merchant = previous_data["merchant"];
+   farmer_name = previous_data["farmer_name"];
    action = previous_data["action"];
+
 
    if(action == "sell_product")
    {
@@ -69,6 +72,7 @@ class PrintingController extends GetxController
         "date":current_sale.date,
         "product" : current_sale.product,
         "farmer_number":current_sale.farmer_number,
+        "farmer_name":farmer_name,
         "username":current_sale.username,
         "amount_kg":current_sale.amount_kg
       };
@@ -92,6 +96,7 @@ class PrintingController extends GetxController
         "date":current_purchase.date,
         "product" : current_purchase.product,
         "farmer_number":current_purchase.farmer_number,
+        "farmer_name":farmer_name,
         "username":current_purchase.username,
         "amount_kg":current_purchase.amount_kg
       };

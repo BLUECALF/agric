@@ -78,6 +78,9 @@ class AppController extends GetxController
     receiptText.addSpacer();
     receiptText.addLeftRightText("Farmer Number", data["current_transaction"]["farmer_number"],leftSize: l,rightSize: l);
     receiptText.addSpacer();
+
+    receiptText.addLeftRightText("Name :",data["current_transaction"]["farmer_name"] ,leftSize: l,rightSize: l);
+    receiptText.addSpacer();
     receiptText.addLeftRightText("Amount KG", data["current_transaction"]["amount_kg"].toString(),leftSize: l,rightSize: l);
     receiptText.addSpacer();
     receiptText.addLeftRightText("Served By", data["current_transaction"]["username"],leftSize: l,rightSize: l);
